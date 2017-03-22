@@ -3,6 +3,8 @@ module Asset::Import
   def annotate_container(asset, remote_asset)
     if remote_asset.try(:aliquots, nil)
       remote_asset.aliquots.each do |aliquot|
+        asset.add_facts(Fact.create(:predicate => 'sample_tube',
+          :object_asset => asset))
         asset.add_facts(Fact.create(:predicate => 'sanger_sample_id',
           :object => aliquot.sample.sanger.sample_id))
         asset.add_facts(Fact.create(:predicate => 'sanger_sample_name',
@@ -27,7 +29,7 @@ module Asset::Import
 
   def build_asset_from_remote_asset(barcode, remote_asset)
     ActiveRecord::Base.transaction do |t|
-      asset = Asset.create(:barcode => barcode)
+      asset = Asset.create(:barcode => barcode, :uuid => remote_asset.uuid)
       class_name = remote_asset.class.to_s.gsub(/Sequencescape::/,'')
       asset.add_facts(Fact.create(:predicate => 'a', :object => class_name))
 

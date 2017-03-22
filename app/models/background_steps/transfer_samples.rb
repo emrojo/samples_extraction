@@ -36,6 +36,10 @@ class BackgroundSteps::TransferSamples < Step
       each_asset_and_modified_asset do |asset, modified_asset|
         added_facts = []
         added_facts.push([Fact.new(:predicate => 'is', :object => 'Used')])
+        if (asset.has_predicate?('sample_tube'))
+          added_facts.push([Fact.new(:predicate => 'sample_tube', 
+            :object_asset => asset.facts.with_predicate('sample_tube').first.object_asset)])
+        end
         added_facts.push(asset.facts.with_predicate('sanger_sample_id').map do |aliquot_fact|
           [
             Fact.new(:predicate => 'sanger_sample_id', :object => aliquot_fact.object),

@@ -21,8 +21,12 @@ module Asset::Export
       :wells => facts.with_predicate('contains').map(&:object_asset).map do |well|
         unless well.nil? || well.facts.nil?
           well.facts.reduce({}) do |memo, fact|
+            if (['sample_tube'].include?(fact.predicate))
+              memo["#{fact.predicate}_uuid"] = fact.object_asset.uuid
+            end
+
             if (['location', 'aliquotType', 'sanger_sample_id',
-              'sanger_sample_name', 'measured_volume'].include?(fact.predicate))
+              'sanger_sample_name', 'sample_uuid'].include?(fact.predicate))
               memo[fact.predicate] = fact.object
             end
             memo
