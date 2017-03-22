@@ -12,7 +12,7 @@ class SequencescapeClient
     {
       :namespace     => 'SamplesExtraction',
       :url           => Rails.configuration.ss_uri,
-      :authorisation => 'development',
+      :authorisation => Rails.configuration.ss_authorisation,
       :read_timeout  => 60
     }
   end
