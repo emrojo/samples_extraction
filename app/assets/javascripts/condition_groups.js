@@ -146,7 +146,11 @@
       var editor = ace.edit("editor");
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/text");
-      editor.setValue(this.toN3());
+      if ($('#step_type_for_reasoning').prop('checked')===true) {
+        editor.setValue($('#step_type_n3_definition').val());
+      } else {
+        editor.setValue(this.toN3());
+      }
     };
 
     proto.getEditorContent = function() {
@@ -154,6 +158,13 @@
       //editor.setTheme("ace/theme/monokai");
       //editor.getSession().setMode("ace/mode/text");
       return editor.getValue();
+    };
+
+    proto.setEditorContent = function(val) {
+      var editor = ace.edit("editor");
+      //editor.setTheme("ace/theme/monokai");
+      //editor.getSession().setMode("ace/mode/text");
+      return editor.setValue(val);
     };
 
 

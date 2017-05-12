@@ -12,7 +12,7 @@ class BackgroundSteps::Inference < Step
     update_attributes!({
       :state => 'running',
       :step_type => type,
-      :asset_group => AssetGroup.create!(:assets => asset_group.assets)
+      :asset_group => asset_group
     })
     background_job
   end

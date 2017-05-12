@@ -24,7 +24,8 @@
   </div>
 
   <div class="field">
-    <%= f.select :role, options_for_select([['Operator', 'operator'],['Administrator', 'administrator']], user.role), {}, :disabled => readonly  %>
+    <%= f.select :role, options_for_select([['Operator', 'operator'],['Administrator', 'administrator'],
+    ['Curator', 'curator']], user.role), {}, :disabled => readonly  %>
   </div>
 
   <div class="field">

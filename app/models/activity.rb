@@ -142,7 +142,7 @@ class Activity < ActiveRecord::Base
 
   def do_step(step_type, user, step_params, printer_config)
     step = find_or_create_step(step_type, user, step_params)
-    reasoning!(printer_config, user)
+    reasoning!(step, printer_config, user)
 
     if step && step.created_asset_group
       step.created_asset_group.delay.print(printer_config, user.username)
@@ -159,19 +159,18 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def reasoning!(printer_config=nil, user=nil)
+  def reasoning!(step, printer_config=nil, user=nil)
     BackgroundSteps::Inference.create(:asset_group => asset_group, :activity => self, :user => user)
 
-    BackgroundSteps::TransferTubesToTubeRackByPosition.create(:asset_group => asset_group, :activity => self, :user => user)
-    BackgroundSteps::TransferPlateToPlate.create(:asset_group => asset_group, :activity => self, :user => user)
-    BackgroundSteps::TransferSamples.create(:asset_group => asset_group, :activity => self, :user => user)
+    # BackgroundSteps::TransferTubesToTubeRackByPosition.create(:asset_group => asset_group, :activity => self, :user => user)
+    # BackgroundSteps::TransferPlateToPlate.create(:asset_group => asset_group, :activity => self, :user => user)
+    # BackgroundSteps::TransferSamples.create(:asset_group => asset_group, :activity => self, :user => user)
 
-    BackgroundSteps::AliquotTypeInference.create(:asset_group => asset_group, :activity => self, :user => user)
-    BackgroundSteps::StudyNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
-    BackgroundSteps::PurposeNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
+    # BackgroundSteps::AliquotTypeInference.create(:asset_group => asset_group, :activity => self, :user => user)
+    # BackgroundSteps::StudyNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
+    # BackgroundSteps::PurposeNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
 
-    BackgroundSteps::UpdateSequencescape.create(:asset_group => asset_group, :activity => self, :printer_config => printer_config, :user => user)
-    #PushDataJob.perform_later(printer_config)
+    # BackgroundSteps::UpdateSequencescape.create(:asset_group => asset_group, :activity => self, :printer_config => printer_config, :user => user)
   end
 
 end

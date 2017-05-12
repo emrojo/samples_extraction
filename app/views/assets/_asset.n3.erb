@@ -1,0 +1,3 @@
+<% asset.facts.each do |f| %>
+  <<%= asset.uuid %>> :<%= f.predicate %> <% if f.object_asset.nil? %>"""<%= f.object %>"""<% else %><<%= f.object_asset.uuid %>><% end %> .
+<% end %>

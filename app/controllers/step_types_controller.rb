@@ -26,6 +26,10 @@ class StepTypesController < ApplicationController
   # GET /step_types/1
   # GET /step_types/1.json
   def show
+    respond_to do |format|
+      format.html { render :show }
+      format.n3 { render :show }
+    end    
   end
 
   # GET /step_types/new

@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     redirect_to :action => 'index'
   end
 
+  def current_user
+    @current_user
+  end
+
   def set_current_user
     @current_user = nil
     if session[:token]

@@ -32,6 +32,11 @@ class User < ActiveRecord::Base
     update_attributes(:token => nil)
   end
 
+  def has_role?(rolename)
+    rolename.to_s == role
+    return true
+  end
+
   def session_info
     {:username => username, :fullname => fullname, :barcode => barcode, :role => role,
       :tube_printer_name => tube_printer_name, :plate_printer_name => plate_printer_name}

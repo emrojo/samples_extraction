@@ -13,7 +13,7 @@
                 <div id="step-<%= step.id %>" class="collapse <%= 'in' if params[:step_id].to_i==step.id %>">
                   <% unless @in_steps_finished %>
                   <table class="table">
-                    <thead><th>Action</th><th>Barcode</th><th>Fact<input style="display:none;" type="checkbox" <%= 'checked="checked"' unless step.cancelled? %> class='pull-right'></th>
+                    <thead><th>Action</th><th>Barcode</th><th>Fact<% if @current_user.has_role?(:curator) %><input type="checkbox" <%= 'checked="checked"' unless step.cancelled? %> class='pull-right'><% end %></th>
                     </thead>
                     <tbody>
                         <%= render :partial => 'operations/operations', :locals => {

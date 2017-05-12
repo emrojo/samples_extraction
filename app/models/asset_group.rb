@@ -67,7 +67,7 @@ class AssetGroup < ActiveRecord::Base
   end
 
   def to_n3
-    assets.map(&:to_n3).join('')
+    render :n3
   end
 
   def clean_fact_group(groups)
