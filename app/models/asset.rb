@@ -53,6 +53,10 @@ class Asset < ActiveRecord::Base
     joins(:facts).where(:facts => {:predicate => predicate})
   }
 
+  scope :with_object, ->(object) {
+    joins(:facts).where(:facts => {:object => object})
+  }
+
   scope :for_activity_type, ->(activity_type) {
     joins(:activities_started).joins(:facts).where(:activities => { :activity_type_id => activity_type.id}).order("activities.id")
   }
@@ -243,6 +247,10 @@ class Asset < ActiveRecord::Base
         end
 
     obj
+  end
+
+  def uri
+    "http://localhost:3000/labware/#{uuid}"
   end
 
   def facts_for_reasoning

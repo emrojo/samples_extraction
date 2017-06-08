@@ -9,9 +9,15 @@
     //this.template = JST['templates/asset_group'];
     this.attachHandlers(node);
     this.actualTimestamp = null;
+
+    this.init();
   };
 
   var proto = AssetGroup.prototype;
+
+  proto.init = function() {
+    $.get({url: $('#asset-group-container form').attr('action')});
+  };
 
   proto.onRemoveBarcode = function(barcode) {
 
@@ -26,7 +32,7 @@
   };
 
   proto.render = function(json) {
-    this.container.html(json);
+    $('.asset-group-content', this.container).html(json);
     this.form = $('form', this.container);
     this.attachHandlers(this.form);
     this.reloadStepTypes();
@@ -56,12 +62,6 @@
   };
 
   proto.reloadStepTypes = function() {
-    /*var node;
-    node = $("#step_types_active .panel-body .content_step_types");
-    node.trigger("load_stop.loading_spinner", {
-      node: node
-    });*/
-
     var url = $('.step_types_active').data('psd-step-types-update-url');
     $('.step_types_active').load(url, $.proxy(function() {
       $(this.form).trigger("execute.builder");
@@ -71,17 +71,10 @@
   };
 
   proto.reloadSteps = function() {
-    /*var node = $("#steps_finished .panel-body .steps-table");
-    node.trigger("load_stop.loading_spinner", {
-      node: node
-    });*/
     var url = $('#steps_finished > div').data('psd-steps-update-url');
-    //var url = null;
     $('#steps_finished').load(url, $.proxy(function() {
       $(this.form).trigger("execute.builder");
     }, this));
-
-    //$(this.form).trigger("execute.builder");
   };
 
   proto.onAssetGroupChange = function() {

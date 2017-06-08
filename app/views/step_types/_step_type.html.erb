@@ -4,7 +4,7 @@
       <% unless step_type.step_template.nil? || step_type.step_template.empty? %>
           <li class="btn-group">
 
-            <a href="#step-type-id-<%= step_template_id %>-<%= step_type.id %>" class="btn btn-default" data-toggle="pill">
+            <a href=".step-type-id-<%= step_template_id %>-<%= step_type.id %>" class="btn btn-default" data-toggle="pill">
               <%= step_type.name %>
             </a>
             <% unless @activity.active_step.nil? %>
@@ -30,7 +30,7 @@
   <% step_types.select{|s| s.step_template }.each_with_index do |step_type, index| %>
     <% unless step_type.step_template.nil? || step_type.step_template.empty? %>
 
-    <div id="step-type-id-<%= step_template_id %>-<%= step_type.id %>" class="tab-pane container step-type-template">
+    <div id="step-type-id-<%= step_template_id %>-<%= step_type.id %>" class="step-type-id-<%= step_template_id %>-<%= step_type.id %> tab-pane container step-type-template">
       <%= render :partial => 'step_types/step_template',
           :locals => { :step_type => step_type, :index => index } %>
     </div>

@@ -36,7 +36,19 @@
     </ul>
 
     <div role="tabpanel" class="tab-pane active"  id="asset-group-container">
-    <%= render :template => 'asset_groups/show' %>
+
+      <%= trigger_alerts %>
+
+      <div class="form-group" data-psd-component-class="AssetGroup" data-psd-component-parameters="{}">
+        <%= bootstrap_form_for [@activity, @asset_group], action: 'update', remote: true, html: { :autocomplete => 'off', :"data-psd-asset-group-form" => "1"} do |f| %>
+
+          <input type="hidden" name="asset_group[delete_barcode]" id="asset_group_delete_barcode" value="" />
+          <input type="hidden" name="asset_group[delete_all_barcodes]" id="asset_group_delete_all_barcodes" value="false" />
+          <div class="asset-group-content"></div>
+          <!-- %= render :template => 'asset_groups/show' % -->
+        <% end %>
+      </div>      
+    
     </div>
   </div>
 
@@ -44,11 +56,33 @@
 
 <% end %>
 <% if @assets && !@activity.finished? %>
-  <div class="laststeptype"><%= render :template => 'step_types/active' %></div>
+  <div class="laststeptype">
+    <!-- %= render :template => 'step_types/active' % -->
+  </div>
 <% end %>
 
   <div id="steps_finished">
-  <%= render :template =>'steps/finished' %>
+    <div class="form-group" id="steps_finished" data-psd-steps-update-url="<%= activity_path(@activity)+'/steps' %>">
+      <label class="control-label">What happened before?</label>
+
+      <!-- %= render :partial => 'steps/steps', :locals => {:steps => steps.reverse} % -->
+    </div>
+      <div class="panel-body" data-psd-component-class="LoadingIcon" data-psd-component-parameters='{ "iconClass": "glyphicon", "containerIconClass": "spinner", "loadingClass": "fast-right-spinner"}'>
+        <div class="spinner">
+          <span class="glyphicon glyphicon-refresh"></span> Please, wait while we refresh this content...
+        </div>
+      </div>
+    
+
+     <!-- % if current_page?(action: 'steps_finished') % -->
+
+    <!-- script type="text/javascript">
+      $("tr[data-target]").on('click', function(e) {
+        $("#steps_finished").load($("#steps_finished").data("psd-steps-update-complete-url")+'/'+$(e.currentTarget).data('psd-step-id'));
+      });
+    </script -->
+    <!-- % end % -->
+
   </div>
 
   <% unless @activity.finished? %>

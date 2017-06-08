@@ -9,7 +9,8 @@ module Asset::Export
       SequencescapeClient.update_extraction_attributes(instance, attributes_to_update, user.username)
     end
 
-    update_plate(instance)
+    # We update current plate with the uuids from the server
+    instance = SequencescapeClient.find_by_uuid(uuid)
 
     facts.each {|f| f.update_attributes!(:up_to_date => true)}
     old_barcode = barcode
@@ -48,10 +49,21 @@ module Asset::Export
     end
   end
 
+  def validate_racking_info?(data)
+    unless data.first[:location].nil?
+      # Disallows duplicated locations
+      return (data.map{|n| n[:location]}.compact.uniq.count == data.count)
+    end
+    return true
+  end
+
   def attributes_to_update
-    facts.with_predicate('contains').map(&:object_asset).map do |well|
+    data = facts.with_predicate('contains').map(&:object_asset).uniq.map do |well|
       racking_info(well)
     end
+
+    return data if validate_racking_info?(data)
+    raise 'Invalid racking info provided'
   end
 
   def racking_info(well)
