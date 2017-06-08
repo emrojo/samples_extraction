@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.array!(@assets) do |asset|
   json.extract! asset, :id
   json.url asset_url(asset, format: :json)

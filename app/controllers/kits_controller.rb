@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class KitsController < ApplicationController
   before_action :set_kit, only: [:show, :edit, :update, :destroy]
   before_action :set_kit_types, only: [:new, :show, :edit, :update]
@@ -10,8 +11,7 @@ class KitsController < ApplicationController
 
   # GET /kits/1
   # GET /kits/1.json
-  def show
-  end
+  def show; end
 
   # GET /kits/new
   def new
@@ -19,8 +19,7 @@ class KitsController < ApplicationController
   end
 
   # GET /kits/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /kits
   # POST /kits.json
@@ -62,17 +61,18 @@ class KitsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_kit
-      @kit = Kit.find(params[:id])
-    end
 
-    def set_kit_types
-      @kit_types = KitType.all
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_kit
+    @kit = Kit.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def kit_params
-      params.require(:kit).permit(:barcode, :max_num_reactions, :num_reactions_performed, :kit_type_id)
-    end
+  def set_kit_types
+    @kit_types = KitType.all
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def kit_params
+    params.require(:kit).permit(:barcode, :max_num_reactions, :num_reactions_performed, :kit_type_id)
+  end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Operation < ApplicationRecord
   belongs_to :step
   belongs_to :asset
@@ -5,35 +6,35 @@ class Operation < ApplicationRecord
   belongs_to :action
   belongs_to :activity
 
-  scope :for_presenting, ->() { includes(:asset, :action,:object_asset) }
+  scope :for_presenting, ->() { includes(:asset, :action, :object_asset) }
 
   def action_type
     return action.action_type if action
-    return attributes["action_type"]
+    attributes['action_type']
   end
 
   def opposites
     {
-      add_facts: :remove_facts, remove_facts: :add_facts, 
+      add_facts: :remove_facts, remove_facts: :add_facts,
       create_asset: :remove_facts, delete_asset: :add_facts
     }
   end
 
   def synonims
     {
-      add_facts: :add_facts, remove_facts: :remove_facts, 
+      add_facts: :add_facts, remove_facts: :remove_facts,
       create_asset: :add_facts, delete_asset: :remove_facts
     }
-  end  
+  end
 
   def cancel
     send(opposites[action_type.underscore.to_sym].to_s)
-    update_attributes(:cancelled? => true)
+    update_attributes(cancelled?: true)
   end
 
   def remake
     send(synonims[action_type.underscore.to_sym].to_s)
-    update_attributes(:cancelled? => false)
+    update_attributes(cancelled?: false)
   end
 
   def add_facts
@@ -41,13 +42,12 @@ class Operation < ApplicationRecord
     asset.touch
   end
 
-  alias_method :create_asset, :add_facts
+  alias create_asset add_facts
 
   def remove_facts
     asset.remove_facts(Fact.new(predicate: predicate, object: object, object_asset: object_asset))
     asset.touch
   end
 
-  alias_method :delete_asset, :remove_facts
-
+  alias delete_asset remove_facts
 end

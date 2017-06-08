@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateAssetGroupsSteps < ActiveRecord::Migration
   def change
     create_table :asset_groups_steps do |t|

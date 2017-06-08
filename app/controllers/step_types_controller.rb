@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class StepTypesController < ApplicationController
   before_action :set_step_type, only: [:show, :edit, :update, :destroy]
   before_action :set_activity, only: [:active]
@@ -18,7 +19,7 @@ class StepTypesController < ApplicationController
   def index
     @step_types = StepType.not_deprecated unless @activity
     respond_to do |format|
-      format.html { render 'active', :layout => false } if @activity
+      format.html { render 'active', layout: false } if @activity
       format.html { render 'index' }
     end
   end
@@ -29,7 +30,7 @@ class StepTypesController < ApplicationController
     respond_to do |format|
       format.html { render :show }
       format.n3 { render :show }
-    end    
+    end
   end
 
   # GET /step_types/new
@@ -38,20 +39,19 @@ class StepTypesController < ApplicationController
   end
 
   # GET /step_types/1/edit
-  def edit
-  end
+  def edit; end
 
   def active
     @assets = @activity.asset_group.assets
     @step_types = @activity.step_types_for(@assets)
 
     respond_to do |format|
-      format.html {
-        render 'steps/_active', :locals => {
-          :step_types => @step_types,
-          :activity => @activity
-        }, :layout => false
-      }
+      format.html do
+        render 'steps/_active', locals: {
+          step_types: @step_types,
+          activity: @activity
+        }, layout: false
+      end
     end
   end
 
@@ -96,19 +96,18 @@ class StepTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_step_type
-      @step_type = StepType.find(params[:id])
-    end
 
-    def set_activity
-      @activity = Activity.find(params[:activity_id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_step_type
+    @step_type = StepType.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def step_type_params
-      params.require(:step_type).permit(:n3_definition,:name, :step_template, :connect_by, :for_reasoning)
-    end
+  def set_activity
+    @activity = Activity.find(params[:activity_id])
+  end
 
-
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def step_type_params
+    params.require(:step_type).permit(:n3_definition, :name, :step_template, :connect_by, :for_reasoning)
+  end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -10,15 +11,14 @@ Rails.application.configure do
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
   # preloads Rails for running tests, you may have to set it to true.
-  #config.eager_load = false
+  # config.eager_load = false
   config.allow_concurrency = false
   config.eager_load = true
 
-
   # Configure static file server for tests with Cache-Control for performance.
   config.serve_static_files   = true
-  #config.public_file_server.enabled = true
-  #config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
+  # config.public_file_server.enabled = true
+  # config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
   config.static_cache_control = 'public, max-age=3600'
 
   # Show full error reports and disable caching.
@@ -44,10 +44,9 @@ Rails.application.configure do
 
   config.middleware.use RackSessionAccess::Middleware
 
-
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  config.pmb_uri = ENV.fetch('PMB_URI','http://localhost:10000')
+  config.pmb_uri = ENV.fetch('PMB_URI', 'http://localhost:10000')
   config.ss_uri =  ENV.fetch('SS_URI', 'http://localhost:3000/api/1/')
   config.searcher_name_by_barcode = 'Find assets by barcode'
   config.printing_disabled = true

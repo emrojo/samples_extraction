@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ActivityTypesController < ApplicationController
   before_action :set_activity_type, only: [:show, :edit, :update, :destroy]
 
@@ -13,7 +14,7 @@ class ActivityTypesController < ApplicationController
     respond_to do |format|
       format.html { render :show }
       format.n3 { render :show }
-    end    
+    end
   end
 
   # GET /activity_types/new
@@ -22,8 +23,7 @@ class ActivityTypesController < ApplicationController
   end
 
   # GET /activity_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /activity_types
   # POST /activity_types.json
@@ -66,13 +66,14 @@ class ActivityTypesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_activity_type
-      @activity_type = ActivityType.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def activity_type_params
-      params.require(:activity_type).permit(:name, :n3_definition, { :step_type_ids => [] })
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_activity_type
+    @activity_type = ActivityType.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def activity_type_params
+    params.require(:activity_type).permit(:name, :n3_definition, step_type_ids: [])
+  end
 end

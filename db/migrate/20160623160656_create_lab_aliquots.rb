@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateLabAliquots < ActiveRecord::Migration
   def change
     create_table :lab_aliquots do |t|

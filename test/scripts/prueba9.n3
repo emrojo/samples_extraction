@@ -1,0 +1,32 @@
+# ~/cwm/cwm-1.2.1/cwm prueba6.n3 http://localhost:3000/labware/c49f47b0-317f-11e7-ae7d-44fb42fffe72 http://localhost:3000/labware/4e6646b0-3180-11e7-ae7d-44fb42fffe72 --mode=r --think
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix se: <http://localhost:3000/assets/root-ontology-ca065bafbf790f3828e903342e37b8e2af186920d42309414eb09778cedcd1c9.ttl#> .
+@prefix instance: <http://localhost:3000/labware/> .
+
+<http://localhost:3000/labware/c49f47b0-317f-11e7-ae7d-44fb42fffe72> se:transfer <http://localhost:3000/labware/4e6646b0-3180-11e7-ae7d-44fb42fffe72> .
+
+# Connect wells by location if the plate is connected
+@forAll :x, :y, :location.
+{ 
+  ?plateSource se:transfer ?plateDestination .
+
+  ?plateSource se:a "Plate" .
+  ?plateDestination se:a "Plate" .
+  ?plateSource se:contains ?x .
+  ?plateDestination se:contains ?y .
+  ?x se:a """Well""" .
+  ?x se:location ?location .
+  ?y se:a """Well""" .
+  ?y se:location ?location .
+  ?x log:notEqualTo ?y .
+} => {
+  ?x se:transfer ?y.
+  se:step se:addFacts { ?x se:transfer ?y. }.
+}.
+
+{
+  ?x se:transfer ?y .
+  ?x se:sanger_sample_id ?value .
+}=>{
+  ?y se:sanger_sample_id ?value . 
+}.

@@ -1,51 +1,49 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
 
-gem 'rdf-n3'
-gem 'tzinfo-data'
-gem 'puma'
-gem 'ejs'
-gem 'dropzonejs-rails'
-gem 'rest-client'
-gem 'rails-assets-tether', '>= 1.1.0'
-gem 'bootstrap_form'
-gem 'sprockets-rails'
 gem 'ace-rails-ap'
+gem 'bootstrap_form'
 gem 'daemons'
+gem 'dropzonejs-rails'
+gem 'ejs'
+gem 'puma'
+gem 'rails-assets-tether', '>= 1.1.0'
+gem 'rdf-n3'
+gem 'rest-client'
+gem 'sprockets-rails'
+gem 'tzinfo-data'
 
 gem 'activerecord-session_store'
 
 gem 'js_cookie_rails'
 
-
 gem 'micro_token'
 
 gem 'barby'
-
 
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 
 gem 'sequencescape-client-api',
-  #:path => '/Users/emr/projects/sequencescape-client-api'
-  # Should be switched back to sanger + production for deployment
-  :github  => 'emrojo/sequencescape-client-api',
-  :branch  => 'asset-attribute-update',
-  :require => 'sequencescape'
-
+    #:path => '/Users/emr/projects/sequencescape-client-api'
+    # Should be switched back to sanger + production for deployment
+    github: 'emrojo/sequencescape-client-api',
+    branch: 'asset-attribute-update',
+    require: 'sequencescape'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.3.13', '< 0.5'
-#gem 'sqlite3'
+# gem 'sqlite3'
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
 gem 'bootstrap-sass'
+gem 'sass-rails', '~> 5.0'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
 gem 'therubyracer'
+gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.1.0'
@@ -69,7 +67,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'unicorn'
 
 # Add simple support for print-my barcode)
-gem 'pmb-client', '0.1.0', :github => 'sanger/pmb-client'
+gem 'pmb-client', '0.1.0', github: 'sanger/pmb-client'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -83,37 +81,36 @@ group :development, :test, :selenium do
 end
 
 group :debug do
-  gem 'bullet'
   gem 'brakeman'
+  gem 'bullet'
   gem 'deadweight'
   gem 'rack-mini-profiler', require: false
   # For memory profiling (requires Ruby MRI 2.1+)
   gem 'memory_profiler'
 
   # For call-stack profiling flamegraphs (requires Ruby MRI 2.0.0+)
+  gem 'fast_stack'    # For Ruby MRI 2.0
   gem 'flamegraph'
   gem 'stackprof'     # For Ruby MRI 2.1+
-  gem 'fast_stack'    # For Ruby MRI 2.0
 
-  gem 'traceroute'
   gem 'peek'
-  gem 'peek-mysql2'
   gem 'peek-gc'
+  gem 'peek-mysql2'
   gem 'peek-performance_bar'
   gem 'rails_panel'
   gem 'rubocop'
   gem 'rubycritic'
-
+  gem 'traceroute'
 end
 
 group :test, :selenium do
-  gem 'shoulda'
-  gem 'factory_girl'
-  gem 'rspec-rails'
-  gem 'shoulda-matchers'
-  gem 'rails-controller-testing'
-  gem 'cucumber-rails', :require => false
+  gem 'cucumber-rails', require: false
   gem 'database_cleaner'
+  gem 'factory_girl'
+  gem 'rails-controller-testing'
+  gem 'rspec-rails'
+  gem 'shoulda'
+  gem 'shoulda-matchers'
 end
 
 group :selenium do
@@ -121,11 +118,10 @@ group :selenium do
 end
 
 group :test do
-  gem 'poltergeist'
   gem 'launchy'
+  gem 'poltergeist'
   gem 'rack_session_access'
 end
-
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
@@ -137,10 +133,9 @@ group :development do
   gem 'rubocop', require: false
 end
 
-
 group :deployment do
-  gem "psd_logger",
-    :github => "sanger/psd_logger"
-  gem "gmetric", "~>0.1.3"
-  gem "exception_notification"
+  gem 'exception_notification'
+  gem 'gmetric', '~>0.1.3'
+  gem 'psd_logger',
+      github: 'sanger/psd_logger'
 end

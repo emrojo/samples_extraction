@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class AssetGroupsController < ApplicationController
   before_action :set_asset_group, only: [:show, :update, :print]
   before_action :set_activity, only: [:show, :update]
@@ -7,8 +8,8 @@ class AssetGroupsController < ApplicationController
 
   def check_activity_asset_group
     unless @activity.nil?
-      if (@activity.asset_group != @asset_group)
-        @activity.update_attributes(:asset_group => @asset_group)
+      if @activity.asset_group != @asset_group
+        @activity.update_attributes(asset_group: @asset_group)
         redirect_to @activity
       end
     end
@@ -17,8 +18,6 @@ class AssetGroupsController < ApplicationController
   before_action :set_assets, only: [:show, :update]
 
   def show
-    
-
     @assets_grouped = assets_by_fact_group
 
     @step_types = @activity.step_types_active if @activity
@@ -29,7 +28,6 @@ class AssetGroupsController < ApplicationController
       format.json { render :show, status: :created, location: [@activity, @asset_group] }
     end
   end
-
 
   def update
     @assets_grouped = assets_by_fact_group
@@ -49,30 +47,29 @@ class AssetGroupsController < ApplicationController
 
   private
 
-    def update_barcodes
-      perform_barcode_removal
-      perform_barcode_addition
-    end
+  def update_barcodes
+    perform_barcode_removal
+    perform_barcode_addition
+  end
 
-    def assets_by_fact_group
-      obj_type = Struct.new(:predicate,:object,:to_add_by, :to_remove_by, :object_asset_id)
-      @assets.group_by do |a|
-        a.facts.map(&:as_json).map do |f|
-          obj_type.new(f["predicate"], f["object"])
-        end
+  def assets_by_fact_group
+    obj_type = Struct.new(:predicate, :object, :to_add_by, :to_remove_by, :object_asset_id)
+    @assets.group_by do |a|
+      a.facts.map(&:as_json).map do |f|
+        obj_type.new(f['predicate'], f['object'])
       end
     end
+  end
 
+  def set_activity
+    # I need the activity to be able to know the step_types compatible to show.
+    @activity = Activity.find(params_asset_group[:activity_id]) if params_asset_group[:activity_id]
+  end
 
-    def set_activity
-      # I need the activity to be able to know the step_types compatible to show.
-      @activity = Activity.find(params_asset_group[:activity_id]) if params_asset_group[:activity_id]
-    end
-
-    # Use callbacks to share common setup or constraints between actions.
-    def set_asset_group
-      @asset_group = AssetGroup.find(params_asset_group[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_asset_group
+    @asset_group = AssetGroup.find(params_asset_group[:id])
+  end
 
   def perform_barcode_removal
     unless params_update_asset_group[:delete_barcode].nil? || params_update_asset_group[:delete_barcode].empty?
@@ -90,35 +87,35 @@ class AssetGroupsController < ApplicationController
 
   def get_barcodes
     barcodes = params_update_asset_group[:add_barcode].split(/[ ,]/).map do |barcode|
-      unless barcode.match(/^\d+$/)
-        barcode = Barcode.calculate_barcode(barcode[0,2], barcode[2, barcode.length-3].to_i).to_s
+      unless barcode =~ /^\d+$/
+        barcode = Barcode.calculate_barcode(barcode[0, 2], barcode[2, barcode.length - 3].to_i).to_s
       end
-      barcode.gsub('"','').gsub('\'', '')
+      barcode.delete('"').delete('\'')
     end.flatten.compact.reject(&:empty?)
   end
 
   def perform_barcode_addition
     unless params_update_asset_group[:add_barcode].nil? || params_update_asset_group[:add_barcode].empty?
       barcodes = get_barcodes
-      barcodes_str = "'"+barcodes.join(',')+"'";
+      barcodes_str = "'" + barcodes.join(',') + "'"
       begin
         if @asset_group.select_barcodes(barcodes)
-          show_alert({:type => 'info',
-            :msg => "Barcode #{barcodes_str} added"})
+          show_alert(type: 'info',
+                     msg: "Barcode #{barcodes_str} added")
         else
-          show_alert({:type => 'warning',
-            :msg => "Cannot select #{barcodes_str}"})
-          #flash[:danger] = "Could not find barcodes #{barcodes}"
+          show_alert(type: 'warning',
+                     msg: "Cannot select #{barcodes_str}")
+          # flash[:danger] = "Could not find barcodes #{barcodes}"
         end
       rescue Net::ReadTimeout => e
-        show_alert({:type => 'danger',
-          :msg => "Cannot connect with Sequencescape for reading barcode #{barcodes_str}"})
+        show_alert(type: 'danger',
+                   msg: "Cannot connect with Sequencescape for reading barcode #{barcodes_str}")
       rescue Sequencescape::Api::ResourceNotFound => e
-        show_alert({:type => 'warning',
-          :msg => "Cannot find barcode #{barcodes_str} in Sequencescape"})
+        show_alert(type: 'warning',
+                   msg: "Cannot find barcode #{barcodes_str} in Sequencescape")
       rescue StandardError => e
-        show_alert({:type => 'danger',
-          :msg => "Cannot connect with Sequencescape: Message: #{e.message}"})
+        show_alert(type: 'danger',
+                   msg: "Cannot connect with Sequencescape: Message: #{e.message}")
       end
     end
   end
@@ -134,5 +131,4 @@ class AssetGroupsController < ApplicationController
   def set_assets
     @assets = @asset_group.assets.include_facts
   end
-
 end

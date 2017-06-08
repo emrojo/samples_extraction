@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateActivityTypes < ActiveRecord::Migration
   def change
     create_table :activity_types do |t|

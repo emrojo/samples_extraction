@@ -1,27 +1,28 @@
+# frozen_string_literal: true
 class Fact < ActiveRecord::Base
-  belongs_to :asset, :counter_cache => true
-  belongs_to :object_asset, :class_name => 'Asset'
+  belongs_to :asset, counter_cache: true
+  belongs_to :object_asset, class_name: 'Asset'
 
-  scope :not_to_remove, ->() { where(:to_remove_by => nil) }
+  scope :not_to_remove, ->() { where(to_remove_by: nil) }
 
-  scope :with_predicate, ->(predicate) { where(:predicate => predicate)}
+  scope :with_predicate, ->(predicate) { where(predicate: predicate) }
 
-  scope :with_ns_predicate, ->(namespace) { where(:ns_predicate => namespace)}
+  scope :with_ns_predicate, ->(namespace) { where(ns_predicate: namespace) }
 
-  scope :with_fact, -> (predicate, object) { where(:predicate => predicate, :object => object)}
+  scope :with_fact, ->(predicate, object) { where(predicate: predicate, object: object) }
 
-  scope :include_object_asset, ->() {includes(:object_asset)}
+  scope :include_object_asset, ->() { includes(:object_asset) }
 
-  #scope :with_namespace, ->(namespace) { where("predicate LIKE :namespace", namespace: "#{namespace}\#%")}
+  # scope :with_namespace, ->(namespace) { where("predicate LIKE :namespace", namespace: "#{namespace}\#%")}
 
-  #scope :for_sequencescape, ->() { with_namespace('SS') }
+  # scope :for_sequencescape, ->() { with_namespace('SS') }
 
   def set_to_remove_by(step)
-    update_attributes!(:to_remove_by => step)
+    update_attributes!(to_remove_by: step)
   end
 
   def set_to_add_by(step)
-    update_attributes!(:to_add_by => step)
+    update_attributes!(to_add_by: step)
   end
 
   def object_value
@@ -37,14 +38,12 @@ class Fact < ActiveRecord::Base
     f1 = self
     if f1.predicate == f2.predicate
       obj1 = f1.object || '?'
-      obj1 =  '?' unless f1["object_asset_id"].nil?
+      obj1 = '?' unless f1['object_asset_id'].nil?
       obj2 = f1.object || '?'
-      obj2 =  '?' unless f2["object_asset_id"].nil?
+      obj2 = '?' unless f2['object_asset_id'].nil?
       (obj1 <=> obj2)
     else
       f1.predicate <=> f2.predicate
     end
   end
-
 end
-

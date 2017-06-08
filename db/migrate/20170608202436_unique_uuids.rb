@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UniqueUuids < ActiveRecord::Migration
   def change
     add_index :assets, :uuid, unique: true

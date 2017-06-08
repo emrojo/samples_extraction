@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SetBarcodeIndexNotUnique < ActiveRecord::Migration
   def change
     remove_index :assets, :barcode

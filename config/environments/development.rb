@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -39,7 +40,7 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.pmb_uri = ENV.fetch('PMB_URI','http://localhost:10000/v1')
+  config.pmb_uri = ENV.fetch('PMB_URI', 'http://localhost:10000/v1')
   config.ss_uri =  ENV.fetch('SS_URI', 'http://localhost:3000/api/1/')
   config.ss_authorisation =  'development'
   config.searcher_name_by_barcode = 'Find assets by barcode'
@@ -49,5 +50,4 @@ Rails.application.configure do
   config.cwm_path = ENV.fetch('CWM_PATH', '/Users/emr/cwm/cwm-1.2.1')
 
   config.enable_reasoning = true
-
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require './lib/label_template_setup'
 
 # LabelTemplateSetup.register_template('SMPE - 92x8mm - Standard','Plate') do |name, type_id|

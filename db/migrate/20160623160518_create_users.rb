@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
@@ -9,8 +10,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :token
       t.string :role, default: 'operator'
 
-      t.integer :tube_printer_id, :default => nil, index: true, foreign_key: true
-      t.integer :plate_printer_id, :default => nil, index: true, foreign_key: true
+      t.integer :tube_printer_id, default: nil, index: true, foreign_key: true
+      t.integer :plate_printer_id, default: nil, index: true, foreign_key: true
 
       t.timestamps null: false
     end

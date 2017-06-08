@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'parsers/symphony'
 
 class Upload < ApplicationRecord
@@ -15,5 +16,4 @@ class Upload < ApplicationRecord
       Parsers::Symphony.new(data).add_assets(asset) if Parsers::Symphony.valid_for?(data)
     end
   end
-
 end

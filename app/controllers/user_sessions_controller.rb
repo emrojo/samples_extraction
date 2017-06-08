@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class UserSessionsController < ApplicationController
   before_filter :set_user, only: :create
 
@@ -7,11 +8,10 @@ class UserSessionsController < ApplicationController
 
   def destroy
     @current_user.clean_session
-    session[:token]=nil
+    session[:token] = nil
 
     head :no_content
   end
-
 
   private
 
@@ -20,6 +20,6 @@ class UserSessionsController < ApplicationController
   end
 
   def set_user
-    @user = User.find_by!(:barcode => user_session_params[:barcode])
+    @user = User.find_by!(barcode: user_session_params[:barcode])
   end
 end

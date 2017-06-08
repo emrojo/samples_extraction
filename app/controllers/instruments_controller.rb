@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pry'
 class InstrumentsController < ApplicationController
   before_action :set_instrument, only: [:show, :edit, :update, :destroy]
@@ -10,8 +11,7 @@ class InstrumentsController < ApplicationController
 
   # GET /instruments/1
   # GET /instruments/1.json
-  def show
-  end
+  def show; end
 
   # GET /instruments/new
   def new
@@ -19,8 +19,7 @@ class InstrumentsController < ApplicationController
   end
 
   # GET /instruments/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /instruments
   # POST /instruments.json
@@ -63,14 +62,14 @@ class InstrumentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_instrument
-      @instrument = Instrument.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def instrument_params
-      params.require(:instrument).permit(:barcode, :name, { :activity_type_ids => [] })
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_instrument
+    @instrument = Instrument.find(params[:id])
+  end
 
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def instrument_params
+    params.require(:instrument).permit(:barcode, :name, activity_type_ids: [])
+  end
 end

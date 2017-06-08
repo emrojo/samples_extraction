@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class BackgroundSteps::TransferPlateToPlate < Step
   #
   #  {
@@ -18,18 +19,14 @@ class BackgroundSteps::TransferPlateToPlate < Step
   end
 
   def execute_actions
-    update_attributes!({
-      :state => 'running',
-      :step_type => StepType.find_or_create_by(:name => 'TransferPlateToPlate'),
-      :asset_group => AssetGroup.create!(:assets => asset_group.assets.with_predicate('transfer').with_fact('a', 'Plate'))
-    })
+    update_attributes!(state: 'running',
+                       step_type: StepType.find_or_create_by(name: 'TransferPlateToPlate'),
+                       asset_group: AssetGroup.create!(assets: asset_group.assets.with_predicate('transfer').with_fact('a', 'Plate')))
     background_job
   end
 
-
-
   def background_job
-    ActiveRecord::Base.transaction do 
+    ActiveRecord::Base.transaction do
       aliquot_types = []
       if assets_compatible_with_step_type
         plates = asset_group.assets.with_predicate('transfer').with_fact('a', 'Plate').each do |plate|
@@ -40,13 +37,12 @@ class BackgroundSteps::TransferPlateToPlate < Step
         end
       end
     end
-    update_attributes!(:state => 'complete')
+    update_attributes!(state: 'complete')
     asset_group.touch
   ensure
-    update_attributes!(:state => 'error') unless state == 'complete'
+    update_attributes!(state: 'error') unless state == 'complete'
     asset_group.touch
   end
 
   handle_asynchronously :background_job
-
 end

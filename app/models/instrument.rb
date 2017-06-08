@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Instrument < ActiveRecord::Base
   has_and_belongs_to_many :activity_types
   has_many :activities
@@ -7,6 +8,7 @@ class Instrument < ActiveRecord::Base
       kit,
       kit.kit_type,
       kit.kit_type.activity_type,
-      activity_types.include?(kit.kit_type.activity_type)].all?
+      activity_types.include?(kit.kit_type.activity_type)
+    ].all?
   end
 end

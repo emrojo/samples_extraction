@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class CreateSteps < ActiveRecord::Migration
   def change
     create_table :steps do |t|
@@ -6,8 +7,8 @@ class CreateSteps < ActiveRecord::Migration
       t.date :completion_date
       t.references :activity, index: true, foreign_key: true
       t.references :asset_group, index: true, foreign_key: true
-      t.integer :created_asset_group_id, :default => nil, index: true, foreign_key: true
-      t.boolean :in_progress?, :default => false
+      t.integer :created_asset_group_id, default: nil, index: true, foreign_key: true
+      t.boolean :in_progress?, default: false
       t.timestamps
     end
   end

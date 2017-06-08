@@ -1,0 +1,21 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+<tube1> :a "Tube" .
+<tube1> :transfer <tube2> .
+<tube1> :aliquotType "DNA" .
+<tube2> :a "Tube" .
+{
+	?x :a "Tube" .
+	?x :transfer ?y .
+	?x :aliquotType ?_aliquot .
+	?y :a "Tube" .
+        ?y :hasNotPredicate :aliquotType .
+} => {
+	:step :addFacts {?y :aliquotType ?_aliquot. } .
+} .
+  {
+    ?antecedents log:implies ?conseq .
+    ?antecedents log:includes {?a :hasNotPredicate ?b.}.
+  }=>{
+   {?a :hasNotPredicate ?b.} a log:Chaff .
+  }.
+

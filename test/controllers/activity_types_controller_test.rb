@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class ActivityTypesControllerTest < ActionController::TestCase
@@ -5,43 +6,43 @@ class ActivityTypesControllerTest < ActionController::TestCase
     @activity_type = FactoryGirl.create :activity_type
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
     assert_not_nil assigns(:activity_types)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get :new
     assert_response :success
   end
 
-  test "should create activity_type" do
+  test 'should create activity_type' do
     assert_difference('ActivityType.count') do
-      post :create,  { activity_type: @activity_type.attributes}
+      post :create, activity_type: @activity_type.attributes
     end
 
     assert_redirected_to activity_type_path(assigns(:activity_type))
   end
 
-  test "should show activity_type" do
-    get :show,  { id: @activity_type }
+  test 'should show activity_type' do
+    get :show, id: @activity_type
     assert_response :success
   end
 
-  test "should get edit" do
-    get :edit,  { id: @activity_type }
+  test 'should get edit' do
+    get :edit, id: @activity_type
     assert_response :success
   end
 
-  test "should update activity_type" do
-    patch :update,  { id: @activity_type, activity_type: @activity_type.attributes}
+  test 'should update activity_type' do
+    patch :update,  id: @activity_type, activity_type: @activity_type.attributes
     assert_redirected_to activity_type_path(assigns(:activity_type))
   end
 
-  test "should destroy activity_type" do
+  test 'should destroy activity_type' do
     assert_difference('ActivityType.count', -1) do
-      delete :destroy,  { id: @activity_type}
+      delete :destroy, id: @activity_type
     end
 
     assert_redirected_to activity_types_path

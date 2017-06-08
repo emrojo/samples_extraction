@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class PrintersController < ApplicationController
   before_action :set_printer, only: [:show, :edit, :update, :destroy]
 
@@ -9,8 +10,7 @@ class PrintersController < ApplicationController
 
   # GET /printers/1
   # GET /printers/1.json
-  def show
-  end
+  def show; end
 
   # GET /printers/new
   def new
@@ -18,8 +18,7 @@ class PrintersController < ApplicationController
   end
 
   # GET /printers/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /printers
   # POST /printers.json
@@ -62,13 +61,14 @@ class PrintersController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_printer
-      @printer = Printer.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def printer_params
-      params.require(:printer).permit(:name, :printer_type, :default_printer)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_printer
+    @printer = Printer.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def printer_params
+    params.require(:printer).permit(:name, :printer_type, :default_printer)
+  end
 end

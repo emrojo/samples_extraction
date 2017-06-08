@@ -1,45 +1,46 @@
+# frozen_string_literal: true
 require 'test_helper'
 
 class PrintersControllerTest < ActionController::TestCase
   setup do
-    @printer = FactoryGirl.create :printer, {:name => 'one'}
+    @printer = FactoryGirl.create :printer, name: 'one'
   end
 
-  test "should get index" do
+  test 'should get index' do
     get :index
     assert_response :success
     assert_not_nil assigns(:printers)
   end
 
-  test "should get new" do
+  test 'should get new' do
     get :new
     assert_response :success
   end
 
-  test "should create printer" do
+  test 'should create printer' do
     assert_difference('Printer.count') do
-      post :create,  { printer: @printer.attributes }
+      post :create, printer: @printer.attributes
     end
 
     assert_redirected_to printer_path(assigns(:printer))
   end
 
-  test "should show printer" do
+  test 'should show printer' do
     get :show, id: @printer
     assert_response :success
   end
 
-  test "should get edit" do
+  test 'should get edit' do
     get :edit, id: @printer
     assert_response :success
   end
 
-  test "should update printer" do
-    patch :update,   { id: @printer, printer: @printer.attributes }
+  test 'should update printer' do
+    patch :update, id: @printer, printer: @printer.attributes
     assert_redirected_to printer_path(assigns(:printer))
   end
 
-  test "should destroy printer" do
+  test 'should destroy printer' do
     assert_difference('Printer.count', -1) do
       delete :destroy, id: @printer
     end

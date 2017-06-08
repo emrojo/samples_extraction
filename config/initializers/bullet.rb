@@ -1,4 +1,5 @@
-if (ENV["RAILS_ENV"]=='debug')
+# frozen_string_literal: true
+if ENV['RAILS_ENV'] == 'debug'
   Rails.configuration.after_initialize do
     Bullet.enable = true
     Bullet.alert = true
@@ -15,8 +16,8 @@ if (ENV["RAILS_ENV"]=='debug')
     Bullet.airbrake = false
     Bullet.rollbar = false
     Bullet.add_footer = true
-    Bullet.stacktrace_includes = [ 'your_gem', 'your_middleware' ]
-    Bullet.stacktrace_excludes = [ 'their_gem', 'their_middleware' ]
-    #Bullet.slack = { webhook_url: 'http://some.slack.url', channel: '#default', username: 'notifier' }
+    Bullet.stacktrace_includes = %w(your_gem your_middleware)
+    Bullet.stacktrace_excludes = %w(their_gem their_middleware)
+    # Bullet.slack = { webhook_url: 'http://some.slack.url', channel: '#default', username: 'notifier' }
   end
 end

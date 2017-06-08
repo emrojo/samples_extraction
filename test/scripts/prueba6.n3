@@ -1,0 +1,23 @@
+# ~/cwm/cwm-1.2.1/cwm prueba6.n3 http://localhost:3000/labware/c49f47b0-317f-11e7-ae7d-44fb42fffe72 http://localhost:3000/labware/4e6646b0-3180-11e7-ae7d-44fb42fffe72 --mode=r --think
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix se: <http://www.sanger.ac.uk/ontologies/lims/se.owl#> .
+@prefix instance: <http://localhost:3000/labware/> .
+
+@forAll :a, :b, :c .
+{ 
+  ?plate se:a "Plate" .
+  ?plate se:contains ?tube .
+  ?tube log:semantics ?graph .
+  ?graph log:includes {?a ?b ?c . }.
+} => { ?a ?b ?c . }.
+
+@forAll :x, :y, :location.
+{ 
+  ?x se:a """Well""" .
+  ?x se:location ?location .
+  ?y se:a """Well""" .
+  ?y se:location ?location .
+  ?x log:notEqualTo ?y .
+} => {
+  se:step se:addFacts {(?x ?y) se:location ?location .}.
+}.

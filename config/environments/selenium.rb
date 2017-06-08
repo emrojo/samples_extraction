@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -13,10 +14,10 @@ Rails.application.configure do
   config.eager_load = false
 
   # Configure static file server for tests with Cache-Control for performance.
-  #config.serve_static_files   = true
-  #config.public_file_server.enabled = true
-  #config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
-  #config.static_cache_control = 'public, max-age=3600'
+  # config.serve_static_files   = true
+  # config.public_file_server.enabled = true
+  # config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
+  # config.static_cache_control = 'public, max-age=3600'
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
@@ -41,7 +42,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
-  config.pmb_uri = ENV.fetch('PMB_URI','http://localhost:10000/v1')
+  config.pmb_uri = ENV.fetch('PMB_URI', 'http://localhost:10000/v1')
   config.ss_uri =  ENV.fetch('SS_URI', 'http://localhost:3000/api/1/')
   config.ss_authorisation =  'development'
   config.searcher_name_by_barcode = 'Find assets by barcode'
@@ -51,5 +52,4 @@ Rails.application.configure do
   config.cwm_path = ENV.fetch('CWM_PATH', '')
 
   config.enable_reasoning = false
-
 end

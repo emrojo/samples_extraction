@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'pry'
 module Parsers
   class Symphony
@@ -11,13 +12,13 @@ module Parsers
     end
 
     def self.valid_for?(str)
-      return Nokogiri::XML(str).xpath("FullPlateTrack").count == 1
+      Nokogiri::XML(str).xpath('FullPlateTrack').count == 1
     end
 
     def tube_at_location(rack, location)
       tubes = rack.facts.with_predicate('contains').map(&:object_asset)
       return nil if tubes.empty?
-      tubes.select {|t| t.facts.with_fact('location', location).count > 0}.first
+      tubes.select { |t| t.facts.with_fact('location', location).count > 0 }.first
     end
 
     def apply_to_rack(rack)
@@ -30,7 +31,7 @@ module Parsers
       #  {
       #   ?rack :contains ?tubeInRack .
       #   ?tubeInRack Symphony:SampleCode ?barcode .
-      #   ?tubePrevious :barcode ?barcode 
+      #   ?tubePrevious :barcode ?barcode
       #  } => {
       #   :step :addFacts { ?tubePrevious :transfer ?tubeInRack . }.
       #   :step :removeFacts { ?tubeInRack Symphony:SampleCode ?barcode . } .
@@ -49,15 +50,15 @@ module Parsers
           if f.predicate == 'SampleCode'
             asset = Asset.find_or_import_asset_with_barcode(f.object)
             asset.add_facts([
-              Fact.create(:predicate => 'transfer', :object_asset => tube)
-            ])
+                              Fact.create(predicate: 'transfer', object_asset: tube)
+                            ])
             tube.add_facts([
-              Fact.create(:predicate => 'transferredFrom', :object_asset => asset)
-            ])
+                             Fact.create(predicate: 'transferredFrom', object_asset: asset)
+                           ])
           elsif f.predicate == 'SampleOutputVolume'
             tube.add_facts([
-              Fact.create(:predicate => 'volume', :object => f.object)
-            ])
+                             Fact.create(predicate: 'volume', object: f.object)
+                           ])
           end
           f.destroy
         end
@@ -65,28 +66,24 @@ module Parsers
     end
 
     def apply_symphony_facts_to_rack(rack)
-      @doc.xpath("//SampleTrack").map do |sample_track|
-        facts = ["SampleCode", "SampleOutputPos", "SampleOutputVolume"].map do |name|
+      @doc.xpath('//SampleTrack').map do |sample_track|
+        facts = %w(SampleCode SampleOutputPos SampleOutputVolume).map do |name|
           value = sample_track.at_xpath(name).text
-          if name == "SampleOutputPos"
-            value = value.gsub!(':','')
-          end
-          Fact.new({
-            :predicate => name,
-            :object => value,
-            :ns_predicate => Parsers::Symphony::SYMPHONY_NAMESPACE
-          })
+          value = value.delete!(':') if name == 'SampleOutputPos'
+          Fact.new(predicate: name,
+                   object: value,
+                   ns_predicate: Parsers::Symphony::SYMPHONY_NAMESPACE)
         end
-        asset_location = facts.select do |f| 
-          f.predicate == 'SampleOutputPos' && 
-          f.ns_predicate == Parsers::Symphony::SYMPHONY_NAMESPACE
+        asset_location = facts.select do |f|
+          f.predicate == 'SampleOutputPos' &&
+            f.ns_predicate == Parsers::Symphony::SYMPHONY_NAMESPACE
         end.first.object
 
         asset = tube_at_location(rack, asset_location)
         if asset.nil?
           add_error("No tube present at location #{asset_location}. Transfer cannot be created.")
         end
-        asset.add_facts(facts) if asset
+        asset&.add_facts(facts)
       end
     end
 
@@ -101,7 +98,8 @@ module Parsers
     end
 
     def location_to_index(location)
-      letter, num = location[0], location[1]
+      letter = location[0]
+      num = location[1]
       (('A'..'F').find_index(location[0]) * 12) + (location[1].to_i - 1)
     end
   end

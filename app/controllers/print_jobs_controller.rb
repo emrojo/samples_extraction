@@ -1,9 +1,8 @@
+# frozen_string_literal: true
 class PrintJobsController < ApplicationController
   def printer_config
-    {'Tube' => 'd304bc', 'Plate' => 'd304bc'}
+    { 'Tube' => 'd304bc', 'Plate' => 'd304bc' }
   end
-
-
 
   def create
     Class.new do
@@ -16,6 +15,6 @@ class PrintJobsController < ApplicationController
   end
 
   def set_assets
-    @assets = params[:barcodes].map{|b| Asset.find_by(:barcode =>b)}
+    @assets = params[:barcodes].map { |b| Asset.find_by(barcode: b) }
   end
 end
