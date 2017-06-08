@@ -5,7 +5,7 @@ class Operation < ApplicationRecord
   belongs_to :action
   belongs_to :activity
 
-  scope :for_presenting, ->() { includes(:asset, :action) }
+  scope :for_presenting, ->() { includes(:asset, :action,:object_asset) }
 
   def action_type
     return action.action_type if action

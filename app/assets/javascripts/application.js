@@ -20,7 +20,7 @@
 
 //= require component_builder
 //= require upload_file
-//= require activities
+//= require asset_group
 //= require asset_facts
 //= require barcode_reader
 //= require condition_groups
@@ -43,6 +43,9 @@
 //= require step_cancellable
 //= require_tree ./templates
 //= require_tree .
+//   require "peek"
+// require "peek/views/performance_bar"
+
 //    require_asset "peek"
 //    require_asset "peek/views/performance_bar"
 

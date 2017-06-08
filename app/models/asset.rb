@@ -27,6 +27,8 @@ class Asset < ActiveRecord::Base
     end
   end
 
+  scope :include_facts, ->() { includes(:facts) }
+
   has_many :operations
 
   has_many :activity_type_compatibilities
@@ -234,7 +236,7 @@ class Asset < ActiveRecord::Base
   def condition_groups_init
     obj = {}
     obj[barcode] = { :template => 'templates/asset_facts'}
-    obj[barcode][:facts]=facts.map do |fact|
+    obj[barcode][:facts]=facts.include_object_asset.map do |fact|
           {
             :cssClasses => '',
             :name => uuid,
@@ -249,9 +251,6 @@ class Asset < ActiveRecord::Base
     obj
   end
 
-  def uri
-    "http://localhost:3000/labware/#{uuid}"
-  end
 
   def facts_for_reasoning
     [facts, Fact.as_object(asset)].flatten

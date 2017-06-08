@@ -14,8 +14,10 @@ class AssetGroupsController < ApplicationController
     end
   end
 
+  before_action :set_assets, only: [:show, :update]
+
   def show
-    @assets = @asset_group.assets
+    
 
     @assets_grouped = assets_by_fact_group
 
@@ -30,7 +32,6 @@ class AssetGroupsController < ApplicationController
 
 
   def update
-    @assets = @asset_group.assets
     @assets_grouped = assets_by_fact_group
     @step_types = @activity.step_types_active
 
@@ -128,6 +129,10 @@ class AssetGroupsController < ApplicationController
 
   def params_asset_group
     params.permit(:activity_id, :id, :add_barcode, :delete_barcode, :delete_all_barcodes)
+  end
+
+  def set_assets
+    @assets = @asset_group.assets.include_facts
   end
 
 end

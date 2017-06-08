@@ -21,6 +21,10 @@ module Lab::Actions
 
   end
 
+  def get_step_for(step_type)
+    Step.new(step_type: step_type)
+  end
+
   def unrack_tubes(list_layout, destination_rack=nil, step=nil)
     tubes = list_layout.map{|obj| obj[:asset]}.compact
     return if tubes.empty?
@@ -43,13 +47,13 @@ module Lab::Actions
         if destination_rack
           #tube.add_fact()
           rerack = Asset.create
-          rerack.add_fact('a', 'Rerack')
-          rerack.add_fact('tube', tube)
-          rerack.add_fact('previousParent', previous_rack)
-          rerack.add_fact('previousLocation', location)
-          rerack.add_fact('location', list_layout[index][:location])
+          step.add_fact(rerack, Fact.create(predicate: 'a', object: 'Rerack'))
+          step.add_fact(rerack, Fact.create(predicate: 'tube', object_asset: tube))
+          step.add_fact(rerack, Fact.create(predicate: 'previousParent', object_asset: previous_rack))
+          step.add_fact(rerack, Fact.create(predicate: 'previousLocation', object: location))
+          step.add_fact(rerack, Fact.create(predicate: 'location', object: list_layout[index][:location]))
 
-          destination_rack.add_fact('rerack', rerack)
+          step.add_fact(destination_rack, Fact.create(predicate: 'rerack', object_asset: rerack))
         end
 
         facts_to_destroy.push(parent_fact)
@@ -86,9 +90,9 @@ module Lab::Actions
           step_ref = nil
           tube.facts.with_predicate('location').each(&:destroy)
         end
-        tube.add_facts(Fact.create(:predicate => 'location', :object => location, :to_add_by => step_ref))
-        tube.add_facts(Fact.create(:predicate => 'parent', :object_asset => rack, :to_add_by => step_ref))
-        rack.add_facts(Fact.create(:predicate => 'contains', :object_asset => tube, :to_add_by => step_ref))
+        step.add_facts(tube, Fact.create(:predicate => 'location', :object => location, :to_add_by => step_ref))
+        step.add_facts(tube, Fact.create(:predicate => 'parent', :object_asset => rack, :to_add_by => step_ref))
+        step.add_facts(rack, Fact.create(:predicate => 'contains', :object_asset => tube, :to_add_by => step_ref))
       end
     end
   end
@@ -177,6 +181,8 @@ module Lab::Actions
   end
 
   def racking(step_type, params)
+    step = get_step_for(step_type)
+
     error_messages = []
     error_locations = []
 
@@ -196,8 +202,7 @@ module Lab::Actions
     check_types_for_racking(list_layout, step_type, error_messages, error_locations)
 
     if error_messages.empty?
-      
-      rack_tubes(rack, list_layout)
+      rack_tubes(rack, list_layout, step)
     else
       raise InvalidDataParams.new(error_messages, error_locations)
     end

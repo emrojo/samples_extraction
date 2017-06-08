@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170303142929) do
+ActiveRecord::Schema.define(version: 20170608202436) do
 
   create_table "actions", force: :cascade do |t|
     t.string   "action_type",                limit: 255, null: false
@@ -101,28 +101,6 @@ ActiveRecord::Schema.define(version: 20170303142929) do
   add_index "asset_groups_assets", ["asset_group_id"], name: "index_asset_groups_assets_on_asset_group_id", using: :btree
   add_index "asset_groups_assets", ["asset_id"], name: "index_asset_groups_assets_on_asset_id", using: :btree
 
-  create_table "asset_groups_steps", force: :cascade do |t|
-    t.integer  "asset_group_id", limit: 4
-    t.integer  "step_id",        limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-  end
-
-  add_index "asset_groups_steps", ["asset_group_id"], name: "index_asset_groups_steps_on_asset_group_id", using: :btree
-  add_index "asset_groups_steps", ["step_id"], name: "index_asset_groups_steps_on_step_id", using: :btree
-
-  create_table "asset_relations", force: :cascade do |t|
-    t.integer  "subject_asset_id", limit: 4
-    t.integer  "predicate_id",     limit: 4
-    t.integer  "object_asset_id",  limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "asset_relations", ["object_asset_id"], name: "index_asset_relations_on_object_asset_id", using: :btree
-  add_index "asset_relations", ["predicate_id"], name: "index_asset_relations_on_predicate_id", using: :btree
-  add_index "asset_relations", ["subject_asset_id"], name: "index_asset_relations_on_subject_asset_id", using: :btree
-
   create_table "assets", force: :cascade do |t|
     t.string   "uuid",        limit: 255
     t.string   "barcode",     limit: 255
@@ -131,17 +109,8 @@ ActiveRecord::Schema.define(version: 20170303142929) do
     t.integer  "facts_count", limit: 4
   end
 
-  add_index "assets", ["barcode"], name: "index_assets_on_barcode", using: :btree
-
-  create_table "assets_facts", force: :cascade do |t|
-    t.integer  "asset_id",   limit: 4
-    t.integer  "fact_id",    limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "assets_facts", ["asset_id"], name: "index_assets_facts_on_asset_id", using: :btree
-  add_index "assets_facts", ["fact_id"], name: "index_assets_facts_on_fact_id", using: :btree
+  add_index "assets", ["barcode"], name: "index_assets_on_barcode", unique: true, using: :btree
+  add_index "assets", ["uuid"], name: "index_assets_on_uuid", unique: true, using: :btree
 
   create_table "condition_groups", force: :cascade do |t|
     t.string  "name",          limit: 255
@@ -225,33 +194,6 @@ ActiveRecord::Schema.define(version: 20170303142929) do
 
   add_index "kits", ["kit_type_id"], name: "index_kits_on_kit_type_id", using: :btree
 
-  create_table "lab_aliquot_containers", force: :cascade do |t|
-    t.string   "type",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-  create_table "lab_aliquots", force: :cascade do |t|
-    t.string   "type",          limit: 255
-    t.float    "volume",        limit: 24
-    t.float    "concentration", limit: 24
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  create_table "lab_plates", force: :cascade do |t|
-    t.string   "type",       limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
-  end
-
-  create_table "lab_samples", force: :cascade do |t|
-    t.string   "type",             limit: 255
-    t.string   "sanger_sample_id", limit: 255
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
-  end
-
   create_table "label_templates", force: :cascade do |t|
     t.string   "name",          limit: 255, null: false
     t.string   "template_type", limit: 255
@@ -276,12 +218,6 @@ ActiveRecord::Schema.define(version: 20170303142929) do
   add_index "operations", ["action_id"], name: "index_operations_on_action_id", using: :btree
   add_index "operations", ["asset_id"], name: "index_operations_on_asset_id", using: :btree
   add_index "operations", ["step_id"], name: "index_operations_on_step_id", using: :btree
-
-  create_table "predicates", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "printers", force: :cascade do |t|
     t.string   "name",            limit: 255,                 null: false
@@ -377,11 +313,6 @@ ActiveRecord::Schema.define(version: 20170303142929) do
   add_foreign_key "activity_types_instruments", "instruments"
   add_foreign_key "asset_groups_assets", "asset_groups"
   add_foreign_key "asset_groups_assets", "assets"
-  add_foreign_key "asset_groups_steps", "asset_groups"
-  add_foreign_key "asset_groups_steps", "steps"
-  add_foreign_key "asset_relations", "predicates"
-  add_foreign_key "assets_facts", "assets"
-  add_foreign_key "assets_facts", "facts"
   add_foreign_key "condition_groups", "step_types"
   add_foreign_key "conditions", "condition_groups"
   add_foreign_key "facts", "assets"

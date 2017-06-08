@@ -34,6 +34,14 @@ class ActivityType < ActiveRecord::Base
     superceded_by.save!
   end
 
+  # def render(sel)
+  #   view = ActionView::Base.new(ActionController::Base.view_paths, activity_type: self)
+  #   view.extend ApplicationHelper
+  #   view.class.cattr_accessor :activity_type
+  #   view.activity_type = self
+  #   view.render(:partial => 'activity_types/activity_type', formats: [:n3])
+  # end
+
 
   # def after_deprecate
   #   self.reload
@@ -53,6 +61,6 @@ class ActivityType < ActiveRecord::Base
   end
 
   def to_n3
-    [":step :activityTypeName \"\"\"#{name}\"\"\"", step_types.map(&:to_n3)].flatten.join(" . \n")+" ."
+    render :n3
   end
 end

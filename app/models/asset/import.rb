@@ -1,13 +1,19 @@
 module Asset::Import
 
+  def step_for_import
+    return @step_for_import if @step_for_import
+    step_type = StepType.find_or_create_by(name: 'Import')
+    @step_for_import = Step.new(step_type: step_type)
+  end
+
   def annotate_container(asset, remote_asset)
     if remote_asset.try(:aliquots, nil)
       remote_asset.aliquots.each do |aliquot|
-        asset.add_facts(Fact.create(:predicate => 'sample_tube',
+        step_for_import.add_facts(asset, Fact.create(:predicate => 'sample_tube',
           :object_asset => asset))
-        asset.add_facts(Fact.create(:predicate => 'sanger_sample_id',
+        step_for_import.add_facts(asset, Fact.create(:predicate => 'sanger_sample_id',
           :object => aliquot.sample.sanger.sample_id))
-        asset.add_facts(Fact.create(:predicate => 'sanger_sample_name',
+        step_for_import.add_facts(asset, Fact.create(:predicate => 'sanger_sample_name',
           :object => aliquot.sample.sanger.name))
       end
     end
@@ -20,7 +26,7 @@ module Asset::Import
   def annotate_study_name_from_aliquots(asset, remote_asset)
     if remote_asset.try(:aliquots, nil)
       if remote_asset.aliquots.first.sample
-        asset.add_facts(Fact.create(predicate: 'study_name', 
+        step_for_import.add_facts(asset, Fact.create(predicate: 'study_name', 
           object: sample_id_to_study_name(remote_asset.aliquots.first.sample.sanger.sample_id)))
       end
     end    
@@ -40,10 +46,10 @@ module Asset::Import
     if remote_asset.try(:wells, nil)
       remote_asset.wells.each do |well|
         local_well = Asset.create!(:uuid => well.uuid)
-        asset.add_facts(Fact.create(:predicate => 'contains', :object_asset => local_well))
-        local_well.add_facts(Fact.create(:predicate => 'a', :object => 'Well'))
-        local_well.add_facts(Fact.create(:predicate => 'location', :object => well.location))
-        local_well.add_facts(Fact.create(:predicate => 'parent', :object_asset => asset))
+        step_for_import.add_facts(asset, Fact.create(:predicate => 'contains', :object_asset => local_well))
+        step_for_import.add_facts(local_well, Fact.create(:predicate => 'a', :object => 'Well'))
+        step_for_import.add_facts(local_well, Fact.create(:predicate => 'location', :object => well.location))
+        step_for_import.add_facts(local_well, Fact.create(:predicate => 'parent', :object_asset => asset))
         #local_well.add_facts(Fact.create(:predicate => 'aliquotType', :object => 'nap'))
         annotate_container(local_well, well)
       end
@@ -63,16 +69,16 @@ module Asset::Import
     ActiveRecord::Base.transaction do |t|
       asset = Asset.create(:barcode => barcode, :uuid => remote_asset.uuid)
       class_name = sequencescape_type_for_asset(remote_asset)
-      asset.add_facts(Fact.create(:predicate => 'a', :object => class_name))
+      step_for_import.add_facts(asset, Fact.create(:predicate => 'a', :object => class_name))
 
       if keep_sync_with_sequencescape?(remote_asset)
-        asset.add_facts(Fact.create(predicate: 'pushTo', object: 'Sequencescape'))
+        step_for_import.add_facts(asset, Fact.create(predicate: 'pushTo', object: 'Sequencescape'))
         if remote_asset.try(:plate_purpose, nil)
-          asset.add_facts(Fact.create(:predicate => 'purpose',
+          step_for_import.add_facts(asset, Fact.create(:predicate => 'purpose',
           :object => remote_asset.plate_purpose.name))
         end
       end
-      asset.add_facts(Fact.create(:predicate => 'is', :object => 'NotStarted'))
+      step_for_import.add_facts(asset, Fact.create(:predicate => 'is', :object => 'NotStarted'))
 
       annotate_container(asset, remote_asset)
       annotate_wells(asset, remote_asset)
@@ -91,9 +97,9 @@ module Asset::Import
     unless asset
       if Barcode.is_creatable_barcode?(barcode)
         asset = Asset.create!(:barcode => barcode)
-        asset.facts << Fact.create!(:predicate => 'a', :object => 'Tube')
-        asset.facts << Fact.create!(:predicate => 'barcodeType', :object => 'Code2D')
-        asset.facts << Fact.create!(:predicate => 'is', :object => 'Empty')
+        step_for_import.add_facts(asset, Fact.create!(:predicate => 'a', :object => 'Tube'))
+        step_for_import.add_facts(asset, Fact.create!(:predicate => 'barcodeType', :object => 'Code2D'))
+        step_for_import.add_facts(asset, Fact.create!(:predicate => 'is', :object => 'Empty'))
       end
     end
     unless asset

@@ -10,6 +10,8 @@ class Fact < ActiveRecord::Base
 
   scope :with_fact, -> (predicate, object) { where(:predicate => predicate, :object => object)}
 
+  scope :include_object_asset, ->() {includes(:object_asset)}
+
   #scope :with_namespace, ->(namespace) { where("predicate LIKE :namespace", namespace: "#{namespace}\#%")}
 
   #scope :for_sequencescape, ->() { with_namespace('SS') }

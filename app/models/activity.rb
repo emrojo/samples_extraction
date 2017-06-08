@@ -9,6 +9,8 @@ class Activity < ActiveRecord::Base
 
   has_many :owned_asset_groups, :class_name => 'AssetGroup', :foreign_key => 'activity_owner_id'
 
+  scope :include_activity_type, ->() { includes(:activity_type) }
+
   #belongs_to :active_step, :class_name => 'Step'
 
   def other_owned_asset_groups

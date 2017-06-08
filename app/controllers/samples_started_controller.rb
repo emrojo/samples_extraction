@@ -1,11 +1,11 @@
 class SamplesStartedController < ApplicationController
   def index
-    @activity_types = ActivityType.all.visible.sort{|a,b| a.name <=> b.name}.uniq
+    @activity_types = ActivityType.all.visible
 
     @assets_for_activity_types = @activity_types.map do |activity_type|
       {
         :activity_type => activity_type,
-        :assets => Asset.started.for_activity_type(activity_type).uniq.paginate(pagination_params_for_activity_type(activity_type))
+        :assets => Asset.include_facts.started.for_activity_type(activity_type).paginate(pagination_params_for_activity_type(activity_type))
       }
     end
     @activity_type_selected = ActivityType.find_by_id(samples_started_params[:activity_type_id])

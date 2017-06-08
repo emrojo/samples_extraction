@@ -1,3 +1,8 @@
-<% asset.facts.each do |f| %>
-  <<%= asset.uri %>> :<%= f.predicate %> <% if f.object_asset.nil? %>"""<%= f.object %>"""<% else %><<%= f.object_asset.uri %>><% end %> .
+<% asset.facts.include_object_asset.each do |f| %>
+  <<%= asset_url(asset.uuid) %>> :<%= f.predicate %> <% if f.object_asset.nil? %>"""<%= f.object %>"""<% else %><<%= asset_url(f.object_asset.uuid) %>><% end %> .
+  <% unless f.object_asset.nil? %>
+    <% if traversable_predicate(f.predicate) %>
+      <%= render partial: 'assets/asset', locals: {asset: f.object_asset} %>
+    <% end %>
+  <% end %>
 <% end %>

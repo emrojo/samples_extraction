@@ -7,6 +7,14 @@ module ApplicationHelper
 
   UNKNOW_ALIQUOT_TYPE = 'unknown-aliquot'
 
+  def default_ontologies
+    "@prefix : <#{url_to_asset('root-ontology.ttl')}#> .".html_safe
+  end
+
+  def traversable_predicate(predicate)
+    ['contains'].include?(predicate)
+  end
+
   def data_rack_display(facts)
     #return '' unless facts.first.class == Fact
     f = facts.select{|f| f.predicate == 'aliquotType'}.first

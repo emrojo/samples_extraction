@@ -13,8 +13,8 @@
  *= require_tree .
  *= require_self
  *= require dropzone/dropzone
- * require peek
- * require peek/views/performance_bar
+ *   require peek
+ *   require peek/views/performance_bar
  */
 @import "bootstrap-sprockets";
 @import "bootstrap";

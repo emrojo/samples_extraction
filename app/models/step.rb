@@ -17,6 +17,10 @@ class Step < ActiveRecord::Base
 
   scope :cancelled, ->() {where(:state => 'cancel')}
 
+  scope :for_history, ->() {
+    includes(:superceded_by,:step_type,:activity,:asset_group,:user,:uploads)
+  }
+
   after_create :deprecate_cancelled_steps
   after_create :execute_actions, :unless => :in_progress?
 
@@ -59,13 +63,24 @@ class Step < ActiveRecord::Base
   end
 
   def add_facts(asset, facts)
-    asset.add_facts(facts)
-    asset.add_operations(facts, self)
+    ActiveRecord::Base.transaction do
+      asset.add_facts(facts)
+      asset.add_operations(facts, self)
+    end
+  end
+
+  def add_fact(asset, fact)
+    ActiveRecord::Base.transaction do
+      asset.add_facts([fact])
+      asset.add_operations([fact], self)
+    end
   end
 
   def remove_facts(asset, facts)
-    asset.remove_facts(facts)
-    asset.remove_operations(facts, self)    
+    ActiveRecord::Base.transaction do
+      asset.remove_facts(facts)
+      asset.remove_operations(facts, self)    
+    end
   end
 
   def unselect_assets_from_antecedents
@@ -120,8 +135,8 @@ class Step < ActiveRecord::Base
 
   def update_assets_started
     activity.asset_group.assets.not_started.each do |asset|
-      asset.add_facts(Fact.create(:predicate => 'is', :object => 'Started'))
-      asset.facts.where(:predicate => 'is', :object => 'NotStarted').each(&:destroy)
+      add_facts(asset, Fact.create(:predicate => 'is', :object => 'Started'))
+      remove_facts(asset, asset.facts.where(:predicate => 'is', :object => 'NotStarted'))
     end
   end
 

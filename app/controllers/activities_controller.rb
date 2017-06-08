@@ -73,7 +73,7 @@ class ActivitiesController < ApplicationController
   end
 
   def index
-    @my_activities = @current_user ? Activity.for_user(@current_user) : []
+    @my_activities = @current_user ? Activity.for_user(@current_user).include_activity_type : []
   end
 
 

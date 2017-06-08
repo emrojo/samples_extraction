@@ -8,6 +8,8 @@ class ConditionGroup < ActiveRecord::Base
 
   has_many :asset_groups
 
+  scope :include_conditions, ->() { includes(:conditions) }
+
   def is_wildcard?
     conditions.empty?
   end

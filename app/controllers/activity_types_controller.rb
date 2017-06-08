@@ -10,6 +10,10 @@ class ActivityTypesController < ApplicationController
   # GET /activity_types/1
   # GET /activity_types/1.json
   def show
+    respond_to do |format|
+      format.html { render :show }
+      format.n3 { render :show }
+    end    
   end
 
   # GET /activity_types/new

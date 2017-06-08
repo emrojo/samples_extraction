@@ -1,2 +1,0 @@
-class Predicate < ApplicationRecord
-end

@@ -5,7 +5,7 @@ class KitsController < ApplicationController
   # GET /kits
   # GET /kits.json
   def index
-    @kits = Kit.all
+    @kits = Kit.all.include_kit_type
   end
 
   # GET /kits/1

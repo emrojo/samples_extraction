@@ -9,7 +9,7 @@
 </head>
 <body data-no-turbolink="true">
 
-  <% if (ENV["RAILS_ENV"] == :debug) %>
+  <% if Rails.env.debug? %>
      <%= render 'peek/bar' %>
   <% end %>
 <%= render 'header' %>

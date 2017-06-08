@@ -22,6 +22,11 @@ class StepType < ActiveRecord::Base
 
   scope :not_for_reasoning, ->() { where(:for_reasoning => false) }
 
+  scope :include_subject_condition_groups, ->() {includes(:subject_condition_groups)}
+  scope :include_object_condition_groups, ->() {includes(:object_condition_groups)}
+  scope :include_condition_groups, ->() {includes(:condition_groups)}
+  scope :include_actions, ->() {includes(:actions)}
+
   def after_deprecate
     superceded_by.activity_types << activity_types
     update_attributes!(:activity_types => [])
@@ -68,7 +73,7 @@ class StepType < ActiveRecord::Base
       }
       memo
     end
-    agroups = actions.reduce(cgroups) do |memo, action|
+    agroups = actions.include_subject_condition_groups.reduce(cgroups) do |memo, action|
       name = action.subject_condition_group.name || "a#{action.subject_condition_group.id}"
       memo[name]={
         :facts => [],

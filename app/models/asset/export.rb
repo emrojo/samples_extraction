@@ -1,5 +1,10 @@
 module Asset::Export
 
+  def step_for_export
+    step_type = StepType.find_or_create_by(name: 'Export')
+    step = Step.new(step_type: step_type)
+  end
+
   def update_sequencescape(print_config, user)
     instance = SequencescapeClient.find_by_uuid(uuid)
     unless instance
@@ -15,10 +20,10 @@ module Asset::Export
     facts.each {|f| f.update_attributes!(:up_to_date => true)}
     old_barcode = barcode
     update_attributes(:uuid => instance.uuid, :barcode => instance.barcode.ean13)
-    add_facts(Fact.create(:predicate => 'beforeBarcode', :object => old_barcode))
-    add_facts(Fact.create(predicate: 'purpose', object: class_name))
-    facts.with_predicate('barcodeType').each(&:destroy)
-    add_facts(Fact.create(:predicate => 'barcodeType', :object => 'SequencescapePlate'))
+    step_for_export.add_facts(self, Fact.create(:predicate => 'beforeBarcode', :object => old_barcode))
+    step_for_export.add_facts(self, Fact.create(predicate: 'purpose', object: class_name))
+    step_for_export.remove_facts(self, facts.with_predicate('barcodeType'))
+    step_for_export.add_facts(self, Fact.create(:predicate => 'barcodeType', :object => 'SequencescapePlate'))
     mark_as_updated
     print(print_config, user.username) if old_barcode != barcode
   end
@@ -41,10 +46,10 @@ module Asset::Export
   end
 
   def mark_as_updated
-    add_facts(Fact.create(predicate: 'pushedTo', object: 'Sequencescape'))
+    step_for_export.add_facts(self, Fact.create(predicate: 'pushedTo', object: 'Sequencescape'))
     facts.with_predicate('contains').each do |f|
       if f.object_asset.has_predicate?('sample_tube')
-        f.object_asset.add_facts(Fact.create(predicate: 'pushedTo', object: 'Sequencescape'))
+        step_for_export.add_facts(f.object_asset, Fact.create(predicate: 'pushedTo', object: 'Sequencescape'))
       end
     end
   end

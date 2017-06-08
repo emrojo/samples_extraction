@@ -17,7 +17,7 @@
       <div role="tabpanel" class="tab-pane  <%= 'active' if index==0%>" id="at-<%= activity_type.id %>">
         <div class="panel-body">
           <% if assets.nil? || assets.empty? %>
-            This activity type has no activities yet.
+            This activity type has no samples started yet.
           <% else %>
             <table class='table table-condensed'>
               <thead>
@@ -33,7 +33,7 @@
                       <td><% if index==0 %><%= activity.instrument.name %> <%= activity.instrument.barcode %><% end %></td>
                       <td><%= asset.barcode %></td>
                       <td>
-                        <%= render :partial => 'facts/facts', :locals => { :facts => asset.facts} %>
+                        <%= render :partial => 'facts/facts', :locals => { :facts => asset.facts.include_object_asset} %>
                       </td><td><%= activity.completed_at || 'In progress' %></td>
                       <td><%= (activity.last_user ? activity.last_user.username : 'None') %></td>
                     </tr>
