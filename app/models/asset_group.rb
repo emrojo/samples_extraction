@@ -34,6 +34,7 @@ class AssetGroup < ActiveRecord::Base
   end
 
   def select_barcodes(barcodes)
+    debugger
     barcodes.each do |barcode|
       next unless assets.select { |a| a.barcode == barcode }.empty?
       asset = Asset.find_or_import_asset_with_barcode(barcode)

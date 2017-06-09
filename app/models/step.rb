@@ -63,15 +63,15 @@ class Step < ActiveRecord::Base
 
   def add_facts(asset, facts)
     ActiveRecord::Base.transaction do
-      asset.add_facts(facts)
-      asset.add_operations(facts, self)
+      asset.add_facts([facts].flatten)
+      asset.add_operations([facts].flatten, self)
     end
   end
 
   def add_fact(asset, fact)
     ActiveRecord::Base.transaction do
-      asset.add_facts([fact])
-      asset.add_operations([fact], self)
+      asset.add_facts(fact)
+      asset.add_operations(fact, self)
     end
   end
 

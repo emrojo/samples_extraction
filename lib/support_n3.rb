@@ -344,7 +344,7 @@ module SupportN3
                          object: fragment(v),
                          step_type_id: @step_type.id,
                          subject_condition_group_id: @c_groups[fragment(k)].id,
-                         object_condition_group_id: object_condition_group_id})
+                         object_condition_group_id: object_condition_group_id)
           next unless (action=='unselectAsset')
           Condition.create(                             predicate: fragment(p), object: fragment(v),
             condition_group_id: @c_groups[fragment(k)].id

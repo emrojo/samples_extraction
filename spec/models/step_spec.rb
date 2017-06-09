@@ -26,11 +26,9 @@ RSpec.describe Step, type: :model do
       @step_type = FactoryGirl.create :step_type
 
       @cg1 = FactoryGirl.create(:condition_group, name: 'p')
-      @cg1.conditions << FactoryGirl.create(:condition,                                               predicate: 'is', object: 'Tube'
-)
+      @cg1.conditions << FactoryGirl.create(:condition,                                               predicate: 'is', object: 'Tube')
       @cg2 = FactoryGirl.create(:condition_group, name: 'q')
-      @cg2.conditions << FactoryGirl.create(:condition,                                               predicate: 'is', object: 'Rack'
-)
+      @cg2.conditions << FactoryGirl.create(:condition,                                               predicate: 'is', object: 'Rack')
       @step_type.condition_groups << @cg1
       @step_type.condition_groups << @cg2
       @tubes = Array.new(7) do |_i| 
@@ -133,7 +131,7 @@ RSpec.describe Step, type: :model do
 
             @action = FactoryGirl.create(:action, action_type: 'addFacts',
                                                    predicate: 'value', object_condition_group: @wildcard,
-                                                   subject_condition_group: @cg2})
+                                                   subject_condition_group: @cg2)
             @step_type.actions << @action
 
             @step = create_step
@@ -157,7 +155,7 @@ RSpec.describe Step, type: :model do
                                                                object_condition_group: @wildcard)
             @action = FactoryGirl.create(:action, action_type: 'addFacts',
                                                    predicate: 'relates', object_condition_group: @cg1,
-                                                   subject_condition_group: @cg2})
+                                                   subject_condition_group: @cg2)
             @step_type.actions << @action
 
             @tubes.each_with_index do |tube, idx|

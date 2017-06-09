@@ -80,10 +80,10 @@ class Asset < ActiveRecord::Base
   }
 
   scope :compatible_with_activity_type, ->(activity_type) {
-    st = activity_type.step_types.select do |st|
+    val = activity_type.step_types.select do |st|
       st.condition_groups.select { |cg| cg.conditions.any? { |c| c.predicate == 'is' && c.object == 'NotStarted' } }
     end.first
-    st_checks = [st.id, st.condition_groups.map(&:id)]
+    st_checks = [val.id, val.condition_groups.map(&:id)]
 
     joins(:facts)
       .joins('right outer join conditions on conditions.predicate=facts.predicate and conditions.object=facts.object')
@@ -213,12 +213,13 @@ class Asset < ActiveRecord::Base
   end
 
   def object_value(fact)
-    object = if fact.object
-               fact.object
-             else
-      object = if fact.object_asset
-                 fact.object_asset.uuid
-               end
+    if fact.object
+      fact.object
+    else
+      if fact.object_asset
+        fact.object_asset.uuid
+      end
+    end
   end
 
   def condition_groups_init
