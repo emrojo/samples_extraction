@@ -4,7 +4,7 @@ A tool to use and customize workflows for tracking information about the
 process for samples extraction and update the relevant information in 
 Sequencescape.
 
-Main Features:
+## Main Features:
 
 - Inbox of Started and Non started samples
 - Worflows creation using the GUI with the browser
@@ -15,7 +15,7 @@ Main Features:
 - Admin view to manage users, printers and labware
 - Functionality for searching of labwares by metadata criteria
 
-Main Data model:
+## Main Data model:
 ```text
 Kits <-- KitTypes <-- ActivityTypes ---> Activities     
                           |                |
@@ -29,7 +29,7 @@ ConditionGroups <--   AssetGroups        Operations
 Conditions            Assets --> Facts
 ```
 
-Other features:
+## Other features:
 
 - Main process is labware type agnostic, any labware description is following 
 the description of the ontology created in app/assets/owls/root-ontology.ttl
@@ -38,7 +38,7 @@ scripts for querying the data (see lib/examples)
 - Any rules processing is delegated to the delayed job in a background job that
 could use other external tools to perform the processing
 
-To start:
+## To start:
 
 1. Modify config/enviroments/... PMB_URI to link with the required instance for
  print my barcode
