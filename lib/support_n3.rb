@@ -19,7 +19,7 @@ module SupportN3
   end
 
   def self.build_asset(name, create_assets=true, created_assets=[])
-    if create_assets
+    unless create_assets
       asset = Asset.find_or_create_by(:name => name)
     else
       asset = created_assets.select{|a| a.name == name}.first
@@ -77,12 +77,13 @@ module SupportN3
   end
 
   def self.parse_facts(input, options = {}, create_assets=true)
+    create_assets = true if create_assets.nil? 
     options = {
       validate: false,
       canonicalize: false,
     }.merge(options)
 
-    created_assets = [] unless create_assets
+    created_assets = [] if create_assets
 
     quads = RDF::N3::Reader.new(input, options).quads.clone
     quads.map do |quad|

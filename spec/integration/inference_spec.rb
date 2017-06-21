@@ -10,7 +10,7 @@ RSpec.describe "Inference" do
 
   describe '#inference' do
     describe '#parse_facts' do
-      it 'creates assets from a N3 definition', :testcreation => true do
+      xit 'creates assets from a N3 definition', :testcreation => true do
         code = %{
           :tube1 :relates :tube2 .
           :tube2 :name """a name""" .

@@ -83,19 +83,20 @@ def inferences_data
 },
 {
   :it => %Q{relates elements with relation},
+  :tags => :testing,
   :rule => %Q{
         {
-          ?x :a :TubeA .
+          ?x :a "TubeA" .
           ?x :transfer ?y .
-          ?y :a :TubeB .
+          ?y :a "TubeB" .
         } => {
           :step :addFacts { ?y :transferredFrom ?x . }.
         }
     },
   :inputs => %Q{
-        :tube1 :a """TubeA""" .
+        :tube1 :a "TubeA" .
         :tube1 :transfer :tube2 .
-        :tube2 :a """TubeB""" .        
+        :tube2 :a "TubeB" .
 
     },
   :outputs => %Q{
