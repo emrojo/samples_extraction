@@ -16,7 +16,7 @@ Main Features:
 - Functionality for searching of labwares by metadata criteria
 
 Main Data model:
-
+```text
 Kits <-- KitTypes <-- ActivityTypes ---> Activities     
                           |                |
                           V                V
@@ -26,8 +26,8 @@ Actions <------------ StepTypes -------> Steps
 ConditionGroups <--   AssetGroups        Operations
      |                  |
      V                  V
-Conditions           Assets --> Facts
-
+Conditions            Assets --> Facts
+```
 
 Other features:
 
