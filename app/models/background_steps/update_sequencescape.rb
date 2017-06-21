@@ -19,7 +19,7 @@ class BackgroundSteps::UpdateSequencescape < Step
     ActiveRecord::Base.transaction do
       if assets_compatible_with_step_type
         asset_group.assets.each do |asset|
-          asset.update_sequencescape(printer_config, user)
+          asset.update_sequencescape(printer_config, user, self)
           #removed_facts = asset.facts.select{|f| f.predicate == 'pushTo' && f.object == 'Sequencescape'}
           #asset.remove_operations(removed_facts, self)
           #removed_facts.select{|f| f.predicate == 'pushTo' && f.object == 'Sequencescape'}.each do |f|

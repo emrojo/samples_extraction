@@ -83,6 +83,7 @@ Given I am a user with name "Alice" and role "Administrator"
 When I use the browser to enter in the application
 Then I should see the Instruments page
 
+@aliquottest
 Scenario: Create a new tube without specifying aliquotType
 When I go to the Instruments page
 Then I create an activity with instrument "My Instrument" and kit "1"
@@ -102,11 +103,7 @@ Then I should see these steps available:
 
 And I perform the step "Create new tube with any aliquot"
 
-Then I should have created an asset with the following facts:
-| Predicate   |  Object |
-| aliquotType |  NA     |
-
-And I should not have created an asset with the following facts:
+Then I should not have created an asset with the following facts:
 | Predicate   |  Object |
 | aliquotType |  RNA     |
 
@@ -127,7 +124,3 @@ And I perform the step "Create new tube RNA"
 Then I should have created an asset with the following facts:
 | Predicate   |  Object |
 | aliquotType |  RNA     |
-
-And I should not have created an asset with the following facts:
-| Predicate   |  Object |
-| aliquotType |  NA     |

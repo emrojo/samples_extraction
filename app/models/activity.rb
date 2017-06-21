@@ -164,15 +164,15 @@ class Activity < ActiveRecord::Base
   def reasoning!(step, printer_config=nil, user=nil)
     BackgroundSteps::Inference.create(:asset_group => asset_group, :activity => self, :user => user)
 
-    # BackgroundSteps::TransferTubesToTubeRackByPosition.create(:asset_group => asset_group, :activity => self, :user => user)
-    # BackgroundSteps::TransferPlateToPlate.create(:asset_group => asset_group, :activity => self, :user => user)
-    # BackgroundSteps::TransferSamples.create(:asset_group => asset_group, :activity => self, :user => user)
+    BackgroundSteps::TransferTubesToTubeRackByPosition.create(:asset_group => asset_group, :activity => self, :user => user)
+    BackgroundSteps::TransferPlateToPlate.create(:asset_group => asset_group, :activity => self, :user => user)
+    BackgroundSteps::TransferSamples.create(:asset_group => asset_group, :activity => self, :user => user)
 
-    # BackgroundSteps::AliquotTypeInference.create(:asset_group => asset_group, :activity => self, :user => user)
-    # BackgroundSteps::StudyNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
-    # BackgroundSteps::PurposeNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
+    BackgroundSteps::AliquotTypeInference.create(:asset_group => asset_group, :activity => self, :user => user)
+    BackgroundSteps::StudyNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
+    BackgroundSteps::PurposeNameInference.create(:asset_group => asset_group, :activity => self, :user => user)
 
-    # BackgroundSteps::UpdateSequencescape.create(:asset_group => asset_group, :activity => self, :printer_config => printer_config, :user => user)
+    BackgroundSteps::UpdateSequencescape.create(:asset_group => asset_group, :activity => self, :printer_config => printer_config, :user => user)
   end
 
 end

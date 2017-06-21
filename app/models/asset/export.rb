@@ -1,11 +1,6 @@
 module Asset::Export
 
-  def step_for_export
-    step_type = StepType.find_or_create_by(name: 'Export')
-    step = Step.new(step_type: step_type)
-  end
-
-  def update_sequencescape(print_config, user)
+  def update_sequencescape(print_config, user, step_for_export)
     instance = SequencescapeClient.find_by_uuid(uuid)
     unless instance
       instance = SequencescapeClient.create_plate(class_name, {}) if class_name
@@ -24,7 +19,7 @@ module Asset::Export
     step_for_export.add_facts(self, Fact.create(predicate: 'purpose', object: class_name))
     step_for_export.remove_facts(self, facts.with_predicate('barcodeType'))
     step_for_export.add_facts(self, Fact.create(:predicate => 'barcodeType', :object => 'SequencescapePlate'))
-    mark_as_updated
+    mark_as_updated(step_for_export)
     print(print_config, user.username) if old_barcode != barcode
   end
 
@@ -45,7 +40,7 @@ module Asset::Export
     nil
   end
 
-  def mark_as_updated
+  def mark_as_updated(step_for_export)
     step_for_export.add_facts(self, Fact.create(predicate: 'pushedTo', object: 'Sequencescape'))
     facts.with_predicate('contains').each do |f|
       if f.object_asset.has_predicate?('sample_tube')
@@ -55,6 +50,7 @@ module Asset::Export
   end
 
   def validate_racking_info?(data)
+    return false if data.blank?
     unless data.first[:location].nil?
       # Disallows duplicated locations
       return (data.map{|n| n[:location]}.compact.uniq.count == data.count)
@@ -66,7 +62,7 @@ module Asset::Export
     data = facts.with_predicate('contains').map(&:object_asset).uniq.map do |well|
       racking_info(well)
     end
-
+    return [] if data.blank?
     return data if validate_racking_info?(data)
     raise 'Invalid racking info provided'
   end

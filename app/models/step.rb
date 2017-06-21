@@ -63,6 +63,7 @@ class Step < ActiveRecord::Base
   end
 
   def add_facts(asset, facts)
+    facts = [facts].flatten
     ActiveRecord::Base.transaction do
       asset.add_facts(facts)
       asset.add_operations(facts, self)
@@ -70,13 +71,12 @@ class Step < ActiveRecord::Base
   end
 
   def add_fact(asset, fact)
-    ActiveRecord::Base.transaction do
-      asset.add_facts([fact])
-      asset.add_operations([fact], self)
-    end
+    facts = [fact].flatten    
+    add_facts(asset, facts)
   end
 
   def remove_facts(asset, facts)
+    facts = [facts].flatten
     ActiveRecord::Base.transaction do
       asset.remove_facts(facts)
       asset.remove_operations(facts, self)    
