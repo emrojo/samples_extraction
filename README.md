@@ -1,21 +1,21 @@
 # samples_extraction
 
-A semantic web customizable tool for worflows definition and data retrieval for updating the information of samples extraction processes in LIMS persistance servers.
+A tool to use and customize workflows for tracking information about the
+process for samples extraction and update the relevant information in 
+Sequencescape.
 
-FEATURES:
+Main Features:
 
-- Inbox of Started and Not Started samples
-- Complete Worflow creation from scratch using a browser
-- Workflow selection by kit barcode
+- Inbox of Started and Non started samples
+- Worflows creation using the GUI with the browser
+- Selection of the workflow to use by providing a kit barcode
 - Imports and exports labware by barcode from Sequencescape LIMS
-- Data retrieval and manipulation by following one of the previously created workflows
-- Historical view of the operations performed during an activity
+- Historical view of the operations performed during an activity.
 - Print barcodes using PrintMyBarcode service
-- Imports and Exports data in CSV, XML and JSON
 - Admin view to manage users, printers and labware
-- Searching of labwares
+- Functionality for searching of labwares by metadata criteria
 
-DATA MODEL:
+Main Data model:
 
 Kits <-- KitTypes <-- ActivityTypes ---> Activities     
                           |                |
@@ -29,15 +29,25 @@ ConditionGroups <--   AssetGroups        Operations
 Conditions           Assets --> Facts
 
 
-DESCRIPTION:
+Other features:
 
-- Labware agnostic schema-less design with data integrity checks performed by using the ontologies declared
-- Workflow definition using RDF/N3
-- Background jobs approach, where the main tasks are performed in a delayed job queue during user interaction. 
-- New knowledge generated from the inferences performed using the ontologies and the declared workflows applied to the current group of labware
+- Main process is labware type agnostic, any labware description is following 
+the description of the ontology created in app/assets/owls/root-ontology.ttl
+- Web resources are accessible in .n3 format to be able to create external
+scripts for querying the data (see lib/examples)
+- Any rules processing is delegated to the delayed job in a background job that
+could use other external tools to perform the processing
 
 To start:
+
+1. Modify config/enviroments/... PMB_URI to link with the required instance for
+ print my barcode
+2. Modify config/environments SS_URI to link with Sequencescape and start Sequencescape
+3. Create the label_templates for PrintMyBarcode 
 ```bash
-rake db:drop db:create db:migrate db:seed label_templates:setup
+rake label_templates:setup
+```
+4. Start the server
+```bash
 rails server
 ```
