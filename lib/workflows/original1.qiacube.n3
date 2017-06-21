@@ -1,0 +1,409 @@
+:activityType :activityTypeName """AllPrep DNA/RNA/miRNA Universal""" .
+{
+  ?tube   :a  :SampleTube .
+  ?tube   :is   :NotStarted .
+  ?tube   :maxCardinality   """12""" .
+  ?dna_tube   :maxCardinality   """0""" .
+  ?rnap_tube   :maxCardinality   """0""" .
+} => {
+  :step :addFacts {
+    ?tube   :groupNamePrefix """"Sample tubes""" .
+  }.
+  :step  :stepTypeName """Create DNA and RNA+P tubes from Sample tubes""" .
+  :step  :createAsset  {
+    ?dna_tube   :a  :Tube .
+    ?dna_tube   :aliquotType  :DNA .
+    ?dna_tube   :is  :Empty .
+    ?dna_tube   :groupNamePrefix """"DNA tubes""" .    
+  } .
+  :step  :createAsset  {
+    ?rnap_tube   :a  :Tube .
+    ?rnap_tube   :aliquotType  :RNAP .
+    ?rnap_tube   :is :Empty .
+    ?rnap_tube   :groupNamePrefix """"RNA+P tubes""" .    
+  } .
+} .
+
+{
+  ?tube   :a  :SampleTube .
+  ?tube   :is :NotStarted .
+  ?tube   :maxCardinality   """12""" .
+  ?tube   :sanger_sample_id ?_sample .
+  ?dna_tube   :a  :Tube .
+  ?dna_tube   :aliquotType  :DNA .
+  ?dna_tube   :maxCardinality   """12""" .
+  ?rnap_tube   :a  :Tube .
+  ?rnap_tube   :aliquotType  :RNAP .
+  ?rnap_tube   :maxCardinality   """12""" .
+} => {
+  :step  :stepTypeName """Extract DNA and RNA+P from Sample tubes""" .
+  :step  :stepTemplate """transfer_tube_to_tube""" .
+  :step  :unselectAsset  ?tube .
+  :step  :removeFacts {?dna_tube :is :Empty.}.
+  :step  :removeFacts {?rnap_tube :is :Empty.}.
+  :step  :addFacts   { ?tube   :transfer   ?dna_tube .} .
+  :step  :addFacts   { ?tube   :transfer   ?rnap_tube .} .
+  :step  :addFacts   { ?dna_tube   :transferredFrom  ?tube .} .
+  :step  :addFacts   { ?rnap_tube   :transferredFrom  ?tube .} .
+  :step :addFacts {?tube :is :Started.}.
+  :step :removeFacts {?tube :is :NotStarted.}.
+} .
+
+{
+  ?tube   :a  :SampleTube .
+  ?tube   :is   :NotStarted .
+  ?tube   :sanger_sample_id ?_sample .
+  ?tube   :maxCardinality   """12""" .
+  ?dna_tube   :maxCardinality   """12""" .
+  ?rnap_tube   :maxCardinality   """12""" .
+} => {
+  :step  :stepTypeName """(BY POSITION) Create and Extract DNA and RNA+P from Sample tubes""" .
+  :step :connectBy """position""" .  
+  :step  :createAsset  {
+    ?dna_tube :a  :Tube .
+    ?dna_tube :aliquotType  :DNA .
+    ?dna_tube :transferredFrom ?tube .
+  } .
+  :step  :createAsset  {
+    ?rnap_tube   :a  :Tube .
+    ?rnap_tube   :aliquotType  :RNAP .
+    ?rnap_tube :transferredFrom ?tube .
+  } .
+  :step  :unselectAsset   ?tube.
+  :step :connectBy """position""" .
+  :step  :addFacts   { ?tube   :transfer   ?dna_tube .} .
+  :step  :addFacts   { ?tube   :transfer   ?rnap_tube .} .
+  :step  :addFacts   { ?tube :is :Started. }.
+  :step :removeFacts { ?tube :is :NotStarted.}.
+} .
+
+
+{
+  ?dna_tube   :aliquotType  :DNA .
+  ?dna_tube   :sanger_sample_id  ?_sample .
+  ?dna_tube   :maxCardinality   """0""" .
+  ?rnap_tube   :aliquotType  :RNAP .
+  ?rnap_tube   :maxCardinality   """0""" .
+} => {
+  :step  :stepTypeName """Select just DNA tubes""" .
+  :step  :unselectAsset  ?rnap_tube.
+} .
+
+{
+  ?dna_tube   :aliquotType  :DNA .
+  ?dna_tube   :maxCardinality   """0""" .
+  ?rnap_tube   :aliquotType  :RNAP .
+  ?rnap_tube   :sanger_sample_id  ?_sample .
+  ?rnap_tube   :maxCardinality   """0""" .
+} => {
+  :step  :stepTypeName """Select just RNA+P tubes""" .
+  :step  :unselectAsset  ?dna_tube.
+  } .
+
+{
+  ?tube  :a  :SampleTube .
+  ?tube  :is   :NotStarted .
+  ?tube  :maxCardinality   """12""" .
+  ?dna_tube  :maxCardinality   """0""" .
+} => {
+  :step  :stepTypeName """Create DNA tube from Sample tube""" .
+  :step  :createAsset  {
+    ?dna_tube  :a  :Tube .
+    ?dna_tube  :aliquotType  :DNA .
+    ?dna_tube  :is :Empty .
+  } .
+} .
+
+{
+  ?tube  :a  :SampleTube .
+  ?tube  :is   :NotStarted .
+  ?tube  :maxCardinality   """12""" .
+  ?rna_tube  :maxCardinality   """0""" .
+} => {
+  :step  :stepTypeName """Create RNA+P tube from Sample tube""" .
+  :step  :createAsset  {
+    ?rna_tube  :a  :Tube .
+    ?rna_tube  :aliquotType  :RNAP .
+    ?rna_tube  :is :Empty .
+  } .
+} .
+
+{
+  ?tube  :a  :SampleTube .
+  ?tube  :is   :NotStarted .
+  ?tube  :maxCardinality   """0""" .
+  ?tube   :sanger_sample_id ?_sample .
+  ?dna_tube   :a  :Tube .
+  ?dna_tube   :aliquotType  :DNA .
+  ?dna_tube :is :Empty.
+  ?dna_tube   :maxCardinality   """0""" .
+} => {
+  :step  :stepTypeName """Extract DNA only""" .
+  :step  :stepTemplate """transfer_tube_to_tube""" .
+  :step  :unselectAsset  ?tube.
+  :step  :unselectAsset  ?dna_tube.
+  :step  :addFacts   {?tube  :transfer   ?dna_tube .} .
+  :step  :addFacts   {?dna_tube   :transferredFrom   ?tube .} .
+  :step :removeFacts {?dna_tube :is :Empty.}.
+} .
+
+{
+  ?tube   :a  :SampleTube .
+  ?tube  :is   :NotStarted .  
+  ?tube   :aliquotType :RNAP .
+  ?tube   :sanger_sample_id ?_sample .
+  ?tube   :maxCardinality   """0""" .
+  ?rna_tube   :a  :Tube .
+  ?rna_tube   :aliquotType  :RNAP .
+  ?rna_tube   :is  :Empty .
+  ?rna_tube   :maxCardinality   """12""" .
+} => {
+  :step  :stepTypeName """Extract RNA+P for RNA only""" .
+  :step  :stepTemplate """transfer_tube_to_tube""" .
+  :step  :removeFacts {?rna_tube :is :Empty.}.
+  :step  :addFacts   {?tube   :transfer   ?rna_tube .} .
+  :step  :addFacts   {?rna_tube   :transferredFrom  ?tube .} .
+} .
+
+{
+  ?rnap_tube       :a  :Tube .
+  ?rnap_tube   :aliquotType   :RNAP .
+  ?rnap_tube   :maxCardinality   """12""" .
+  ?rna_tube   :maxCardinality   """0""" .
+} => {
+  ?rnap_tube  :groupName """NA+P tube""" .
+  ?rna_tube  :groupName """RNA tube""" .
+  :step  :stepTypeName """Create RNA tubes from RNA+P tubes""" .
+  :step  :createAsset  {
+    ?rna_tube   :a  :Tube .
+    ?rna_tube   :aliquotType  :RNA .
+    ?rna_tube   :is  :Empty .
+  } .
+} .
+
+{
+  ?rnap_tube   :a  :Tube .
+  ?rnap_tube   :aliquotType :RNAP .
+  ?rnap_tube   :sanger_sample_id ?_sample .
+  ?rnap_tube   :maxCardinality   """12""" .
+  ?rna_tube   :maxCardinality   """12""" .
+} => {
+  :step  :stepTypeName """(BY POSITION) Create RNA and extract RNA from RNA+P tubes""" .
+  :step :connectBy """position""" .
+  :step  :createAsset  {
+    ?rna_tube   :a  :Tube .
+    ?rna_tube   :aliquotType  :RNA .
+    ?rna_tube   :transferredFrom  ?rnap_tube .
+  } .
+  :step  :addFacts   {?rnap_tube   :transfer   ?rna_tube .} .
+} .
+
+{
+  ?rnap_tube   :a  :Tube .
+  ?rnap_tube   :aliquotType :RNAP .
+  ?rnap_tube   :sanger_sample_id ?_sample .
+  ?rnap_tube   :maxCardinality   """12""" .
+  ?rna_tube   :maxCardinality   """12""" .
+  ?rna_tube   :is :Empty .
+} => {
+  :step  :stepTypeName """Extract RNA from RNA+P tubes""" .
+  :step :connectBy """position""" .
+  :step  :addFacts  {
+    ?rna_tube   :aliquotType  :RNA .
+    ?rna_tube   :transferredFrom  ?rnap_tube .
+  } .
+  :step  :addFacts   {?rnap_tube   :transfer   ?rna_tube .} .
+  :step  :removeFacts {?rna_tube :is :Empty .}.
+} .
+
+{
+  ?rnap_tube   :a  :Tube .
+  ?rnap_tube   :aliquotType :RNAP .
+  ?rna_tube   :a  :Tube .
+  ?rna_tube   :aliquotType  :RNA .
+  ?rna_tube   :sanger_sample_id ?_sample .
+}=>{
+  :step :stepTypeName """Select only RNA tubes""".
+  :step :unselectAsset ?rnap_tube .
+}.
+
+
+{
+  ?dna_tube   :a  :Tube .
+  ?dna_tube   :aliquotType  :DNA .
+  ?dna_tube   :sanger_sample_id ?_sample .
+  ?fluidx_tube    :a  :Tube .
+  ?fluidx_tube    :is :Empty .
+  ?fluidx_tube    :barcodeType :Code2D .
+}=>{
+  :step  :stepTypeName """Transfer DNA to Fluidx tubes""" .
+  :step  :stepTemplate """transfer_tube_to_tube""" .
+  :step :addFacts { ?dna_tube :transfer ?fluidx_tube . } .
+  :step :addFacts { ?fluidx_tube :transferredFrom ?dna_tube . } .
+  :step :addFacts { ?fluidx_tube :aliquotType :DNA . } .
+  :step :removeFacts {?fluidx_tube :is :Empty . } .
+} .
+
+{
+  ?dna_tube   :a  :Tube .
+  ?dna_tube   :aliquotType  :DNA .
+  ?dna_tube   :sanger_sample_id ?_sample .
+  ?fluidx_tube    :a  :Tube .
+  ?fluidx_tube    :is :Empty .
+  ?fluidx_tube    :barcodeType :Code2D .
+}=>{
+  :step  :stepTypeName """(BY POSITION) Transfer DNA to Fluidx tubes""" .
+  :step :connectBy """position""" .  
+  :step :addFacts {?dna_tube :transfer ?fluidx_tube.}.
+  :step :addFacts {?fluidx_tube :transferredFrom ?dna_tube . } .
+  :step :addFacts {?fluidx_tube :aliquotType :DNA.}.
+  :step :removeFacts {?fluidx_tube :is :Empty.}.
+} .
+
+{
+  ?rna_tube   :a  :Tube .
+  ?rna_tube   :aliquotType  :RNA .
+  ?rna_tube   :sanger_sample_id  ?_sample .
+  ?fluidx_tube    :a  :Tube .
+  ?fluidx_tube    :is :Empty .
+  ?fluidx_tube    :barcodeType :Code2D .
+}=>{
+  :step  :stepTypeName """Transfer RNA to Fluidx tubes""" .
+  :step  :stepTemplate """transfer_tube_to_tube""" .
+  :step :addFacts {?rna_tube :transfer ?fluidx_tube.}.
+  :step :addFacts {?fluidx_tube :transferredFrom ?rna_tube.}.
+  :step :addFacts {?fluidx_tube :aliquotType :RNA.}.
+  :step :removeFacts {?fluidx_tube :is :Empty.}.
+} .
+
+{
+  ?rna_tube   :a  :Tube .
+  ?rna_tube   :aliquotType  :RNA .
+  ?rna_tube   :sanger_sample_id ?_sample .
+  ?fluidx_tube    :a  :Tube .
+  ?fluidx_tube    :is :Empty .
+  ?fluidx_tube    :barcodeType :Code2D .
+}=>{
+  :step  :stepTypeName """(BY POSITION) Transfer RNA to Fluidx tubes""" .
+  :step :connectBy """position""" .  
+  :step :addFacts {?rna_tube :transfer ?fluidx_tube.}.
+  :step :addFacts {?fluidx_tube :transferredFrom ?rna_tube.}.
+  :step :addFacts {?fluidx_tube :aliquotType :RNA.}.
+  :step :removeFacts {?fluidx_tube :is :Empty.}.
+} .
+
+{
+  ?tube   :a  :Tube .
+  ?tube   :transfer ?fluidx_tube .
+  ?fluidx_tube    :a  :Tube .
+  ?fluidx_tube    :barcodeType :Code2D .
+}=>{
+  :step  :stepTypeName """Select only Fluidx tubes""" .
+  :step :unselectAsset ?tube .
+} .
+
+{
+  ?tube :a :Tube .
+  ?tube :aliquotType :DNA .
+  ?rack_dna :maxCardinality """1""" .
+  ?tube :maxCardinality """96""" .
+}=>{
+  :step :stepTypeName """Create TubeRack for DNA""" .
+  :step :createAsset {
+    ?rack_dna :a :TubeRack . 
+    ?rack_dna :barcodeType :NoBarcode .
+    ?rack_dna :createdFrom ?tube .
+  }.
+  :step :addFacts {?tube :creates ?rack_dna .}.
+}.
+
+{
+  ?tube :a :Tube .
+  ?tube :aliquotType :RNA .
+  ?rack_rna :maxCardinality """1""" .
+  ?tube :maxCardinality """96""" .
+}=>{
+  :step :stepTypeName """Create TubeRack for RNA""" .
+  :step :createAsset {
+    ?rack_rna :a :TubeRack . 
+    ?rack_rna :barcodeType :NoBarcode .
+    ?rack_rna :createdFrom ?tube .
+  }.
+  :step :addFacts {?tube :creates ?rack_rna .}.
+}.
+
+{
+  ?tube :a :Tube .
+  ?tube :barcodeType :Code2D .
+  ?rack :maxCardinality """1""".
+}=>{
+  :step :stepTypeName """Create TubeRack for Fluidx Tube""" .
+  :step :createAsset {
+    ?rack :a :TubeRack . 
+    ?rack :barcodeType :NoBarcode .
+    ?rack :createdFrom ?tube .
+  }.
+  :step :addFacts {?tube :creates ?rack .}.
+}.
+
+{
+  ?tube :a :Tube .
+  ?tube :barcodeType :Code2D .
+  ?tube_rack :a :TubeRack .
+}=>{
+  :step :stepTypeName """Manual racking""" .
+  :step :stepTypeTemplate """racking_by_columns""" .
+}.
+
+{
+  ?tube_rack :a :TubeRack .
+  ?tube_rack :maxCardinality """1""".
+} => {
+  :step :stepTypeName """Upload .csv layout of Fluidx tubes in empty TubeRack""" .
+  :step :stepTemplate """rack_layout_creating_tubes""" .
+  :step :addFacts { ?tube_rack :layout :Complete . } .
+} .
+
+{
+  ?tube_rack :a :TubeRack .
+  ?tube_rack :maxCardinality """1""".
+  ?tube_rack :layout :Complete . 
+  ?tube :a :Tube .
+  ?tube :sanger_sample_id ?_sample .
+} => {
+  :step :stepTypeName """Transfer tube contents to Fluidx rack by column order""" .
+  :step :addFacts {
+    ?tube :transferToTubeRackByPosition ?tube_rack .
+  } .
+} .
+
+{
+  ?tube :a :Tube .
+  ?tube_rack :a :TubeRack .
+  ?tube_rack :maxCardinality """1""".
+} => {
+  :step :stepTypeName """Upload .csv layout of fluidx tubes in Empty TubeRack""" .
+  :step :stepTemplate """rack_layout_creating_tubes""" .
+  :step :addFacts { ?tube_rack :layout :Complete . } .
+} .
+
+{
+  ?tube_rack :a :TubeRack .
+  ?tube_rack :maxCardinality """1""" .
+  ?tube_rack :purpose ?_purpose_name .
+  ?tube :a :Tube .
+} => {
+  :step :stepTypeName """Upload Extracted TubeRack to Sequencescape""" .
+  :step :addFacts { ?tube_rack :pushTo :Sequencescape. }.
+} .
+
+{
+  ?tube_rack :a :TubeRack .
+  ?tube_rack :maxCardinality """1""" .
+  ?tube_rack :purpose ?_purpose_name .
+} => {
+  :step :stepTypeName """Upload TubeRack to Sequencescape""" .
+  :step :addFacts { ?tube_rack :pushTo :Sequencescape. }.
+} .
+
+

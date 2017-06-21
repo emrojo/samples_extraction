@@ -1,0 +1,41 @@
+:activityType :activityTypeName """QIAamp Investigator BioRobot""" .
+{
+  ?p :a :Plate .
+  ?p :is :NotStarted .
+  ?p :maxCardinality """1""".
+} => {
+  :step :stepTypeName """ Creates destination plate from plate""" .
+  :step :addFacts {?p :transfer ?q .}  .
+  :step :addFacts {?q :transferredFrom ?p .}  .
+  :step :addFacts {?p :is :Started .}  .
+  :step :removeFacts {?p :is :NotStarted .}.
+  :step :unselectAsset ?p .
+  :step :createAsset {
+    ?q :a :Plate .
+    ?q :purpose :DestinationPlate .
+  } .
+} .
+
+{
+  ?p :a :SampleTube .
+  ?p :is :NotStarted .
+} => {
+  :step :stepTypeName """ Creates Destination TubeRack from tube """ .
+  :step :createAsset {
+    ?q :a :TubeRack .
+    ?q :purpose :DestinationPlate .
+    ?q :maxCardinality """1""" .
+  } .
+} .
+
+{
+  ?p :a :SampleTube .
+  ?p :is :NotStarted .
+  ?q :a :TubeRack .
+  ?q :purpose :DestinationPlate .
+} => {
+  :step :stepTypeName """Upload .csv layout for Destination TubeRack""" .
+  :step :stepTemplate """rack_layout_creating_tubes""" .
+  :step :addFacts { ?tubeRack :layout :Complete . } .
+} .
+

@@ -1,0 +1,37 @@
+:activity :activityTypeName """Testing activity type 2""" .
+{ ?p :is :stage1 .} => { :step :stepTypeName """Stage 1""" .
+       :step :removeFacts { ?p :is :stage1 .} .
+       :step :addFacts { ?p :is :stage2 .} .
+      }.
+
+{ ?p :is :stage2 .} => { :step :stepTypeName """Stage 2""" .
+       :step :removeFacts { ?p :is :stage2 .} .
+       :step :addFacts { ?p :is :stage3 .} .
+       }.
+
+{ ?p :is :stage3 .} => { :step :stepTypeName """Stage 3""" .
+       :step :removeFacts { ?p :is :stage3 .} .
+       :step :addFacts { ?p :is :stage4 .} .
+       }.
+
+{ ?p :is :stage4 .} => { :step :stepTypeName """Stage 4""" .
+       :step :removeFacts { ?p :is :stage4 .} .
+       :step :addFacts { ?p :is :stage1 .} .
+       }.
+
+
+{ ?p :is :EmptyTube .
+  ?p :is :Empty .
+  ?q :is :stage3 .
+} => { :step :stepTypeName """Tubes processed""" .
+       :step :removeFacts {
+         ?q :is :stage3 .
+         ?p :is :EmptyTube .
+         ?p :is :Empty .
+       } .
+       :step :addFacts {
+          ?p :is :TransferedTube .
+          ?q :is :EmptyTube .
+          ?q :is :Empty .
+       } .
+       }.

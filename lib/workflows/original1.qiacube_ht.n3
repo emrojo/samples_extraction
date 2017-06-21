@@ -1,0 +1,53 @@
+:activityType :activityTypeName """QIAamp 96 DNA QIAcube HT""" .
+
+{ ?p :a :Plate .
+  ?p :is :NotStarted .
+  ?p :maxCardinality """1""" .
+} => {
+  :step :stepTypeName """Create stamped plate""" .
+  :step :addFacts {
+    ?p :is :Started .
+    ?p :transfer ?q .
+    ?q :transferredFrom ?p .
+  } .
+  :step :removeFacts {
+    ?p :is :NotStarted .
+  } .
+  :step :unselectAsset ?p .
+  :step :createAsset {
+    ?q :a :Plate .
+    ?q :a :StampedPlate .
+  } .
+} .
+
+{ ?p :a :StampedPlate .
+  ?p :maxCardinality """1""" .
+  ?q :maxCardinality """1""" .
+} => {
+  :step :stepTypeName """Create Biorobot plate""" .
+  :step :addFacts {
+    ?p :transfer ?q .
+    ?q :transferredFrom ?p .
+  } .
+  :step :unselectAsset ?p .
+  :step :createAsset {
+    ?q :a :Plate .
+    ?q :a :BiorobotPlate .
+  } .
+} .
+
+{ ?p :a :BiorobotPlate .
+  ?p :maxCardinality """1""" .
+  ?q :maxCardinality """1""" .
+} => {
+  :step :stepTypeName """Create Stock plate""" .
+  :step :addFacts {
+    ?p :transfer ?q .
+    ?q :transferredFrom ?p .
+  } .
+  :step :unselectAsset ?p .
+  :step :createAsset {
+    ?q :a :Plate .
+    ?q :a :StockPlate .
+  } .
+} .

@@ -55,6 +55,10 @@ RSpec.describe 'Inference' do
     end
 
     describe '#inferences' do
+      before do
+        Asset.all.each(&:destroy)
+      end
+
       inferences_data.each do |data|
         if data[:unless]
           next if send(data[:unless])
@@ -62,7 +66,7 @@ RSpec.describe 'Inference' do
 
         if data[:it]
           tags = data[:tags] ? data[:tags] : {}
-          it data[:it], tags do
+          xit data[:it], tags do
             check_inference(data[:rule], data[:inputs], data[:outputs])
           end
         else

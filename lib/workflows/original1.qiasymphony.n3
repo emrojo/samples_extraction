@@ -1,0 +1,120 @@
+:activity :activityTypeName """QIASymphony""" .
+
+{
+  ?p :a :SampleTube .
+  ?p :is :NotStarted .
+} => {
+  :step :stepTypeName """Create tubes with barcode 128""" .
+  :step :removeFacts {?p :is :NotStarted .}.
+  :step :addFacts {?p :is :Started .}.
+  :step :createAsset {
+    ?q :a :Tube .
+    ?q :is :Empty .
+    ?q :barcodeType :Code128 .
+  } .
+} .
+
+{
+  ?p :a :SampleTube .
+  ?p :is :NotStarted .
+} => {
+  :step :connectBy """position""" .
+  :step :stepTypeName """(BY POSITION) Create Code128 tubes and transfer from SampleTubes""" .
+  :step :removeFacts {?p :is :NotStarted .}.
+  :step :addFacts {?p :is :Started .}.
+  :step :createAsset {
+    ?q :a :Tube .
+    ?q :is :Empty .
+    ?q :barcodeType :Code128 .
+  } .
+  :step :removeFacts { ?q :is :Empty .}.
+  :step :addFacts {
+    ?p :transfer ?q .
+  }.
+  :step :addFacts {
+    ?q :transferredFrom ?p .
+  }.
+} .
+
+
+{
+  ?p :a :SampleTube .
+  ?p :is :Started .
+  ?q :a :Tube .
+  ?q :is :Empty .
+  ?q :barcodeType :Code128 .
+} => {
+  :step :connectBy """position""" .
+  :step :stepTypeName """Transfer from SampleTubes to Code128""" .
+  :step :removeFacts { ?q :is :Empty .}.
+  :step :addFacts {
+    ?p :transfer ?q .
+  }.
+  :step :addFacts {
+    ?q :transferredFrom ?p .
+  }.
+} .
+
+{
+  ?p :a :SampleTube .
+  ?q :a :Tube .
+  ?q :barcodeType :Code128 .
+  ?p :transfer ?q .
+} => {
+  :step :stepTypeName """Select only Code128 tubes""" .
+  :step :unselectAsset ?p .
+} .
+
+{
+  ?p :a :Tube .
+  ?p :barcodeType :Code128 .
+  ?q :maxCardinality """1""" .
+} => {
+  :step :stepTypeName """Create a TubeRack""" .
+  :step :createAsset {
+    ?q :a :TubeRack .
+  }.
+} .
+
+{
+  ?p :a :Tube .
+  ?p :barcodeType :Code128 .
+
+  ?q :a :TubeRack .
+  ?q :maxCardinality """1""" .
+} => {
+  :step :stepTypeName """Upload .csv layout with empty 2D tubes for destination TubeRack""" .
+  :step :stepTemplate """rack_layout_creating_tubes""" .
+  :step :addFacts { ?q :layout :Complete . } .
+} .
+
+{
+  ?p :a :Tube .
+  ?p :barcodeType :Code128 .
+
+  ?q :a :TubeRack .
+  ?q :maxCardinality """1""" .
+  ?q :layout :Complete .
+} => {
+  :step :stepTypeName """Select only the TubeRack""" .
+  :step :unselectAsset ?p .
+} .
+
+{
+  ?q :a :TubeRack .
+  ?q :maxCardinality """1""" .
+  ?q :layout :Complete .
+} => {
+  :step :stepTypeName """Upload .csv Order QIASymphony file""" .
+  :step :stepTemplate """rack_order_symphony""" .
+  :step :addFacts { ?q :order :Complete. }.
+} .
+
+{
+  ?q :a :TubeRack .
+  ?q :maxCardinality """1""" .
+  ?q :order :Complete .
+} => {
+  :step :stepTypeName """Upload TubeRack to Sequencescape""" .
+  :step :addFacts { ?q :pushTo :Sequencescape. }.
+} .

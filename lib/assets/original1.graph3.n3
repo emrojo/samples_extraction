@@ -1,0 +1,152 @@
+:activity :activityTypeName """Testing activity type""" .
+
+{
+  ?p :a :Tube .
+  ?p :is :NotStarted .
+} => {
+  :step :stepTypeName """Change purpose of tube to 1D Tube""" .
+  :step :addFacts {
+    ?p :has :Barcode1D .
+    ?p :is :Full .
+    ?p :is :Started .
+  } .
+  :step :removeFacts {
+    ?p :is :NotStarted .
+  } .
+} .
+
+{ ?p :has :Barcode1D .
+} => {
+  :step :stepTypeName """Print 2D barcodes""" .
+  :step :createAsset {
+    ?q :a :Tube .
+    ?q :is :Empty .
+    ?q :has :Barcode2D .
+  } .
+  :step :selectAsset ?q .
+}.
+
+{ ?TubeWithBarcode1D :has :Barcode1D .
+  ?TubeWithBarcode1D :is :Full .
+  ?TubeWithBarcode2D :has :Barcode2D .
+  ?TubeWithBarcode2D :is :Empty .
+} => {
+  :step :stepTypeName """Transfer 1D to 2D tubes""" .
+  :step :stepTemplate """transfer_tube_to_tube""" .
+  :step :unselectAsset ?TubeWithBarcode1D .
+  :step :unselectAsset {?r :is :Empty.}.
+  :step :removeFacts {
+    ?TubeWithBarcode1D :is :Full .
+    ?TubeWithBarcode2D :is :Empty .
+  } .
+  :step :addFacts {
+    ?TubeWithBarcode1D :is :Empty .
+    ?TubeWithBarcode2D :is :Full .
+    ?TubeWithBarcode1D :transferTo ?TubeWithBarcode2D .
+    ?TubeWithBarcode2D :transferedFrom ?TubeWithBarcode1D .
+  } .
+} .
+
+
+{ ?p :has :Barcode2D .
+  ?p :is :Full .
+  ?p :maxCardinality """96""" .
+} => {
+  :step :stepTypeName """Put tubes in 96 rack""" .
+  ?step :addFacts {
+    ?p :inRack ?q .
+  } .
+  ?step :createAsset {
+    ?q :a :TubeRack .
+    ?q :pushTo :Sequencescape .
+    ?q :purpose """Stock Plate""" .
+    ?q :maxCardinality """1""" .
+  } .
+} .
+
+{ ?p  :has :Barcode2D .
+?p :is :Full .
+  ?p :maxCardinality """384""" .
+} => { :step :stepTypeName """Put tubes in 384 rack""" .
+  ?step :addFacts {
+    ?p :inRack ?q .
+  } .
+  ?step :createAsset {
+    ?q :a :TubeRack .
+    ?q :pushTo :Sequencescape .
+    ?q :purpose """Stock Plate""" .
+    ?q :maxCardinality """1""" .
+  } .
+} .
+
+{ ?p :has :Barcode2D .
+?p :is :Full .
+  ?p :maxCardinality """2""" .
+} => { :step :stepTypeName """Put tubes in 2 rack""" .
+  ?step :addFacts {
+    ?p :inRack ?q .
+  } .
+  ?step :createAsset {
+    ?q :a :TubeRack .
+    ?q :pushTo :Sequencescape .
+    ?q :purpose """Stock Plate""" .
+    ?q :maxCardinality """1""" .
+  } .
+} .
+
+{ ?p :a :TubeRack .
+} => { :step :stepTypeName """Reracking""" .
+      ?step :removeFacts { ?p :is :TubeRack} .
+      ?step :addFacts { ?p :is :TubeRackToRerack .} .
+} .
+
+{ ?p :is :TubeRackToRerack .
+} => { :step :stepTypeName """Upload re-racking layout""" .
+      :step :stepTemplate """upload_file_step""" .
+      ?step :removeFacts { ?p :is :TubeRackToRerack} .
+      ?step :addFacts { ?p :is :TubeRackWithRerackLayout .} .
+} .
+
+{ ?p :is :TubeRackWithRerackLayout .
+} => { :step :stepTypeName """Print re-racked Tube rack""" .
+      ?step :removeFacts { ?p :is :TubeRackWithRerackLayout} .
+      ?step :addFacts { ?p :is :TubeRack} .
+      ?step :createAsset { :q :is :TubeRack .} .
+      ?step :addFacts { ?p :rerackedTo :q } .
+} .
+
+
+{ ?p :is :TubeRack .
+} => { :step :stepTypeName """Upload volume check""" .
+       :step :stepTemplate """upload_file_step""" .
+      ?step :removeFacts { ?p :is :TubeRack} .
+      ?step :addFacts { ?p :is :TubeRackChecked .
+      ?p :is :stage2} .
+} .
+
+
+{ ?p :is :TubeRack .
+} => { :step :stepTypeName """Another upload""" .
+       :step :stepTemplate """upload_file_step""" .
+      ?step :removeFacts { ?p :is :TubeRack} .
+      ?step :addFacts { ?p :is :TubeRackChecked .
+      ?p :is :stage2} .
+} .
+
+
+{ ?p :is :TubeRackChecked .
+} => { :step :stepTypeName """Update Sequencescape""" .
+       ?step :addFacts {?p :is :stage2 .} .
+      } .
+
+
+
+{ ?p :is :TubeRackChecked .
+?q :is :TubeRackChecked .
+} => { :step :stepTypeName """Re-rack""" .
+      ?step :removeFacts { ?p :is :TubeRack .} .
+      ?step :removeFacts { ?q :is :TubeRack .} .
+      ?step :createAsset { :r :is :TubeRack .} .
+      ?step :addFacts { ?p :reracked :r} .
+      ?step :addFacts { ?q :reracked :r} .
+} .

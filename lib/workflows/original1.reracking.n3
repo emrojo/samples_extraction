@@ -1,0 +1,41 @@
+:activity :activityTypeName """Re-Racking""" .
+
+{
+  ?p :a :TubeRack.
+  ?q :maxCardinality """1""".
+} => {
+  :step :stepTypeName """Create a new empty TubeRack""".
+  :step :createAsset {
+    ?q :a :TubeRack .
+    ?q :barcodeType :NoBarcode .
+  }.
+}.
+
+{
+  ?q :maxCardinality """1""".
+} => {
+  :step :stepTypeName """Create a new empty TubeRack""".
+  :step :createAsset {
+    ?q :a :TubeRack .
+    ?q :barcodeType :NoBarcode .
+  }.
+}.
+
+{
+  ?p :a :TubeRack .
+  ?p :maxCardinality """1""".
+} => {
+  :step :stepTypeName """Upload .csv layout for TubeRack""".
+  :step :stepTemplate """rack_layout_creating_tubes""" .
+}.
+
+
+{
+  ?p :a :TubeRack .
+  ?p :maxCardinality """1""".
+} => {
+  :step :stepTypeName """Update in Sequencescape""".
+  :step :addFacts { ?p :pushTo :Sequencescape . } .
+}.
+
+

@@ -1,0 +1,12 @@
+:activity :activityTypeName """Racking""" .
+
+{ ?p :a :SampleTube .
+  ?q :a :TubeRack .
+} => {
+  :step :stepTypeName """Racking by column order""" .
+  :step :stepTemplate """racking_by_columns""" .
+  :step :addFacts {
+    ?q :pushTo :Sequencescape .
+  } .
+  :step :unselectAsset ?p .
+} .

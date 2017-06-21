@@ -9,6 +9,8 @@ module Asset::Import
   def annotate_container(asset, remote_asset)
     if remote_asset.try(:aliquots, nil)
       remote_asset.aliquots.each do |aliquot|
+        step_for_import.add_facts(asset, Fact.create(predicate: 'supplier_name',
+                                                     object_asset: aliquot.sample.sample_metadata.supplier_name))
         step_for_import.add_facts(asset, Fact.create(predicate: 'sample_tube',
                                                      object_asset: asset))
         step_for_import.add_facts(asset, Fact.create(predicate: 'sanger_sample_id',

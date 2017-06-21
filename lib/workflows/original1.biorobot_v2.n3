@@ -1,0 +1,42 @@
+:step :activityTypeName """Biorobot V2""" . 
+{
+  ?p :a "Plate" .
+  ?p :is "NotStarted" .
+} => {
+  :step :createAsset {?q :a "Plate". } .
+  :step :createAsset {?q :transferredFrom ?p. } .
+  :step :createAsset {?q :purpose "LysedPlate". } .
+  :step :addFacts {?p :is "Started". } .
+  :step :addFacts {?p :transferTo ?q. } .
+  :step :removeFacts {?p :is "NotStarted". } .
+  :step :stepTypeName "Create stamped plate" .
+  :step :unselectAsset ?p .
+  :step :addFacts {?p :aliquotType "DNA".}.
+}.
+{
+  ?p :a "Plate" .
+  ?p :purpose "LysedPlate" .
+} => {
+  :step :createAsset {?q :a "Plate". } .
+  :step :createAsset {?q :transferredFrom ?p. } .
+  :step :createAsset {?q :pushTo "Sequencescape". } .
+  :step :createAsset {?q :barcodeType "NoBarcode". } .
+  :step :addFacts {?p :transferTo ?q. } .
+  :step :stepTypeName "Create Stock plate" .
+  :step :unselectAsset ?p .
+}.
+{
+  ?plate :a :Plate .
+  ?plate :purpose :LysedPlate .
+  ?plate :contains ?well .
+  ?well :a :Well .
+} => {
+  :step  :stepTypeName """Process on the Lysed Plate wells to indicate that they are DNA""" .
+  :step :addFacts { ?well :aliquotType :DNA . } .
+  } .
+{
+  ?Condition1 :pushTo "Sequencescape" .
+} => {
+  :step :addFacts {?Condition1 :pushTo "Sequencescape". } .
+  :step :stepTypeName "Retry push to Sequencescape" .
+}.
