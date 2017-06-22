@@ -13,7 +13,7 @@ class Asset < ActiveRecord::Base
 
   alias_attribute :name, :uuid 
 
-  has_many :facts
+  has_many :facts, :dependent => :delete_all
   has_and_belongs_to_many :asset_groups
   has_many :steps, :through => :asset_groups
 
@@ -29,7 +29,7 @@ class Asset < ActiveRecord::Base
 
   scope :include_facts, ->() { includes(:facts) }
 
-  has_many :operations
+  has_many :operations, :dependent => :delete_all
 
   has_many :activity_type_compatibilities
   has_many :activity_types, :through => :activity_type_compatibilities

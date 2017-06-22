@@ -3,8 +3,8 @@ module Asset::Import
   def step_for_import
     return @step_for_import if @step_for_import
     step_type = StepType.find_or_create_by(name: 'Import')
-    asset_group = AssetGroup.new
-    @step_for_import = Step.new(step_type: step_type, asset_group: asset_group)
+    asset_group = AssetGroup.create
+    @step_for_import = Step.create(step_type: step_type, asset_group: asset_group)
   end
 
   def annotate_container(asset, remote_asset)

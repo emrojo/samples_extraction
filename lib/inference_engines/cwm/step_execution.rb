@@ -23,15 +23,23 @@ module InferenceEngines
         end
       end
 
+      include Rails.application.routes.url_helpers
       def run
-        input_tempfile = Tempfile.new('datainfer')
+        #input_tempfile = Tempfile.new('datainfer')
         output_tempfile = Tempfile.new('out_datainfer')
 
-        input_tempfile.write(@asset_group.to_n3)
-        input_tempfile.write(@step_types.map(&:to_n3).join("\n"))
-        input_tempfile.close
-        debug_log `cat #{input_tempfile.path}`
-        `#{Rails.configuration.cwm_path}/cwm #{input_tempfile.path} --think > #{output_tempfile.path}`
+        #input_tempfile.write(@asset_group.to_n3)
+        #input_tempfile.write(@step_types.map(&:to_n3).join("\n"))
+        #input_tempfile.close
+        #debug_log `cat #{input_tempfile.path}`
+        host = "http://localhost:3000"
+        urls = [@step_types].reduce([asset_group_url(@asset_group, host: host)]) do |memo, step_type|
+          memo.push(step_type_url(step_type, host: host))
+        end
+        urls_argument = urls.join(' ')
+        `#{Rails.configuration.cwm_path}/cwm #{urls_argument} --mode=r --think > #{output_tempfile.path}`
+        #step_type_url(step_type)
+        #{}`#{Rails.configuration.cwm_path}/cwm #{input_tempfile.path} --think > #{output_tempfile.path}`
         debug_log `cat #{output_tempfile.path}`
         step_actions = SupportN3::load_step_actions(output_tempfile)
 
