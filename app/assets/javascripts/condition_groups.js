@@ -96,7 +96,9 @@
     };
 
     proto.toN3 = function(e) {
-
+      if (this.conditionGroups.length == 0) {
+        return "";
+      }
       var checksN3 = $.map(this.conditionGroups, $.proxy(function(group) {
         return $.map(group.getCheckFacts(), $.proxy(this.checkFactToN3, this, group));
       }, this)).join('\n\t');
@@ -121,7 +123,10 @@
     };
 
     proto.storeN3 = function(e) {
-      $('input#step_type_n3_definition').val(this.toN3());
+      var n3 = this.toN3();
+      if (n3.length > 0) {
+        $('input#step_type_n3_definition').val(n3);
+      }
       //alert(this.toN3());
     };
 
@@ -146,7 +151,12 @@
       var editor = ace.edit("editor");
       editor.setTheme("ace/theme/monokai");
       editor.getSession().setMode("ace/mode/text");
-      editor.setValue(this.toN3());
+
+      if ($('input#step_type_n3_definition').val().length == 0) {
+        editor.setValue(this.toN3());  
+      } else {
+        editor.setValue($('input#step_type_n3_definition').val());
+      }
     };
 
     proto.getEditorContent = function() {
@@ -161,7 +171,16 @@
       //$('#editorContainer').hide();
     };
 
+    proto.onChangeForReasoning = function() {
+      var node = $('#step_type_for_reasoning')[0];
+      if (node) {
+        $('.edit_step_type').toggleClass('for-reasoning', node.checked);
+      }
+    };
+
     proto.attachHandlers = function() {
+      this.onChangeForReasoning();
+
       $(this.button).on('click', $.proxy(function() {
         this.addGroup(this.generateGroupName(), {});
       }, this));
@@ -173,6 +192,8 @@
       $(this.node).on('changed-name.condition-group', $.proxy(this.updateConditionGroupName, this));
 
       $('[data-psd-condition-groups-save]').on('click', $.proxy(this.storeN3, this));
+
+      $('#step_type_for_reasoning').on('click', $.proxy(this.onChangeForReasoning, this));
       $('.show-n3').on('click', $.proxy(function(e) {
         //e.stopPropagation();
         e.preventDefault();
@@ -180,7 +201,9 @@
         //return false;
       }, this));
       $('.update-n3').on('click', $.proxy(function(e) {
-        $('input#step_type_n3_definition').val(this.getEditorContent());
+        if (this.getEditorContent().length > 0) {
+          $('input#step_type_n3_definition').val(this.getEditorContent());
+        }
       }, this));
     };
 

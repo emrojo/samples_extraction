@@ -1,0 +1,3 @@
+<%= step_url(operation.step) %> :<%= operation.action_type %> { 
+  <<%= asset_url(operation.asset) %>>  :<%= operation.predicate %> <% if operation.object_asset.nil? %>"""<%= operation.object %>"""<% else %><<%= asset_url(operation.object_asset) %>><% end %> .
+} .

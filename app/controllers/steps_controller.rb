@@ -104,7 +104,6 @@ class StepsController < ApplicationController
 
     respond_to do |format|
       if @step.update(create_step_params)
-        debugger
         format.html { redirect_to @step, notice: 'Step was successfully updated.' }
         format.json { render :show, status: :ok, location: @step }
       else
@@ -119,7 +118,6 @@ class StepsController < ApplicationController
   def destroy
     @step.destroy
     respond_to do |format|
-      debugger
       format.html { redirect_to steps_url, notice: 'Step was successfully destroyed.' }
       format.json { head :no_content }
     end

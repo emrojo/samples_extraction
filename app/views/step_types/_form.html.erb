@@ -18,12 +18,12 @@
     <%= f.text_field :name, :readonly => readonly %>
   </div>
   <div class="field step_type_for_reasoning">
-    <%= f.check_box :for_reasoning, :value => false %>
+    <%= f.check_box :for_reasoning, :value => false, :disabled => readonly %>
   </div>
-  <div class="field">
+  <div class="field not-for-reasoning">
     <%= f.select :connect_by, options_for_select([['All', nil], ['By position', 'position']], step_type.connect_by), {}, :disabled => readonly %>
   </div>
-  <div class="field">
+  <div class="field not-for-reasoning">
     <%= f.select :step_template, options_for_select(step_type.all_step_templates.map do |a|
       if a.empty?
         ['None', nil]
@@ -35,9 +35,9 @@
   </div>
 
   <div class="field">
-    <%= f.hidden_field :n3_definition %>
+    <%= f.hidden_field :n3_definition, value: "#{step_type.for_reasoning ? step_type.n3_definition : nil}" %>
 
-    <div id="conditionGroups" class="<%= 'readonly' if readonly %>">
+    <div id="conditionGroups" class="not-for-reasoning <%= 'readonly' if readonly %>">
       <div class="btn-group">
         <a class="btn btn-default" data-psd-condition-group-action-types="<%= Action.types.to_json %>"
         >New Condition Group</a>

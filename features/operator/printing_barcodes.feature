@@ -20,11 +20,11 @@ Given I have the following label templates:
 | PlateTemplate | Plate | 2           |
 
 Given I have to process these tubes that are on my table:
-|  Barcode | Facts                   |
-|  1       | is:NotStarted, a:Tube   |
-|  2       | is:NotStarted, a:Tube   |
-|  3       | is:NotStarted, a:Plate  |
-|  4       | is:NotStarted, a:Plate  |
+|  Barcode        | Facts                   |
+|  00000001       | is:NotStarted, a:Tube   |
+|  00000002       | is:NotStarted, a:Tube   |
+|  00000003       | is:NotStarted, a:Plate  |
+|  00000004       | is:NotStarted, a:Plate  |
 
 Given we use these activity types:
 | Name          |
@@ -77,16 +77,21 @@ Then I should see the Instruments page
 When I create an activity with instrument "My Instrument" and kit "1"
 
 When I scan these barcodes into the selection basket:
-|Barcode |
-| 1      |
-| 2      |
+| Barcode       |
+| 00000001      |
+| 00000002      |
 
 Then I should see these barcodes in the selection basket:
-| Barcode |
-| 1       |
-| 2       |
+| Barcode        |
+| 00000001       |
+| 00000002       |
+
+Then I should see these steps available: 
+| Step          |
+| Create a tube |
 
 When I want to print "2" new barcodes starting from "33" with template "TubeTemplate" at printer "printer1"
+
 And I perform the step "Create a tube"
 Then I should have performed the step "Create a tube"
 And I should have printed what I expected
@@ -100,12 +105,12 @@ Then I should see the Instruments page
 When I create an activity with instrument "My Instrument" and kit "1"
 
 When I scan these barcodes into the selection basket:
-|Barcode |
-| 3      |
+| Barcode        |
+| 00000003       |
 
 Then I should see these barcodes in the selection basket:
-| Barcode |
-| 3       |
+| Barcode        |
+| 00000003       |
 
 And I should see these steps available:
 | Step                      |

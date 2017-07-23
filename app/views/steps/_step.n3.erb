@@ -1,0 +1,5 @@
+<<%= step_url(@step, format: :n3) %>> :user <%= @step.user_id %> .
+<<%= step_url(@step, format: :n3) %>> :stepType <<%= step_type_url(@step.step_type, format: :n3) %>> .
+<% @step.operations.each do |operation| %>
+  <%= render partial: 'operations/operation', locals: { operation: operation } %>
+<% end %>

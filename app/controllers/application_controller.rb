@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
 
   before_action :set_current_user
 
+  attr_reader :current_user
+
   def record_not_found(exception)
     flash.now[:error] = 'No record found'
     redirect_to :action => 'index'

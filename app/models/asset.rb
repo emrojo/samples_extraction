@@ -13,7 +13,7 @@ class Asset < ActiveRecord::Base
 
   alias_attribute :name, :uuid 
 
-  has_many :facts
+  has_many :facts, :dependent => :delete_all
   has_and_belongs_to_many :asset_groups
   has_many :steps, :through => :asset_groups
 
@@ -216,15 +216,7 @@ class Asset < ActiveRecord::Base
   end
 
   def object_value(fact)
-    if fact.object
-      object = fact.object
-    else
-      if fact.object_asset
-        object = fact.object_asset.uuid
-      else
-        object=nil
-      end
-    end
+    fact.object || fact.object_asset.uuid
   end
 
   def condition_groups_init
@@ -490,8 +482,9 @@ class Asset < ActiveRecord::Base
   end
 
   def to_n3
-    facts.map do |f|
-      "<#{uuid}> :#{f.predicate} " + (f.object_asset.nil? ? "\"#{f.object}\"" : "<#{f.object_asset.uuid}>") +" .\n"
-    end.join('')
+    #facts.map do |f|
+    #  "<#{uuid}> :#{f.predicate} " + (f.object_asset.nil? ? "\"#{f.object}\"" : "<#{f.object_asset.uuid}>") +" .\n"
+    #end.join('')
+    render :n3
   end
 end

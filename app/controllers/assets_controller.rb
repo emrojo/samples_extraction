@@ -35,6 +35,10 @@ class AssetsController < ApplicationController
   # GET /assets/1.json
   def show
     #@asset = Asset.find_by_uuid!(params[:uuid])
+    respond_to do |format|
+      format.html { render :show }
+      format.n3 { render :show }
+    end    
   end
 
 
@@ -100,9 +104,13 @@ class AssetsController < ApplicationController
 
 
     # Use callbacks to share common setup or constraints between actions.
-    def set_asset
-      @asset = Asset.find(params[:id])
-    end
+  def set_asset
+    @asset = if UUID_REGEXP.match(params[:id])
+               Asset.find_by(uuid: params[:id])
+             else
+               Asset.find(params[:id])
+             end
+  end
 
     def set_queries
       valid_indexes = params.keys.map{|k| k.match(/^[pq](\d*)$/)}.compact.map{|k| k[1]}

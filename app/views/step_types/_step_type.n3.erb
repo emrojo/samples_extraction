@@ -1,0 +1,27 @@
+<% if step_type.condition_groups.empty? || step_type.actions.empty? %>
+  <%= step_type.n3_definition.html_safe  %>
+<% else %>
+  {
+  <% step_type.condition_groups.include_conditions.map(&:conditions).flatten.map do |c| %>
+    <% if c.object_condition_group %>
+      ?<%= c.condition_group.name %> :<%= c.predicate %> ?<%= c.object_condition_group.name %> .
+    <% else %>
+        ?<%= c.condition_group.name %> :<%= c.predicate %> """<%= c.object %>""" .
+    <% end %>
+  <% end %>
+  } => {
+  <% if step_type.name %>
+    :step :stepTypeName """<%= step_type.name %>""" .
+  <% end %>
+  <% if step_type.connect_by %>
+    :step :connectBy """<%= step_type.connect_by %>""" .
+  <% end %>
+  <% step_type.actions.include_subject_condition_groups.include_object_condition_groups.map do |a| %>
+      <% if a.object_condition_group %>
+        :step :<%= a.action_type %> { ?<%= a.subject_condition_group.name %> :<%= a.predicate %> ?<%= a.object_condition_group.name %>. } .
+      <% else %>
+        :step :<%= a.action_type %> {?<%= a.subject_condition_group.name %> :<%= a.predicate %> """<%= a.object %>""" . } .
+      <% end %>
+  <% end %>
+  } .
+<% end %>

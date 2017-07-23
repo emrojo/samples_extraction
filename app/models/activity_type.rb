@@ -53,6 +53,7 @@ class ActivityType < ActiveRecord::Base
   end
 
   def to_n3
-    [":step :activityTypeName \"\"\"#{name}\"\"\"", step_types.map(&:to_n3)].flatten.join(" . \n")+" ."
+    render :n3
+    #[":step :activityTypeName \"\"\"#{name}\"\"\"", step_types.map(&:to_n3)].flatten.join(" . \n")+" ."
   end
 end

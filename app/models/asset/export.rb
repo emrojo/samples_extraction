@@ -48,7 +48,16 @@ module Asset::Export
     end
   end
 
+
+  def duplicate_locations_in_plate?
+    locations = facts.with_predicate('contains').map(&:object_asset).map do |a| 
+      a.facts.with_predicate('location').map(&:object)
+    end.flatten.compact
+    (locations.uniq.length != locations.length)
+  end
+
   def attributes_to_update
+    raise 'Duplicate locations in plate' if duplicate_locations_in_plate?
     facts.with_predicate('contains').map(&:object_asset).map do |well|
       racking_info(well)
     end

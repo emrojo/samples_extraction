@@ -1,0 +1,4 @@
+:step :activityTypeName "<%= activity_type.name %>" .
+<% activity_type.step_types.include_condition_groups.include_actions.each do |step_type| %>
+  <%= render step_type %>
+<% end %>

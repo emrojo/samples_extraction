@@ -59,7 +59,7 @@
       <%= f.submit %>
     </div>
   <% end %>
-  <input type="hidden" name="activity_type[n3_definition]" id="n3_definition" value="<%= @activity_type.to_n3 %>" %>
+  <%= hidden_field_tag(:"activity_type[n3_definition]", render(partial: 'activity_types/activity_type', :formats => [:n3], locals: {activity_type: @activity_type })) %>
 <script type="text/javascript">
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
@@ -67,11 +67,11 @@
 
     $('button.show-n3').on('click', $.proxy(function(e) {
       e.preventDefault();
-      editor.setValue($('input#n3_definition').val());
+      //editor.setValue($('input#n3_definition').val());
     }, this))
 
     $('.update-n3').on('click', $.proxy(function(e) {
-      $('input#n3_definition').val(editor.getValue());
+      $('input#activity_type_n3_definition').val(editor.getValue());
     }, this));
 
 </script>

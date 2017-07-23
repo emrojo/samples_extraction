@@ -1,0 +1,8 @@
+<% asset.facts.includes(:object_asset).each do |f| %>
+  <<%= asset_url(asset.uuid) %>> se:<%= f.predicate %> <%= object_for(f) %> .
+  <% unless f.object_asset.nil? %>
+    <% if traversable_predicate(f.predicate) %>
+      <%= render partial: 'assets/asset', locals: {asset: f.object_asset} %>
+    <% end %>
+  <% end %>
+<% end %>

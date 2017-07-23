@@ -1,0 +1,412 @@
+@prefix : <http://webprotege.stanford.edu/project/C19o1syxLFHMGRTjKvKd7r#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://webprotege.stanford.edu/project/C19o1syxLFHMGRTjKvKd7r> .
+
+<http://webprotege.stanford.edu/project/C19o1syxLFHMGRTjKvKd7r> rdf:type owl:Ontology .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/elements/1.1/description
+<http://purl.org/dc/elements/1.1/description> rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://webprotege.stanford.edu/R7nLs0Rklz9tmwdNA2l6tKI
+<http://webprotege.stanford.edu/R7nLs0Rklz9tmwdNA2l6tKI> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RCFMmB2qcc0e0403AtOXMtf> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Specifies a status for the labware"^^xsd:string ;
+                                                         rdfs:label "is" .
+
+
+###  http://webprotege.stanford.edu/R7r9Vyy6WpTnc3wlYOQVWkm
+<http://webprotege.stanford.edu/R7r9Vyy6WpTnc3wlYOQVWkm> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range owl:Thing ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The step will create an new asset in the working space"^^xsd:string ;
+                                                         rdfs:label "createAsset" .
+
+
+###  http://webprotege.stanford.edu/R835nzNaX4DpEaaHXdnZHkr
+<http://webprotege.stanford.edu/R835nzNaX4DpEaaHXdnZHkr> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Actual container of the well or tube. When a tube is reracked to a different tube rack this property value should change to the new rack."^^xsd:string ;
+                                                         rdfs:label "parent" .
+
+
+###  http://webprotege.stanford.edu/R874ortoKuLG5yZkojPcFHb
+<http://webprotege.stanford.edu/R874ortoKuLG5yZkojPcFHb> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RBMcSe5fZnMylwqdKsLL0bW> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Type of the barcode for the labware"^^xsd:string ;
+                                                         rdfs:label "barcodeType" .
+
+
+###  http://webprotege.stanford.edu/R8WhG8aFR9jOIvbkBuENVcU
+<http://webprotege.stanford.edu/R8WhG8aFR9jOIvbkBuENVcU> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Inverse of transfer"^^xsd:string ;
+                                                         rdfs:label "transferredFrom" .
+
+
+###  http://webprotege.stanford.edu/R8biiRRRoeRPcorCQUoRSkr
+<http://webprotege.stanford.edu/R8biiRRRoeRPcorCQUoRSkr> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range owl:Thing ;
+                                                         <http://purl.org/dc/elements/1.1/description> "This step will add this new facts to the working space."^^xsd:string ;
+                                                         rdfs:label "addFacts" .
+
+
+###  http://webprotege.stanford.edu/R9EOTpr8LrnXuYRaBUtzLmN
+<http://webprotege.stanford.edu/R9EOTpr8LrnXuYRaBUtzLmN> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range owl:Thing ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The step will unselect the specified group of assets from the current asset group of the activity."^^xsd:string ;
+                                                         rdfs:label "unselectAsset" .
+
+
+###  http://webprotege.stanford.edu/R9yRMAN9B84lGQEqguKyyZp
+<http://webprotege.stanford.edu/R9yRMAN9B84lGQEqguKyyZp> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Inverse of creates"^^xsd:string ;
+                                                         rdfs:label "createdFrom" .
+
+
+###  http://webprotege.stanford.edu/RB559k8Mkc6Ldl4Q0pHcC3g
+<http://webprotege.stanford.edu/RB559k8Mkc6Ldl4Q0pHcC3g> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range owl:Thing ;
+                                                         <http://purl.org/dc/elements/1.1/description> "This step will remove the facts specified from the working space"^^xsd:string ;
+                                                         rdfs:label "removeFacts" .
+
+
+###  http://webprotege.stanford.edu/RBFhID0Dw4PyyOTeQNOxy55
+<http://webprotege.stanford.edu/RBFhID0Dw4PyyOTeQNOxy55> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Specifies that a transfer has happened between two 2 wells, or 2 tubes."^^xsd:string ;
+                                                         rdfs:label "transfer" .
+
+
+###  http://webprotege.stanford.edu/RBUc5PeNcPntjAFpdYnasyE
+<http://webprotege.stanford.edu/RBUc5PeNcPntjAFpdYnasyE> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RcVhl8tYeH766t5cYHCT4F> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Link between an element of labware and its original sample tube. If we have a sanger sample id this should specify the original sample tube where the extraction process started."^^xsd:string ;
+                                                         rdfs:label "sample_tube" .
+
+
+###  http://webprotege.stanford.edu/RBgssKnnMvbbmgfVi79zPhL
+<http://webprotege.stanford.edu/RBgssKnnMvbbmgfVi79zPhL> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Specifies the creation of a labware from another labware."^^xsd:string ;
+                                                         rdfs:label "creates" .
+
+
+###  http://webprotege.stanford.edu/RCksgCJEXN9XAheHrdpsBUT
+<http://webprotege.stanford.edu/RCksgCJEXN9XAheHrdpsBUT> rdf:type owl:ObjectProperty ;
+                                                         rdfs:subPropertyOf owl:topObjectProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range <http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Specified that a tube has been racked in the tube racked by following the column order in the first free slot available"^^xsd:string ;
+                                                         rdfs:label "transferToTubeRackByPosition" .
+
+
+###  http://webprotege.stanford.edu/ReLv3AST6b14lrnttH0GVu
+<http://webprotege.stanford.edu/ReLv3AST6b14lrnttH0GVu> rdf:type owl:ObjectProperty ;
+                                                        rdfs:subPropertyOf owl:topObjectProperty ;
+                                                        rdfs:domain <http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> ;
+                                                        rdfs:range <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                        <http://purl.org/dc/elements/1.1/description> "Link between a container (tube rack or a plate) and its content (well or tube)"^^xsd:string ;
+                                                        rdfs:label "contains"^^xsd:string .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://webprotege.stanford.edu/R8ZT3S0F4pjw2wiwjvIwmc9
+<http://webprotege.stanford.edu/R8ZT3S0F4pjw2wiwjvIwmc9> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range xsd:integer ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Max number of elements of a specific group that can be valid in order to consider this step as active for that group."^^xsd:string ;
+                                                         rdfs:label "maxCardinality" .
+
+
+###  http://webprotege.stanford.edu/RBPNVUY2NV2hLSbjlz0GNAo
+<http://webprotege.stanford.edu/RBPNVUY2NV2hLSbjlz0GNAo> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Type of aliquot for the content. When applied to a container it tell us that all the contents inside that container have this aliquot type. Current values are 'DNA', 'RNA' and 'NA'."^^xsd:string ;
+                                                         rdfs:label "aliquotType" .
+
+
+###  http://webprotege.stanford.edu/RC7IRRi37QZ8CcrmfceiyBh
+<http://webprotege.stanford.edu/RC7IRRi37QZ8CcrmfceiyBh> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Location (Column an Row) of a well or tube inside the parent plate where it is located"^^xsd:string ;
+                                                         rdfs:label "location" .
+
+
+###  http://webprotege.stanford.edu/RCEpVOZSvjMjD0j8DNes5NH
+<http://webprotege.stanford.edu/RCEpVOZSvjMjD0j8DNes5NH> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Unique identifier for the piece of labware"^^xsd:string ;
+                                                         rdfs:label "uuid" .
+
+
+###  http://webprotege.stanford.edu/RCQ7lFOjCY8VarQgzBUnuUg
+<http://webprotege.stanford.edu/RCQ7lFOjCY8VarQgzBUnuUg> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "For a plate, it will specify the purpose name of the corresponding plate purpose that will be applied in Sequencescape."^^xsd:string ;
+                                                         rdfs:label "purpose" .
+
+
+###  http://webprotege.stanford.edu/RCj0qnZbgzY4b6KQhphWiKV
+<http://webprotege.stanford.edu/RCj0qnZbgzY4b6KQhphWiKV> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Sample name as specified in Sequencescape"^^xsd:string ;
+                                                         rdfs:label "sanger_sample_name" .
+
+
+###  http://webprotege.stanford.edu/RCtMJsvxpbDoHU31Q66gO3I
+<http://webprotege.stanford.edu/RCtMJsvxpbDoHU31Q66gO3I> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Title of the step. It will be the label displayed in the button for the user to execute the step."^^xsd:string ;
+                                                         rdfs:label "stepTypeName" .
+
+
+###  http://webprotege.stanford.edu/RDBoYR8oXy5a7j5fUhkdtOL
+<http://webprotege.stanford.edu/RDBoYR8oXy5a7j5fUhkdtOL> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Specifies a prefix that will be applied to the created group in order to be able to distinguish it among the other groups in the activity."^^xsd:string ;
+                                                         rdfs:label "groupNamePrefix" .
+
+
+###  http://webprotege.stanford.edu/RDQDud6x9s9qbR6o8csJC6f
+<http://webprotege.stanford.edu/RDQDud6x9s9qbR6o8csJC6f> rdf:type owl:DatatypeProperty ;
+                                                         rdfs:subPropertyOf owl:topDataProperty ;
+                                                         rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         rdfs:range xsd:string ;
+                                                         <http://purl.org/dc/elements/1.1/description> "If he value is \"position\" it will indicate that any specification of link created between 2 elements of different groups will link  both groups by linking each element of each different group by position (the first element of group A with first of group B, second of A with second of B, etc...)"^^xsd:string ;
+                                                         rdfs:label "connectBy" .
+
+
+###  http://webprotege.stanford.edu/RDVz1sFr4ZRCWkwUGWwH68
+<http://webprotege.stanford.edu/RDVz1sFr4ZRCWkwUGWwH68> rdf:type owl:DatatypeProperty ;
+                                                        rdfs:subPropertyOf owl:topDataProperty ;
+                                                        rdfs:domain <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                        rdfs:range xsd:string ;
+                                                        <http://purl.org/dc/elements/1.1/description> "Sample id as specified in Sequencescape"^^xsd:string ;
+                                                        rdfs:label "sanger_sample_id" .
+
+
+###  http://webprotege.stanford.edu/RPpD1ujbwgsule6G1eM3gx
+<http://webprotege.stanford.edu/RPpD1ujbwgsule6G1eM3gx> rdf:type owl:DatatypeProperty ;
+                                                        rdfs:subPropertyOf owl:topDataProperty ;
+                                                        rdfs:domain <http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> ;
+                                                        rdfs:range xsd:string ;
+                                                        <http://purl.org/dc/elements/1.1/description> "Indicates that the layout for the plate has been completed"^^xsd:string ;
+                                                        rdfs:label "layout" .
+
+
+###  http://webprotege.stanford.edu/RQ4ZSVtVO4hcJ3Naqos1xE
+<http://webprotege.stanford.edu/RQ4ZSVtVO4hcJ3Naqos1xE> rdf:type owl:DatatypeProperty ;
+                                                        rdfs:subPropertyOf owl:topDataProperty ;
+                                                        rdfs:domain <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                        rdfs:range xsd:string ;
+                                                        <http://purl.org/dc/elements/1.1/description> "If the step requires a different type of interaction in the UI than a simple button pressing, this value will refer to the step template that will provide that extra functionality (like for uploading a file, adding tubes to a rack, linking assets by pairs, etc...)"^^xsd:string ;
+                                                        rdfs:label "stepTemplate" .
+
+
+###  http://webprotege.stanford.edu/RTVYYhisHLQuvjxlKXZzGO
+<http://webprotege.stanford.edu/RTVYYhisHLQuvjxlKXZzGO> rdf:type owl:DatatypeProperty ;
+                                                        rdfs:subPropertyOf owl:topDataProperty ;
+                                                        rdfs:domain <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                        rdfs:range xsd:string ;
+                                                        <http://purl.org/dc/elements/1.1/description> "Barcode value of the labware"^^xsd:string ;
+                                                        rdfs:label "barcode" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://webprotege.stanford.edu/R2Rmc26C1WfOWMGWRfx6wD
+<http://webprotege.stanford.edu/R2Rmc26C1WfOWMGWRfx6wD> rdf:type owl:Class ;
+                                                        rdfs:subClassOf <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                        <http://purl.org/dc/elements/1.1/description> "One of the physical slots of a plate. They cannot be moved between plates."^^xsd:string ;
+                                                        rdfs:label "Well" .
+
+
+###  http://webprotege.stanford.edu/R7hcJtsHIVx6L2T38ekuw98
+<http://webprotege.stanford.edu/R7hcJtsHIVx6L2T38ekuw98> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The actual step of the extraction process that we are executing"^^xsd:string ;
+                                                         rdfs:label "step" .
+
+
+###  http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h
+<http://webprotege.stanford.edu/R8CoWhlSddCrpln5iJ1pq8h> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RBBXEkBGSsXQYgy13HamKrH> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "One of the steps of a extraction process"^^xsd:string ;
+                                                         rdfs:label "Step" .
+
+
+###  http://webprotege.stanford.edu/R8mrIw5txW0nKXM4WXOTWAb
+<http://webprotege.stanford.edu/R8mrIw5txW0nKXM4WXOTWAb> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RBBXEkBGSsXQYgy13HamKrH> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "A extraction process"^^xsd:string ;
+                                                         rdfs:label "Activity" .
+
+
+###  http://webprotege.stanford.edu/R980L2cz4MS1IzM0ybnk3rs
+<http://webprotege.stanford.edu/R980L2cz4MS1IzM0ybnk3rs> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "A tube that can contain information of one sample"^^xsd:string ;
+                                                         rdfs:label "Tube" .
+
+
+###  http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK
+<http://webprotege.stanford.edu/R9GnbF90PgauUSvFCo3AumK> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Any asset of the lab that can be contained inside other assets, and can contain a sample"^^xsd:string ;
+                                                         rdfs:label "Content" .
+
+
+###  http://webprotege.stanford.edu/R9IcQuIoOUS63LOXDas9D3c
+<http://webprotege.stanford.edu/R9IcQuIoOUS63LOXDas9D3c> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RBMcSe5fZnMylwqdKsLL0bW> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Fluidx barcode label"^^xsd:string ;
+                                                         rdfs:label "Code2D" .
+
+
+###  http://webprotege.stanford.edu/R9XAje9c26BADKMcqwrJnPJ
+<http://webprotege.stanford.edu/R9XAje9c26BADKMcqwrJnPJ> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RCFMmB2qcc0e0403AtOXMtf> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The labware has not been started to be processed yet."^^xsd:string ;
+                                                         rdfs:label "NotStarted" .
+
+
+###  http://webprotege.stanford.edu/R9XjEq9GpjPnN3GY8I93Sj0
+<http://webprotege.stanford.edu/R9XjEq9GpjPnN3GY8I93Sj0> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "An asset of the laboratory that can contain wells."^^xsd:string ;
+                                                         rdfs:label "Plate" .
+
+
+###  http://webprotege.stanford.edu/RB2bn70WCmqnjyKRxiSAITO
+<http://webprotege.stanford.edu/RB2bn70WCmqnjyKRxiSAITO> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RCFMmB2qcc0e0403AtOXMtf> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The labware is empty"^^xsd:string ;
+                                                         rdfs:label "Empty" .
+
+
+###  http://webprotege.stanford.edu/RBBXEkBGSsXQYgy13HamKrH
+<http://webprotege.stanford.edu/RBBXEkBGSsXQYgy13HamKrH> rdf:type owl:Class ;
+                                                         rdfs:subClassOf owl:Thing ;
+                                                         rdfs:label "ExtractionProcess" .
+
+
+###  http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM
+<http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Any asset of the laboratory that can contain other assets (in our case, plates and tube racks)"^^xsd:string ;
+                                                         rdfs:label "Container" .
+
+
+###  http://webprotege.stanford.edu/RBMcSe5fZnMylwqdKsLL0bW
+<http://webprotege.stanford.edu/RBMcSe5fZnMylwqdKsLL0bW> rdf:type owl:Class ;
+                                                         rdfs:subClassOf owl:Thing ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Type of label"^^xsd:string ;
+                                                         rdfs:label "BarcodeType" .
+
+
+###  http://webprotege.stanford.edu/RBd7QtErEBqQA72pAtbgUKj
+<http://webprotege.stanford.edu/RBd7QtErEBqQA72pAtbgUKj> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RBMcSe5fZnMylwqdKsLL0bW> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The labware linked with this value has no barcode label yet."^^xsd:string ;
+                                                         rdfs:label "NoBarcode" .
+
+
+###  http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl
+<http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> rdf:type owl:Class ;
+                                                         rdfs:subClassOf owl:Thing ;
+                                                         <http://purl.org/dc/elements/1.1/description> "Any element of the lab"^^xsd:string ;
+                                                         rdfs:label "Labware" .
+
+
+###  http://webprotege.stanford.edu/RCFMmB2qcc0e0403AtOXMtf
+<http://webprotege.stanford.edu/RCFMmB2qcc0e0403AtOXMtf> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RCDu3dtjaIrMDAkLs3jjWUl> ;
+                                                         rdfs:label "Status" .
+
+
+###  http://webprotege.stanford.edu/RCUrsv3Tap5vetsWepZ3WKl
+<http://webprotege.stanford.edu/RCUrsv3Tap5vetsWepZ3WKl> rdf:type owl:Class ;
+                                                         rdfs:subClassOf <http://webprotege.stanford.edu/RCFMmB2qcc0e0403AtOXMtf> ;
+                                                         <http://purl.org/dc/elements/1.1/description> "The labware has started being processed by the Samples Extraction process"^^xsd:string ;
+                                                         rdfs:label "Started" .
+
+
+###  http://webprotege.stanford.edu/RChqGllKtaEFl3m1lK8XDb
+<http://webprotege.stanford.edu/RChqGllKtaEFl3m1lK8XDb> rdf:type owl:Class ;
+                                                        rdfs:subClassOf <http://webprotege.stanford.edu/RBMcSe5fZnMylwqdKsLL0bW> ;
+                                                        <http://purl.org/dc/elements/1.1/description> "Barcode label in 128 format"^^xsd:string ;
+                                                        rdfs:label "Code128" .
+
+
+###  http://webprotege.stanford.edu/ROw1qa3MOOkewqpRUlTsps
+<http://webprotege.stanford.edu/ROw1qa3MOOkewqpRUlTsps> rdf:type owl:Class ;
+                                                        rdfs:subClassOf <http://webprotege.stanford.edu/RBG4cQWUnOkacmkO4POlTiM> ;
+                                                        <http://purl.org/dc/elements/1.1/description> "An asset of the laboratory that can contain tubes. The tubes can be moved to other tube racks by reracking them"^^xsd:string ;
+                                                        rdfs:label "TubeRack" .
+
+
+###  http://webprotege.stanford.edu/RcVhl8tYeH766t5cYHCT4F
+<http://webprotege.stanford.edu/RcVhl8tYeH766t5cYHCT4F> rdf:type owl:Class ;
+                                                        rdfs:subClassOf <http://webprotege.stanford.edu/R980L2cz4MS1IzM0ybnk3rs> ;
+                                                        <http://purl.org/dc/elements/1.1/description> "A tube that actually contains information of a sample"^^xsd:string ;
+                                                        rdfs:label "SampleTube" .
+
+
+###  Generated by the OWL API (version 4.3.1) https://github.com/owlcs/owlapi

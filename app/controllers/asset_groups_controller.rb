@@ -6,9 +6,11 @@ class AssetGroupsController < ApplicationController
   before_filter :check_activity_asset_group, only: [:show, :update]
 
   def check_activity_asset_group
-    if (@activity.asset_group != @asset_group)
-      @activity.update_attributes(:asset_group => @asset_group)
-      redirect_to @activity
+    if @activity
+      if (@activity.asset_group != @asset_group)
+        @activity.update_attributes(:asset_group => @asset_group)
+        redirect_to @activity
+      end
     end
   end
 
@@ -17,10 +19,11 @@ class AssetGroupsController < ApplicationController
 
     @assets_grouped = assets_by_fact_group
 
-    @step_types = @activity.step_types_active
+    @step_types = @activity.step_types_active if @activity
 
     respond_to do |format|
       format.html { render @asset_group }
+      format.n3 { render :show }
       format.json { render :show, status: :created, location: [@activity, @asset_group] }
     end
   end
@@ -62,12 +65,12 @@ class AssetGroupsController < ApplicationController
 
     def set_activity
       # I need the activity to be able to know the step_types compatible to show.
-      @activity = Activity.find(params_asset_group[:activity_id])
+      @activity = Activity.find(params[:activity_id]) if params[:activity_id]
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_asset_group
-      @asset_group = AssetGroup.find(params_asset_group[:id])
+      @asset_group = AssetGroup.find(params[:id])
     end
 
   def perform_barcode_removal
