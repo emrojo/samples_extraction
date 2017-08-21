@@ -1,6 +1,6 @@
 <% unless asset.nil? %>
   <% if asset.barcode %>
-    <<%= n3_url_resource_for(asset.uuid) %>> se:barcode <%= asset.barcode %> .
+    <<%= n3_url_resource_for(asset.uuid) %>> se:barcode """<%= asset.barcode %>""" .
   <% end %>
   <% asset.facts.includes(:object_asset).each do |f| %>
     <<%= n3_url_resource_for(asset.uuid) %>> se:<%= f.predicate %> <%= object_for(f) %> .
