@@ -51,3 +51,10 @@ rake label_templates:setup
 ```bash
 rails server
 ```
+
+## Other notes:
+This application makes use of an inference engine to plan before hand the operations to perform in between the labware. The default engine provided has a very basic functionality to perform very basic rules. To make use of a more sensible set of rules it is recommended to install 'cwm' in the server host (it can be obtained from https://www.w3.org/2000/10/swap/doc/cwm.html ) and provide the following settings in the config file:
+
+  config.cwm_path - path to the folder that contains the cwm binaries
+  config.default_n3_resources_url - url for accessing the application
+  config.enable_reasoning - set it to true to make use of cwm
