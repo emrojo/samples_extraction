@@ -22,6 +22,9 @@ module Asset::Export
     print(print_config, user.username) if old_barcode != barcode
   end
 
+  def export!
+  end
+
   def update_plate(instance)
     instance.wells.each do |well|
       w = well_at(well.location)
@@ -64,16 +67,12 @@ module Asset::Export
   end
 
   def racking_info(well)
-    if well.has_literal?('pushedTo', 'Sequencescape')
+    if (well.has_literal?('pushedTo', 'Sequencescape') || (well.facts.from_remote_asset.count > 0))
       return { 
         uuid: well.uuid, 
         location: well.facts.with_predicate('location').first.object
       }
     end
-    data = {}
-    #unless well.has_predicate?('sample_tube')
-    #  data[:uuid] = well.uuid
-    #end
     well.facts.reduce({}) do |memo, fact|
       if (['sample_tube'].include?(fact.predicate))
         memo["#{fact.predicate}_uuid".to_sym] = fact.object_asset.uuid

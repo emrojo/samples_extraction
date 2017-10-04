@@ -40,7 +40,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   config.pmb_uri = ENV.fetch('PMB_URI','http://localhost:10000/v1')
-  config.ss_uri =  ENV.fetch('SS_URI', 'http://localhost:3000/api/1/')
+  config.ss_uri =  ENV.fetch('SS_URI', 'http://dev.psd.sanger.ac.uk:6800/api/1/')
   config.ss_authorisation =  'development'
   config.searcher_name_by_barcode = 'Find assets by barcode'
   config.printing_disabled = true

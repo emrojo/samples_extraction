@@ -269,15 +269,14 @@ module Asset::Import
     def annotate_wells(asset, remote_asset)
       if remote_asset.try(:wells, nil)
         remote_asset.wells.each do |well|
-          local_well = Asset.find_or_create_by!(:uuid => well.uuid)
+          local_well = Asset.find_or_create_by(:uuid => well.uuid)
+          # Updated wells will also mean that the plate is out of date, so we'll set it in the asset
+          local_well.update_facts_from_remote(Fact.new(:predicate => 'a', :object => 'Well'), asset.get_import_step)
+          local_well.update_facts_from_remote(Fact.new(:predicate => 'location', :object => well.location), asset.get_import_step)
+          local_well.update_facts_from_remote(Fact.new(:predicate => 'parent', :object_asset => asset), asset.get_import_step)
+          asset.update_facts_from_remote(Fact.new(:predicate => 'contains', :object_asset => local_well))
+
           if (well.try(:aliquots, nil)&.first&.sample&.supplier&.sample_name)
-            asset.update_facts_from_remote(Fact.new(:predicate => 'contains', :object_asset => local_well))
-
-            # Updated wells will also mean that the plate is out of date, so we'll set it in the asset
-            local_well.update_facts_from_remote(Fact.new(:predicate => 'a', :object => 'Well'), asset.get_import_step)
-            local_well.update_facts_from_remote(Fact.new(:predicate => 'location', :object => well.location), asset.get_import_step)
-            local_well.update_facts_from_remote(Fact.new(:predicate => 'parent', :object_asset => asset), asset.get_import_step)
-
             annotate_container(local_well, well, asset.get_import_step)
           end
         end

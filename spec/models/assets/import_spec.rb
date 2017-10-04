@@ -71,10 +71,14 @@ RSpec.describe 'Asset::Import' do
             @remote_plate_asset_without_supplier = build_remote_plate(barcode: '5', wells: wells)
             stub_client_with_asset(SequencescapeClient, @remote_plate_asset_without_supplier)            
           end
-          it 'imports the information of the wells that have a supplier name ignoring the others' do
+          it 'adds the information of the samples to the wells that have a supplier name defined' do
             @asset = Asset.find_or_import_asset_with_barcode(@remote_plate_asset_without_supplier.barcode)
-            expect(@asset.facts.with_predicate('contains').count).to eq(2)
-            expect(@asset.facts.with_predicate('contains').map(&:object_asset).map do |w| 
+            
+            assets_with_samples = @asset.facts.with_predicate('contains').map(&:object_asset).compact.select do |asset|
+              asset.facts.with_predicate('sanger_sample_id').count > 0
+            end
+            expect(assets_with_samples.count).to eq(2)
+            expect(assets_with_samples.map do |w| 
               w.facts.with_predicate('location').map(&:object)
             end.flatten).to eq(['C1','D1'])
           end
@@ -166,12 +170,26 @@ RSpec.describe 'Asset::Import' do
               expect{remote_facts.each(&:reload)}.to raise_exception ActiveRecord::RecordNotFound            
             end
 
-  		  		it 'should re-create new remote facts' do
+  		  		it 'should re-create all the remote facts' do
   		  			count = @asset.facts.from_remote_asset.count
   		  			@asset = Asset.find_or_import_asset_with_barcode(@barcode_plate)
   		  			@asset.facts.reload
   		  			expect(@asset.facts.from_remote_asset.count).to eq(count)
   		  		end
+
+            it 'should re-create the dependant remote facts' do
+              dependant_facts = @asset.facts.with_predicate('contains').map(&:object_asset).map do |w| 
+                w.facts.from_remote_asset 
+              end.flatten.compact
+              count = dependant_facts.count
+              @asset = Asset.find_or_import_asset_with_barcode(@barcode_plate)
+              @asset.facts.reload
+              dependant_facts2 = @asset.facts.with_predicate('contains').map(&:object_asset).map do |w| 
+                w.facts.from_remote_asset 
+              end.flatten.compact
+              count2 = dependant_facts2.count
+              expect(count).to eq(count2)
+            end
   		  	end
         end
 		  end

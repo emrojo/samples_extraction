@@ -6,6 +6,7 @@ module ApplicationHelper
   end
 
   UNKNOW_ALIQUOT_TYPE = 'unknown-aliquot'
+  EMPTY_WELL_CSS_CLASS = 'empty-well'
 
   def default_ontologies
     [
@@ -68,9 +69,12 @@ module ApplicationHelper
         f = facts.select{|f| f.predicate == 'location'}.first
         unless f.nil?
           location = f.object
+          f3 = facts.select{|f| f.predicate == 'supplier_sample_name'}.first
+          emptyClass = f3 ? nil : EMPTY_WELL_CSS_CLASS
+
           f2 = facts.select{|f| f.predicate == 'aliquotType'}.first
           aliquotType = f2 ? f2.object : nil
-          memo[location] = {:title => "#{asset.short_description}", :cssClass => aliquotType || UNKNOW_ALIQUOT_TYPE, :url => asset_path(asset)} unless location.nil?
+          memo[location] = {:title => "#{asset.short_description}", :cssClass => emptyClass || aliquotType || UNKNOW_ALIQUOT_TYPE, :url => asset_path(asset)} unless location.nil?
         end
         memo
       end.to_json
