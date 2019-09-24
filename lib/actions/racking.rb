@@ -313,7 +313,8 @@ module Actions
       if parser.valid?
         updates = parser.parsed_changes.merge(reracking_tubes(asset, parser.layout))
 
-        error_messages.push(asset.validate_rack_content)
+        error_messages.push(asset.errors) unless asset.valid?
+        #error_messages.push(asset.validate_rack_content)
         raise InvalidDataParams.new(error_messages) if error_messages.flatten.compact.count > 0
         return updates
       else
