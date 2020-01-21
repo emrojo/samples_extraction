@@ -20,7 +20,80 @@ A workflow processor and management tool supported in metadata annotations that 
 - Redis
 - Mysql
 
-## To start:
+## Installation
+
+## Setup a development environment in local
+
+This installation procedure is prepared for a MacOS environment:
+
+### Redis
+
+1. Install redis as we will need it (for example, using Homebrew):
+
+    # brew install redis
+
+### Print_my_barcode config
+
+1. Add the barcode printers that you would like to use in the server. In a MacOS environment open Settings/Printers & Scanners and add the barcode printers making sure they are defined with protocol LPD.
+
+1. In the rails console, run the following command to add the printer we require into the database:
+
+  > Printer.create(name: PRINTER_NAME)
+
+1. In Samples Extraction project folder, run the following command to create the required label templates into print_my_barcode:
+
+  # rake label_templates:setup
+
+1. Install Print_my_barcode
+
+  # rails s -p10000
+
+### mysql
+
+  1. Start the server
+
+  # mysql.server start
+
+### Sequencescape
+
+  1. Start the delayed jobs:
+
+  # rake jobs:work
+
+  1. Start the Sequencescape server:
+
+  # rails s
+
+### Samples extraction config
+
+  1. Install all the dependencies for the project
+
+  # gem install bundler
+
+  # bundle install
+
+  # yarn
+
+  1. From the project folder, run the command
+
+  # rake secret
+
+  1. Copy the resulting string and create a config/secrets.yml file and paste the string as value from secret_key_base attribute:
+
+```
+development:
+  secret_key_base: <RANDOM_STRING_OBTAINED>
+```
+
+  1. Run the delayed job for Samples extraction
+
+  # rake jobs:work
+
+  1. Run the server in a different port than the other services
+
+  # rails s -p9000
+
+## Starting procedure:
 
 First, start all the required service applications and configure their endpoints by defining
 the following environment variables:
