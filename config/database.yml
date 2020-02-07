@@ -14,7 +14,7 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password: 
+  password:
 
 development:
   <<: *default
@@ -28,6 +28,12 @@ selenium: &test
   <<: *default
   database: samples_extraction_selenium
 
+dockertest: &test
+  <<: *default
+  database: samples_extraction_dockertest
+  username: root
+  password: password
+  host: mysql
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
