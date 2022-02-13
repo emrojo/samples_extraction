@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "@rails/webpacker": "^3.2.2",
-    "ajv": "^6.4.0",
+    "ajv": "^6.12.3",
     "caniuse-lite": "^1.0.30000830",
     "classnames": "^2.2.6",
     "eslint": "^4.19.1",
