@@ -8,7 +8,7 @@
     "fine-uploader": "^5.16.2",
     "fine-uploader-wrappers": "^1.0.1",
     "jquery": "^3.4.1",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "node": "^10.0.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
