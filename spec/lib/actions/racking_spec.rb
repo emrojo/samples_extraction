@@ -2,34 +2,39 @@ require 'rails_helper'
 require 'actions/racking'
 
 RSpec.describe Actions::Racking do
-  let(:content) { File.open('test/data/layout.csv').read }
-  let(:file) { create(:uploaded_file, data: content )}
+  let(:content) { File.read('test/data/layout.csv') }
+  let(:file) { create(:uploaded_file, data: content) }
   let(:activity) { create(:activity) }
   let(:asset_group) { create(:asset_group, assets: [asset]) }
-  let(:fact) { create(:fact, predicate: 'a', object: 'TubeRack')}
-  let(:asset) { create :asset, uploaded_file: file, facts: [fact] }
-  let(:step_type) {create(:step_type, condition_groups: [condition_group]) }
-  let(:step) { create :step,
-    activity: activity,
-    state: Step::STATE_RUNNING,
-    asset_group: asset_group, step_type: step_type }
+  let(:asset) { create :asset, uploaded_file: file, a: 'TubeRack' }
+  let(:step_type) { create(:step_type, condition_groups: [condition_group]) }
+  let(:step) do
+    create :step, activity: activity, state: Step::STATE_RUNNING, asset_group: asset_group, step_type: step_type
+  end
 
-  let(:condition) { create(:condition, predicate: fact.predicate, object: fact.object) }
+  let(:condition) { create(:condition, predicate: 'a', object: 'TubeRack') }
   let(:condition_group) { create(:condition_group, conditions: [condition]) }
+  let(:racking_class) do
+    Class.new do
+      include Actions::Racking
+      attr_reader :asset_group
 
-  include Actions::Racking
-
-  setup do
-    allow(Asset).to receive(:find_or_import_asset_with_barcode) do |barcode|
-      Asset.find_by(barcode: barcode)
+      def initialize(asset_group)
+        @asset_group = asset_group
+      end
     end
   end
 
+  # @todo Use racking_class exclusively
+  include Actions::Racking
+
+  setup { allow(SequencescapeClient).to receive(:labware).and_return([]) }
+
   shared_examples_for 'rack_layout' do
-    describe "when linking it with an asset" do
+    describe 'when linking it with an asset' do
       it 'adds the facts to the asset' do
         expect(asset.facts.count).to eq(1)
-        updates = send(method, asset_group)
+        updates = send(method)
         updates.apply(step)
 
         asset.facts.reload
@@ -43,9 +48,11 @@ RSpec.describe Actions::Racking do
       end
 
       describe 'with links with previous parents' do
-        let(:actual_parent) { create(:asset, uploaded_file: file, facts: [fact]) }
+        let(:actual_parent) { create(:asset, uploaded_file: file, a: 'TubeRack') }
+
         it 'removes links with the previous parents' do
-          send(method, asset_group).apply(step)
+          asset_group
+          send(method).apply(step)
           asset.facts.reload
           assets = asset.facts.with_predicate('contains').map(&:object_asset)
           expect(assets.count).to eq(96)
@@ -56,18 +63,19 @@ RSpec.describe Actions::Racking do
           end
 
           asset_group = AssetGroup.create(assets: [actual_parent])
-          another_step = Step.new(
-            activity: activity,
-            asset_group: asset_group, step_type: step_type,
-            state: Step::STATE_RUNNING
-          )
-          send(method, asset_group).apply(another_step)
 
-          assets = asset.facts.with_predicate('contains').map(&:object_asset)
+          another_step =
+            Step.new(activity: activity, asset_group: asset_group, step_type: step_type, state: Step::STATE_RUNNING)
+
+          racking_class.new(asset_group).send(method).apply(another_step)
+
+          assets = asset.reload.facts.with_predicate('contains').map(&:object_asset)
           expect(assets.count).to eq(0)
 
-          assets = actual_parent.facts.with_predicate('contains').map(&:object_asset)
+          assets =
+            actual_parent.reload.facts.with_predicate('contains').includes(object_asset: :facts).map(&:object_asset)
           expect(assets.count).to eq(96)
+
           assets.each do |a|
             expect(a.facts.with_predicate('location').count).to eq(1)
             expect(a.facts.with_predicate('parent').count).to eq(1)
@@ -79,22 +87,16 @@ RSpec.describe Actions::Racking do
       describe 'with empty slots in the layout .csv' do
         let(:num_empty) { 3 }
         let(:start_pos) { 0 }
-        let(:content) {
-          add_empty_slots(File.open('test/data/layout.csv').read, num_empty, start_pos)
-        }
-        def add_empty_slots(content, num_empty, start_pos=0)
+        let(:content) { add_empty_slots(File.read('test/data/layout.csv'), num_empty, start_pos) }
+        def add_empty_slots(content, num_empty, start_pos = 0)
           csv = CSV.new(content).to_a
-          num_empty.times do |i|
-            csv[start_pos + i][1] = 'No Read'
-          end
-          csv.map do |line|
-            line.join(',')
-          end.join("\n")
+          num_empty.times { |i| csv[start_pos + i][1] = 'No Read' }
+          csv.map { |line| line.join(',') }.join("\n")
         end
 
         it 'adds the new facts to the asset and removes the old ones' do
           expect(asset.facts.count).to eq(1)
-          send(method, asset_group).apply(step)
+          send(method).apply(step)
 
           asset.facts.reload
           assets = asset.facts.with_predicate('contains').map(&:object_asset)
@@ -107,102 +109,76 @@ RSpec.describe Actions::Racking do
             end
           end
         end
-
       end
-
     end
   end
 
-
   describe '#fact_changes_for_rack_when_unracking_tubes' do
-    before do
-      @tubes = 15.times.map do |line|
-        create(:asset)
-      end
-      @tubes.each do |tube|
-        asset.facts << create(:fact, predicate: 'contains', object_asset: tube)
-      end
+    let(:tubes) do
+      [create(:asset, study_name: 'STDY2'), *create_list(:asset, 2, study_name: 'STDY1', aliquot_type: aliquot_type)]
     end
+    let(:aliquot_type) { nil }
+
+    before { tubes.each { |tube| create(:fact, asset: asset, predicate: 'contains', object_asset: tube) } }
+
     it 'removes all the different studies for this rack when all tubes go out' do
-      @tubes.first.facts << create(:fact, predicate: 'study_name', object: 'STDY2')
-      @tubes.each_with_index do |tube, idx|
-        tube.facts << create(:fact, predicate: 'study_name', object: 'STDY1') unless idx == 0
-      end
-      updates = fact_changes_for_rack_when_unracking_tubes(asset, @tubes)
-      expect(updates.to_h[:remove_facts].select do |triple|
-        triple[1]=='study_name'
-      end.map{|triple| triple[2]}.sort).to eq(['STDY1', 'STDY2'])
+      updates = fact_changes_for_rack_when_unracking_tubes(asset, tubes)
+      expect(updates.to_h[:remove_facts].select { |triple| triple[1] == 'study_name' }.pluck(2).sort).to eq(
+        %w[STDY1 STDY2]
+      )
     end
 
-    it 'removes the purpose when all tubes go out' do
-      asset.facts << create(:fact, predicate: 'purpose', object: 'DNA Stock Plate')
-      @tubes.first.facts << create(:fact, predicate: 'aliquotType', object: 'DNA')
-      updates = fact_changes_for_rack_when_unracking_tubes(asset, @tubes)
-      expect(updates.to_h[:remove_facts].select do |triple|
-        triple[1]=='purpose'
-      end.map{|triple| triple[2]}.sort).to eq(['DNA Stock Plate'])
+    context 'when a DNA tube' do
+      let(:aliquot_type) { 'DNA' }
+      it 'removes the purpose when all tubes go out' do
+        updates = fact_changes_for_rack_when_unracking_tubes(asset, tubes)
+        expect(updates.to_h[:remove_facts].select { |triple| triple[1] == 'purpose' }.pluck(2).sort).to eq(
+          ['DNA Stock Plate']
+        )
+      end
     end
 
     it 'only returns the studies of the tubes that are going to be removed' do
-      @tubes.first.facts << create(:fact, predicate: 'study_name', object: 'STDY2')
-      tubes2 = @tubes.each_with_index.map do |tube, idx|
-        unless idx == 0
-          tube.facts << create(:fact, predicate: 'study_name', object: 'STDY1')
-          tube
-        end
-      end.compact
-
-      updates = fact_changes_for_rack_when_unracking_tubes(asset, tubes2)
-      expect(updates.to_h[:remove_facts].select do |triple|
-        triple[1]=='study_name'
-      end.map{|triple| triple[2]}.sort).to eq(['STDY1'])
+      updates = fact_changes_for_rack_when_unracking_tubes(asset, tubes[1..])
+      expect(updates.to_h[:remove_facts].select { |triple| triple[1] == 'study_name' }.pluck(2).sort).to eq(['STDY1'])
     end
   end
 
-
   describe '#fact_changes_for_rack_when_racking_tubes' do
-    before do
-      @tubes = 15.times.map do |line|
-        create(:asset)
-      end
-    end
-    it 'returns all the different studies for this rack' do
-      @tubes.first.facts << create(:fact, predicate: 'study_name', object: 'STDY2')
-      @tubes.each_with_index do |tube, idx|
-        tube.facts << create(:fact, predicate: 'study_name', object: 'STDY1') unless idx == 0
-      end
+    subject(:updates) { fact_changes_for_rack_when_racking_tubes(asset, tubes) }
 
-      updates = fact_changes_for_rack_when_racking_tubes(asset, @tubes)
-      expect(updates.to_h[:add_facts].select do |triple|
-        triple[1]=='study_name'
-      end.map{|triple| triple[2]}.sort).to eq(['STDY1', 'STDY2'])
+    let(:tubes) do
+      [create(:asset, study_name: 'STDY2'), *create_list(:asset, 2, study_name: 'STDY1', aliquot_type: aliquot_type)]
     end
-    it 'generates the DNA stock plate purpose' do
-      @tubes.each_with_index do |tube, idx|
-        tube.facts << create(:fact, predicate: 'aliquotType', object: 'DNA') unless idx == 0
-      end
-      updates = fact_changes_for_rack_when_racking_tubes(asset, @tubes)
-      expect(updates.to_h[:add_facts].select do |triple|
-        triple[1]=='purpose'
-      end.first[2]).to eq('DNA Stock Plate')
+    let(:aliquot_type) { nil }
+
+    it 'returns all the different studies for this rack' do
+      expect(
+        updates.to_h[:add_facts]
+          .select { |_uuid, predicate, _object| predicate == 'study_name' }
+          .map { |_uuid, _predicate, object| object }
+      ).to match_array(%w[STDY1 STDY2])
     end
-    it 'generates the RNA stock plate purpose' do
-      @tubes.each_with_index do |tube, idx|
-        tube.facts << create(:fact, predicate: 'aliquotType', object: 'RNA') unless idx == 0
+    context 'when a DNA tube' do
+      let(:aliquot_type) { 'DNA' }
+
+      it 'generates the DNA stock plate purpose' do
+        expect(updates.to_h[:add_facts].find { |triple| triple[1] == 'purpose' }[2]).to eq('DNA Stock Plate')
       end
-      updates = fact_changes_for_rack_when_racking_tubes(asset, @tubes)
-      expect(updates.to_h[:add_facts].select do |triple|
-        triple[1]=='purpose'
-      end.first[2]).to eq('RNA Stock Plate')
+    end
+    context 'when an RNA tube' do
+      let(:aliquot_type) { 'RNA' }
+
+      it 'generates the RNA stock plate purpose' do
+        expect(updates.to_h[:add_facts].find { |triple| triple[1] == 'purpose' }[2]).to eq('RNA Stock Plate')
+      end
     end
   end
 
   describe '#rack_layout' do
     before do
-      csv = CSV.new(File.open('test/data/layout.csv').read).to_a
-      @tubes = csv.map do |line|
-        create(:asset, barcode: line[1])
-      end
+      csv = CSV.new(File.read('test/data/layout.csv')).to_a
+      @tubes = csv.map { |line| create(:asset, barcode: line[1]) }
     end
     let(:method) { :rack_layout }
     it_behaves_like('rack_layout')
@@ -212,5 +188,4 @@ RSpec.describe Actions::Racking do
     let(:method) { :rack_layout_creating_tubes }
     it_behaves_like('rack_layout')
   end
-
 end

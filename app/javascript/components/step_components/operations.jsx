@@ -19,28 +19,28 @@ class Operations extends React.Component {
     if (operation.action_type == 'deleteAssetGroups') return 'glyphicon-minus'
   }
   renderOperationRow(operation, index) {
-    return(
+    return (
       <tr key={index}>
         <td className="col-md-2">
-          <span className={"glyphicon "+this.classForOperation(operation)} aria-hidden="true"></span>
-          { operation.action_type }
+          <span className={'glyphicon ' + this.classForOperation(operation)} aria-hidden="true"></span>
+          {operation.action_type}
         </td>
-        <td className="col-md-4">
-          {operation.asset ? operation.asset.barcode || operation.asset.uuid : ''}
-        </td>
+        <td className="col-md-4">{operation.asset ? operation.asset.barcode || operation.asset.uuid : ''}</td>
         <td className="col-md-6" data-psd-component-class="AddFactToSearchbox">
-          <Fact fact={operation}/>
+          <Fact fact={operation} />
         </td>
       </tr>
     )
   }
   render() {
     if (this.props.operations.length == 0) {
-      return(  <tr><td colSpan="7">No operations performed in this step.</td></tr>)
-    } else {
-      return(
-        this.props.operations.map(this.renderOperationRow)
+      return (
+        <tr>
+          <td colSpan="7">No operations performed in this step.</td>
+        </tr>
       )
+    } else {
+      return this.props.operations.map(this.renderOperationRow)
     }
   }
 }

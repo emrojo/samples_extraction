@@ -2,8 +2,8 @@ require 'rails_helper'
 require 'parsers/csv_layout/line_reader'
 
 RSpec.describe Parsers::CsvLayout::LineReader do
-  let(:parserClass) { Parsers::CsvLayout::LineReader}
-  let(:result) { [["A01","1234"],["B01", "4567"],["C01","8901"]] }
+  let(:parserClass) { Parsers::CsvLayout::LineReader }
+  let(:result) { [%w[A01 1234], %w[B01 4567], %w[C01 8901]] }
   it 'recognises line feed for new line' do
     expect(parserClass.new("A01,1234\nB01,4567\nC01,8901").lines).to eq(result)
     expect(parserClass.new("A01,1234\nB01,4567\nC01,8901\n").lines).to eq(result)

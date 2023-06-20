@@ -1,15 +1,14 @@
-module Activities::State
+module Activities::State # rubocop:todo Style/Documentation
   def self.included(klass)
     klass.instance_eval do
-      scope :in_progress, ->() { where('completed_at is null')}
-      scope :finished, ->() { where('completed_at is not null')}
+      scope :in_progress, -> { where(completed_at: nil) }
+      scope :finished, -> { where('completed_at is not null') }
     end
   end
 
   def finish
-    ActiveRecord::Base.transaction do
-      update_attributes(:completed_at => DateTime.now, state: 'finish')
-    end
+    ActiveRecord::Base.transaction { update(completed_at: DateTime.now, state: 'finish') }
+    after_finish if respond_to?(:after_finish)
   end
 
   def finished?
@@ -31,5 +30,4 @@ module Activities::State
   def editing?
     state == 'editing'
   end
-
 end

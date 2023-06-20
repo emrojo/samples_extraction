@@ -1,4 +1,4 @@
-class CreateKitTypes < ActiveRecord::Migration
+class CreateKitTypes < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :kit_types do |t|
       t.string :name

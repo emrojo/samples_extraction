@@ -1,4 +1,4 @@
-class CreateAssetRelations < ActiveRecord::Migration
+class CreateAssetRelations < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :asset_relations do |t|
       t.integer :subject_asset_id, index: true, foreign_key: true

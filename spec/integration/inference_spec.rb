@@ -6,37 +6,31 @@ def cwm_engine?
   Rails.configuration.inference_engine == :cwm
 end
 
-RSpec.describe "Inference" do
-
+RSpec.describe 'Inference' do
   describe '#inference' do
     describe '#parse_facts' do
-      it 'creates assets from a N3 definition', :testcreation => true do
-        code = %{
+      it 'creates assets from a N3 definition', testcreation: true do
+        code =
+          '
           :tube1 :relates :tube2 .
           :tube2 :name """a name""" .
           :tube2 :volume """17""" .
-        }
+        '
 
-        obtained_assets = SupportN3::parse_facts(code)
+        obtained_assets = SupportN3.parse_facts(code)
 
         f1 = [
-            FactoryBot.create(:fact, {:predicate => 'name', :object => 'a name'}),
-            FactoryBot.create(:fact, {:predicate => 'volume', :object => '17'})]
-        tube2 = FactoryBot.create(:asset, :name => 'tube2', :facts => f1)
-        f2 = [
-          FactoryBot.create(:fact, {:predicate => 'relates', :object_asset => tube2})
+          FactoryBot.create(:fact, { predicate: 'name', object: 'a name' }),
+          FactoryBot.create(:fact, { predicate: 'volume', object: '17' })
         ]
-        tube1 = FactoryBot.create(:asset, :name => 'tube1', :facts=> f2)
+        tube2 = FactoryBot.create(:asset, name: 'tube2', facts: f1)
+        f2 = [FactoryBot.create(:fact, { predicate: 'relates', object_asset: tube2 })]
+        tube1 = FactoryBot.create(:asset, name: 'tube1', facts: f2)
         tube3 = FactoryBot.create(:asset)
-        f3 = [
-          FactoryBot.create(:fact, {:predicate => 'relates', :object_asset => tube2})
-        ]
-        tube4 = FactoryBot.create(:asset, :name => 'tube4',
-          :facts => f3
-        )
-        f4 = [FactoryBot.create(:fact, {:predicate => 'volume', :object => '17'})]
-        tube5 = FactoryBot.create(:asset, :name => 'tube2',
-          :facts => f4)
+        f3 = [FactoryBot.create(:fact, { predicate: 'relates', object_asset: tube2 })]
+        tube4 = FactoryBot.create(:asset, name: 'tube4', facts: f3)
+        f4 = [FactoryBot.create(:fact, { predicate: 'volume', object: '17' })]
+        tube5 = FactoryBot.create(:asset, name: 'tube2', facts: f4)
 
         obtained_assets.each do |t|
           t.reload
@@ -48,12 +42,11 @@ RSpec.describe "Inference" do
         assets_are_different([tube3, tube2], obtained_assets)
         assets_are_different([tube4, tube2], obtained_assets)
         assets_are_different([tube1, tube5], obtained_assets)
-        assets_are_equal([tube2,tube1], [tube1, tube2])
+        assets_are_equal([tube2, tube1], [tube1, tube2])
 
         assets_are_equal([tube1, tube1, tube2], [tube1, tube2])
       end
     end
-
 
     describe '#inferences' do
       before do
@@ -63,9 +56,7 @@ RSpec.describe "Inference" do
       end
       inferences_data.each do |data|
         if data[:unless]
-          if send(data[:unless])
-            next
-          end
+          next if send(data[:unless])
         end
 
         if data[:it]
@@ -80,6 +71,5 @@ RSpec.describe "Inference" do
         end
       end
     end
-
   end
 end

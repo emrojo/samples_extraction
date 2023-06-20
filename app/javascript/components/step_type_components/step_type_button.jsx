@@ -1,7 +1,7 @@
 import React from 'react'
-import {FormFor} from "react-rails-form-helpers"
-import PrintersSelectionHidden from "../activity_components/printers_selection_hidden"
-import ButtonWithLoading from "../lib/button_with_loading"
+import { FormFor } from 'react-rails-form-helpers'
+import PrintersSelectionHidden from '../activity_components/printers_selection_hidden'
+import ButtonWithLoading from '../lib/button_with_loading'
 
 class StepTypeButton extends React.Component {
   constructor(props) {
@@ -28,36 +28,37 @@ class StepTypeButton extends React.Component {
           step_type_id: this.props.stepTypeData.stepType.id,
           asset_group_id: this.props.assetGroupId,
           tube_printer_id: this.props.selectedTubePrinter,
-          plate_printer_id: this.props.selectedPlatePrinter
-        }
-      }
+          plate_printer_id: this.props.selectedPlatePrinter,
+        },
+      },
     })
   }
   renderButton() {
-    return(
+    return (
       <ButtonWithLoading
         onClick={this.onClick}
         data-turbolinks="false"
-        type="submit" className='btn btn-primary'
-        text={this.props.stepTypeData.name} />
+        type="submit"
+        className="btn btn-primary"
+        text={this.props.stepTypeData.name}
+      />
     )
   }
   render() {
-		return(
-		    <li className="btn-group" style={{top: '6px'}}>
-		      <form
-            className="form-inline activity-desc">
-            <ButtonWithLoading
-              onClick={this.onClick}
-              data-turbolinks="false"
-              type="submit" className='btn btn-primary'
-              text={this.props.stepTypeData.name} />
-		      </form>
-			</li>
-		)
+    return (
+      <li className="btn-group" style={{ top: '6px' }}>
+        <form className="form-inline activity-desc">
+          <ButtonWithLoading
+            onClick={this.onClick}
+            data-turbolinks="false"
+            type="submit"
+            className="btn btn-primary"
+            text={this.props.stepTypeData.name}
+          />
+        </form>
+      </li>
+    )
   }
-
 }
-
 
 export default StepTypeButton

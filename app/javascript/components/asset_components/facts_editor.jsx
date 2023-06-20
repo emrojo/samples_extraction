@@ -10,10 +10,10 @@ class FactsEditor extends Facts {
     this.updateFromJson = this.updateFromJson.bind(this)
 
     this.state = {
-      text: "",
+      text: '',
       asset: this.props.asset,
       facts: this.props.facts,
-      dataAssetDisplay: this.props.dataAssetDisplay
+      dataAssetDisplay: this.props.dataAssetDisplay,
     }
   }
 
@@ -28,11 +28,9 @@ class FactsEditor extends Facts {
       contentType: 'application/json; charset=utf-8',
       data: JSON.stringify({
         changes: {
-          add_facts:[
-            [this.props.asset.uuid, predicate, object]
-          ]
-        }
-      })
+          add_facts: [[this.props.asset.uuid, predicate, object]],
+        },
+      }),
     }).then(this.updateFromJson)
   }
 
@@ -44,30 +42,28 @@ class FactsEditor extends Facts {
       contentType: 'application/json; charset=utf-8',
       data: JSON.stringify({
         changes: {
-          remove_facts:[
-            [this.props.asset.uuid, fact.predicate, fact.object || fact.object_asset.uuid]
-          ]
-        }
-      })
+          remove_facts: [[this.props.asset.uuid, fact.predicate, fact.object || fact.object_asset.uuid]],
+        },
+      }),
     }).then(this.updateFromJson)
   }
 
   updateFromJson(json) {
-    const asset=json.assets[0]
-    const facts=json.facts[0]
-    let dataAssetDisplay={}
-    dataAssetDisplay[asset.uuid]=json.dataAssetDisplay[0]
+    const asset = json.assets[0]
+    const facts = json.facts[0]
+    let dataAssetDisplay = {}
+    dataAssetDisplay[asset.uuid] = json.dataAssetDisplay[0]
 
     this.setState({
       text: '',
       asset,
       dataAssetDisplay,
-      facts: facts
+      facts: facts,
     })
   }
 
   onChangeText(e) {
-    this.setState({text: e.target.value })
+    this.setState({ text: e.target.value })
   }
 
   onKeyPress(e) {
@@ -77,13 +73,15 @@ class FactsEditor extends Facts {
   }
 
   render() {
-    return(
+    return (
       <div className="panel panel-default">
         <div className="panel-body">
-          <Facts asset={this.state.asset} facts={this.state.facts}
-            dataAssetDisplay={this.state.dataAssetDisplay} onRemoveFact={
-              this.props.changesUrl ? this.onRemoveFact : null
-            } />
+          <Facts
+            asset={this.state.asset}
+            facts={this.state.facts}
+            dataAssetDisplay={this.state.dataAssetDisplay}
+            onRemoveFact={this.props.changesUrl ? this.onRemoveFact : null}
+          />
         </div>
         <div className="panel-footer">
           <div className="input-group">
@@ -96,12 +94,23 @@ class FactsEditor extends Facts {
             <input
               disabled={!this.props.changesUrl}
               autoComplete="off"
-              type="text" name="object" value={this.state.text} onChange={this.onChangeText}
-              className="form-control" aria-label="..."
-              onKeyPress={this.onKeyPress} />
+              type="text"
+              name="object"
+              value={this.state.text}
+              onChange={this.onChangeText}
+              className="form-control"
+              aria-label="..."
+              onKeyPress={this.onKeyPress}
+            />
             <div className="input-group-btn">
-              <button type="button" disabled={!this.props.changesUrl}
-              onClick={this.props.changesUrl ? this.onAddFact : null} className="btn btn-default form-control">Add</button>
+              <button
+                type="button"
+                disabled={!this.props.changesUrl}
+                onClick={this.props.changesUrl ? this.onAddFact : null}
+                className="btn btn-default form-control"
+              >
+                Add
+              </button>
             </div>
           </div>
         </div>

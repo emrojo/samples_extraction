@@ -1,4 +1,4 @@
-class CreateAssets < ActiveRecord::Migration
+class CreateAssets < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :assets do |t|
       t.string :uuid

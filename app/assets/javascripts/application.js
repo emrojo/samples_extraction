@@ -45,4 +45,4 @@
 //    require_asset "peek/views/performance_bar"
 
 window.App = {}
-window.App.cable=ActionCable.createConsumer()
+window.App.cable = ActionCable.createConsumer()

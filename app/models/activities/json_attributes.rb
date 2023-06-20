@@ -1,23 +1,28 @@
-module Activities::JsonAttributes
-  def initial_json_attributes(current_user=nil)
+module Activities::JsonAttributes # rubocop:todo Style/Documentation
+  def initial_json_attributes(current_user = nil)
     {
-       activity: {
-         id: id,
-         completed_at: completed_at,
-         activity_type_name: activity_type.name,
-         instrument_name: instrument ? (instrument.name || instrument.barcode) : nil,
-         kit_name: kit ? kit.barcode : nil,
-         selectedAssetGroup: owned_asset_groups.first.id
-       },
+      activity: {
+        id: id,
+        completed_at: completed_at,
+        activity_type_name: activity_type.name,
+        instrument_name: instrument ? (instrument.name || instrument.barcode) : nil,
+        kit_name: kit ? kit.barcode : nil,
+        selectedAssetGroup: owned_asset_groups.first.id
+      },
       tubePrinter: {
-        optionsData: Printer.for_tube.map{|a| [a.name, a.id]},
-        defaultValue: current_user && current_user.tube_printer ? current_user.tube_printer.id : nil
+        optionsData: Printer.for_tube.pluck(:name, :id),
+        defaultValue: current_user&.tube_printer_id
       },
       platePrinter: {
-        optionsData: Printer.for_plate.map{|a| [a.name, a.id]},
-        defaultValue: current_user && current_user.plate_printer ? current_user.plate_printer.id : nil
-      }
-    }.merge(websockets_attributes(json_attributes))
+        optionsData: Printer.for_plate.pluck(:name, :id),
+        defaultValue: current_user&.plate_printer_id
+      },
+      featureFlags: feature_flags(current_user)
+    }.merge(websockets_attributes)
+  end
+
+  def feature_flags(current_user)
+    Flipper.features.index_by(&:key).transform_values { |f| f.enabled?(current_user) }
   end
 
   def json_attributes
@@ -31,7 +36,9 @@ module Activities::JsonAttributes
       stepTypes: -> { ApplicationController.helpers.step_types_control_data(self) },
       stepsPending: -> { ApplicationController.helpers.steps_data_for_steps(self.steps.running) },
       stepsRunning: -> { ApplicationController.helpers.steps_data_for_steps(self.steps.processing) },
-      stepsFailed: -> { ApplicationController.helpers.steps_data_for_steps(self.steps.finished.select{|s| s.state == 'failed'}) },
+      stepsFailed: -> do
+        ApplicationController.helpers.steps_data_for_steps(self.steps.finished.select { |s| s.state == 'failed' })
+      end,
       stepsFinished: -> { ApplicationController.helpers.steps_data_for_steps(self.steps.reload.finished.reverse) }
     }
   end

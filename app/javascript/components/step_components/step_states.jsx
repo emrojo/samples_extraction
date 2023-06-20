@@ -15,7 +15,7 @@ const C = {
   STEP_EVENT_CONTINUE: 'continue',
   STEP_EVENT_STOP: 'stop',
   STEP_EVENT_REMAKE: 'remake',
-  STEP_EVENT_CANCEL: 'cancel'
+  STEP_EVENT_CANCEL: 'cancel',
 }
 
 export default C

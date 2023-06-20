@@ -1,10 +1,10 @@
-module StepsHelper
+module StepsHelper # rubocop:todo Style/Documentation
   def text_color_for_state(state)
     "text-#{color_for_state(state)}"
   end
 
   def color_for_state(state)
-    css = "primary"
+    css = 'primary'
     css = 'success' if state == 'complete'
     css = 'danger' if state == 'error'
     css = 'warning' if state == 'running'

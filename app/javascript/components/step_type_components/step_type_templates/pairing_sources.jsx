@@ -12,31 +12,34 @@ class PairingSources extends React.Component {
     let name = pairingInput.name
     let identifier = pairingInput.id
 
-    return(
+    return (
       <div className="row col-md-12 with-bottom-margin">
-        <label for="source" className="control-label">Scan a { name }</label>
+        <label for="source" className="control-label">
+          Scan a {name}
+        </label>
         <div className="">
-          <input autocomplete="off" name="{ identifier }" className="form-control" 
-            type='text' placeholder="Scan a { name }" />
+          <input
+            autocomplete="off"
+            name="{ identifier }"
+            className="form-control"
+            type="text"
+            placeholder="Scan a { name }"
+          />
         </div>
       </div>
     )
   }
   renderPairingValues(values) {
-    return(
-      <tr> 
-        {
-          Object.keys(this.props.pairingInputs).map((input) => {
-            return(
-              <td>{values[input.id]}</td>
-            )
-          })
-        } 
+    return (
+      <tr>
+        {Object.keys(this.props.pairingInputs).map((input) => {
+          return <td>{values[input.id]}</td>
+        })}
       </tr>
     )
   }
   render() {
-    return(
+    return (
       <div className="row">
         <div className="col-md-3">
           {Object.keys(this.props.pairingInputs).map(this.renderPairingInputs)}
@@ -52,12 +55,12 @@ class PairingSources extends React.Component {
             <table className="table table-condensed">
               <thead>
                 <tr>
-                  { Object.keys(this.props.pairingInputs).map((name) => { return(<th>{name}</th>) } ) }
+                  {Object.keys(this.props.pairingInputs).map((name) => {
+                    return <th>{name}</th>
+                  })}
                 </tr>
               </thead>
-              <tbody>
-                { this.props.pairingValues.map(this.renderPairingValues) }
-              </tbody>
+              <tbody>{this.props.pairingValues.map(this.renderPairingValues)}</tbody>
             </table>
           </div>
         </div>
@@ -65,4 +68,3 @@ class PairingSources extends React.Component {
     )
   }
 }
-

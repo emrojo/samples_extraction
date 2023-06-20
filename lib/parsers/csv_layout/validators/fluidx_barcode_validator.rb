@@ -1,11 +1,14 @@
+# frozen_string_literal: true
+
 module Parsers
   module CsvLayout
     module Validators
+      # Validates that the barcode matches the Fluidx format
       class FluidxBarcodeValidator < ActiveModel::Validator
         def validate(record)
-          unless valid_fluidx_barcode?(record)
-            record.errors.add(:barcode, "Invalid fluidx barcode format #{record.barcode}")
-          end
+          return if valid_fluidx_barcode?(record)
+
+          record.errors.add(:barcode, "Invalid fluidx barcode format #{record.barcode}")
         end
 
         protected

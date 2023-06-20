@@ -1,4 +1,6 @@
-return unless ARGV.any?{|s| s.match(".json")}
+# @todo Migrate to StepPlanner https://github.com/sanger/samples_extraction/issues/193
+
+return unless ARGV.any? { |s| s.match('.json') }
 
 args = ARGV[0]
 matches = args.match(/(\d*)\.json/)

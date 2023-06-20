@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :instrument do
-    barcode  { FactoryBot.generate :barcode }
+    barcode { FactoryBot.generate :barcode }
   end
 end

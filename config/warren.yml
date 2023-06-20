@@ -1,0 +1,28 @@
+development:
+  type: log
+  config: # Useful to allow easy switching to broadcast in development
+    routing_key_prefix: development
+    server:
+      host: localhost
+      port: 5672
+      username: guest
+      password: guest
+      vhost: /
+      frame_max: 0
+      heartbeat: 30
+    exchange: psd.sequencescape
+test:
+  type: test
+production:
+  type: <%= ENV['WARREN_TYPE'] %>
+  config:
+    routing_key_prefix: <%= ENV['WARREN_ROUTING_KEY']||ENV['RAILS_ENV'] %>
+    server:
+      host: <%= ENV['WARREN_HOST'] %>
+      port: <%= ENV['WARREN_PORT'] %>
+      username: <%= ENV['WARREN_USERNAME'] %>
+      password: <%= ENV['WARREN_PASSWORD'] %>
+      vhost: <%= ENV['WARREN_VHOST'] %>
+      frame_max: 0
+      heartbeat: 30
+    exchange: <%= ENV['WARREN_EXCHANGE'] %>

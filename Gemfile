@@ -1,99 +1,94 @@
-source 'http://rubygems.org'
-
+source 'https://rubygems.org'
 
 # Service libraries
-gem 'puma'
+gem 'bootsnap', require: false
 gem 'daemons'
-gem 'redis'
-gem 'delayed_job'
 gem 'delayed_job_active_record'
+gem 'hiredis'
 gem 'mysql2'
+gem 'puma'
+gem 'redis', '< 5'
+gem 'sanger_warren' # Wraps bunny and manages connection pools and configuration
 
 # Rails and framework libraries
-gem 'rails', '~> 5.1'
-gem 'tzinfo-data'
+gem 'aasm'
+gem 'activerecord-import'
 gem 'activerecord-session_store'
 gem 'micro_token'
-gem 'activerecord-import'
-gem 'aasm'
-
+gem 'rails', '~> 6.1'
+gem 'tzinfo-data'
 
 # Rails views and UI
-gem 'turbolinks'
 gem 'bootstrap_form'
-gem 'sprockets-rails'
-gem 'js_cookie_rails'
-gem 'webpacker'
-gem 'webpacker-react'
+gem 'bootstrap-sass'
 gem 'jquery-rails'
+gem 'js_cookie_rails'
 gem 'react-rails'
 gem 'sass-rails'
-gem 'bootstrap-sass'
+gem 'sprockets-rails'
+gem 'turbolinks'
+gem 'webpacker'
+gem 'webpacker-react'
 gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 
-
 # Javascript UI
-gem 'ejs'
-gem 'dropzonejs-rails'
-gem 'rails-assets-tether'#, '>= 1.1.0'
 gem 'ace-rails-ap'
+gem 'dropzonejs-rails'
+gem 'ejs'
+gem 'rails-assets-tether'
 
 # Serializers
+gem 'jbuilder'
+gem 'oj'
 gem 'rdf-n3'
-gem 'jbuilder'#, '~> 2.0'
-gem 'yajl-ruby'#, '>= 1.3'
-gem 'google_hash'
 
 # Traction endpoints
+gem 'json_api_client'
 gem 'jsonapi-resources'
 
-gem 'json_api_client'
-
 # Tools
-gem 'sanger_barcode_format', git: 'https://github.com/sanger/sanger_barcode_format.git'
 gem 'pmb-client', git: 'https://github.com/sanger/pmb-client.git'
+gem 'sanger_barcode_format', git: 'https://github.com/sanger/sanger_barcode_format.git'
 
 # Sequencescspae
-gem 'rest-client'
 gem 'faraday'
-gem 'sequencescape-client-api', git: 'https://github.com/sanger/sequencescape-client-api.git', branch: 'rails_4', require: 'sequencescape'
-#
-#gem 'sequencescape-client-api', require: 'sequencescape'
+gem 'rest-client'
+gem 'sequencescape-client-api', require: 'sequencescape'
 
 # Debugging
 gem 'rb-readline'
 
 # Docs
-gem 'sdoc'#, '~> 0.4.0', group: :doc
+gem 'yard'
 
+# Feature flags
+gem 'flipper'
+gem 'flipper-redis'
+gem 'flipper-ui'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-  gem 'factory_bot_rails'
-  gem 'pry'
+  # Call 'pry' anywhere in the code to stop execution and get a debugger console
+  gem 'pry-byebug'
+  gem 'pry-rails'
   gem 'ruby-growl'
 end
 
 group :test do
-  gem 'factory_bot'
-  gem 'rspec-rails'
-  gem 'shoulda-matchers'
-  gem 'rails-controller-testing'
   gem 'database_cleaner'
+  gem 'factory_bot_rails'
   gem 'json-schema'
-end
-
-group :test do
   gem 'launchy'
   gem 'rack_session_access'
+  gem 'rails-controller-testing'
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'simplecov', require: false
 end
-
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console'#, '~> 2.0'
+  gem 'web-console' # , '~> 2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
@@ -102,11 +97,9 @@ group :development do
   gem 'rubocop-performance'
   gem 'rubocop-rails'
 
-
-  gem 'travis'
-  gem 'travis-lint'
+  # Mocks APi connections, and also prevents inadvertent network connections being made.
+  gem 'webmock'
 end
-
 
 group :deployment do
   gem 'exception_notification'

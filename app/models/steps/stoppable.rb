@@ -1,4 +1,4 @@
-module Steps::Stoppable
+module Steps::Stoppable # rubocop:todo Style/Documentation
   def stop_job
     ActiveRecord::Base.transaction do
       clear_job
@@ -16,5 +16,4 @@ module Steps::Stoppable
   def stop_newer_steps
     activity.steps.newer_than(self).active.each(&:stop!)
   end
-
 end

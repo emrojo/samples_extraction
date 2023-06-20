@@ -1,7 +1,5 @@
-class AddConnectByToStepType < ActiveRecord::Migration
+class AddConnectByToStepType < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
-    ActiveRecord::Base.transaction do |t|
-      add_column :step_types, :connect_by, :string
-    end
+    ActiveRecord::Base.transaction { |_t| add_column :step_types, :connect_by, :string }
   end
 end

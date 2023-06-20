@@ -1,5 +1,1 @@
-FactoryBot.define do
-  factory :condition_group, class: 'ConditionGroup' do
-
-  end
-end
+FactoryBot.define { factory :condition_group, class: 'ConditionGroup' }

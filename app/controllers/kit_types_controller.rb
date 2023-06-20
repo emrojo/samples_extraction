@@ -1,6 +1,6 @@
-class KitTypesController < ApplicationController
-  before_action :set_kit_type, only: [:show, :edit, :update, :destroy]
-  before_action :set_activity_types, only: [:new, :show, :edit, :update]
+class KitTypesController < ApplicationController # rubocop:todo Style/Documentation
+  before_action :set_kit_type, only: %i[show edit update destroy]
+  before_action :set_activity_types, only: %i[new show edit update]
 
   # GET /kit_types
   # GET /kit_types.json
@@ -10,8 +10,7 @@ class KitTypesController < ApplicationController
 
   # GET /kit_types/1
   # GET /kit_types/1.json
-  def show
-  end
+  def show; end
 
   # GET /kit_types/new
   def new
@@ -19,8 +18,7 @@ class KitTypesController < ApplicationController
   end
 
   # GET /kit_types/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /kit_types
   # POST /kit_types.json
@@ -29,7 +27,7 @@ class KitTypesController < ApplicationController
 
     respond_to do |format|
       if @kit_type.save
-        format.html { redirect_to @kit_type, notice: 'Kit type was successfully created.' }
+        format.html { redirect_to @kit_type, notice: 'Kit type was successfully created.' } # rubocop:todo Rails/I18nLocaleTexts
         format.json { render :show, status: :created, location: @kit_type }
       else
         format.html { render :new }
@@ -43,7 +41,7 @@ class KitTypesController < ApplicationController
   def update
     respond_to do |format|
       if @kit_type.update(kit_type_params)
-        format.html { redirect_to @kit_type, notice: 'Kit type was successfully updated.' }
+        format.html { redirect_to @kit_type, notice: 'Kit type was successfully updated.' } # rubocop:todo Rails/I18nLocaleTexts
         format.json { render :show, status: :ok, location: @kit_type }
       else
         format.html { render :edit }
@@ -57,23 +55,24 @@ class KitTypesController < ApplicationController
   def destroy
     @kit_type.destroy
     respond_to do |format|
-      format.html { redirect_to kit_types_url, notice: 'Kit type was successfully destroyed.' }
+      format.html { redirect_to kit_types_url, notice: 'Kit type was successfully destroyed.' } # rubocop:todo Rails/I18nLocaleTexts
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_kit_type
-      @kit_type = KitType.find(params[:id])
-    end
 
-    def set_activity_types
-      @activity_types = ActivityType.all
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_kit_type
+    @kit_type = KitType.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def kit_type_params
-      params.require(:kit_type).permit(:name, :target_type, :activity_type_id, :abbreviation)
-    end
+  def set_activity_types
+    @activity_types = ActivityType.all
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def kit_type_params
+    params.require(:kit_type).permit(:name, :target_type, :activity_type_id, :abbreviation)
+  end
 end

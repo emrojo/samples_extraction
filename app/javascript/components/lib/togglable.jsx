@@ -2,15 +2,19 @@ const Togglable = (description, valueToCheck, onToggle, render) => {
   if (typeof valueToCheck === 'undefined') {
     return (
       <div className="form-group">
-        <label onClick={onToggle} className="control-label">{ description } <small className="btn-link">(Show)</small></label>
+        <label onClick={onToggle} className="control-label">
+          {description} <small className="btn-link">(Show)</small>
+        </label>
       </div>
     )
   }
 
-  return(
+  return (
     <div className="form-group">
-      <label onClick={onToggle} className="control-label">{ description } <small className="btn-link">(Hide)</small></label>
-      { render() }
+      <label onClick={onToggle} className="control-label">
+        {description} <small className="btn-link">(Hide)</small>
+      </label>
+      {render()}
     </div>
   )
 }

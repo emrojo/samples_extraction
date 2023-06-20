@@ -1,4 +1,4 @@
-class UserSessionsController < ApplicationController
+class UserSessionsController < ApplicationController # rubocop:todo Style/Documentation
   before_action :set_user, only: [:create]
 
   def create
@@ -7,11 +7,10 @@ class UserSessionsController < ApplicationController
 
   def destroy
     @current_user.clean_session if @current_user
-    session[:token]=nil
+    session[:token] = nil
 
     head :no_content
   end
-
 
   private
 
@@ -20,6 +19,6 @@ class UserSessionsController < ApplicationController
   end
 
   def set_user
-    @user = User.find_by!(:barcode => user_session_params[:barcode])
+    @user = User.find_by!(barcode: user_session_params[:barcode])
   end
 end

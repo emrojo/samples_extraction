@@ -14,13 +14,12 @@ RSpec.describe Fact do
   context 'when defines a relation' do
     let(:asset) { create :asset }
     it 'cannot store anything without object_asset_id defined' do
-      fact = build(:fact, predicate: 'pred', object: "str", object_asset_id: asset, literal: false)
+      fact = build(:fact, predicate: 'pred', object: 'str', object_asset_id: asset, literal: false)
       expect(fact).not_to be_valid
     end
     it 'cannot store any string if object_asset_id defined' do
-      fact = build(:fact, predicate: 'pred', object: "str", object_asset_id: asset, literal: false)
+      fact = build(:fact, predicate: 'pred', object: 'str', object_asset_id: asset, literal: false)
       expect(fact).not_to be_valid
     end
   end
-
 end

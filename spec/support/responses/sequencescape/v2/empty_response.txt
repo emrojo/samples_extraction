@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Permitted-Cross-Domain-Policies: none
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Type: application/vnd.api+json
+Cache-Control: no-store, must-revalidate, private, max-age=0
+X-Request-Id: 897500d8-ae1e-43e1-b258-580962b39b34
+X-Runtime: 0.033948
+Vary: Origin
+X-MiniProfiler-Original-Cache-Control: max-age=0, private, must-revalidate
+X-MiniProfiler-Ids: r0266h9nt6vv4c6yshsf,lybddp5q6m1b0wja5zl7,h8dyv9vj5146riqk702a,6maz376ry77dilgxstce,ro1x2x8m9yhaa6h1kl64,mmipw1q7smx83bo9fpxk,yi14cm97b0meme37a7fd,lvuylwm990jpzb5044dk,nnfyr6zzn1fv5hv4nq8l,crmk9clc654pm1orvbf2
+Set-Cookie: __profilin=p%3Dt; path=/; HttpOnly; SameSite=Lax
+Transfer-Encoding: chunked
+
+{"data":[],"links":{"first":"http://localhost:3000/api/v2/tube_racks?filter%5Bbarcode%5D=nothing&include=racked_tubes.tube.aliquots.sample.sample_metadata&page%5Bnumber%5D=1&page%5Bsize%5D=100","last":"http://localhost:3000/api/v2/tube_racks?filter%5Bbarcode%5D=nothing&include=racked_tubes.tube.aliquots.sample.sample_metadata&page%5Bnumber%5D=1&page%5Bsize%5D=100"}}

@@ -37,7 +37,7 @@
   ?f :fileType :CSV .
 } => {
   :step :stepTypeName """Apply layout from file into the rack""".
-  :step :stepAction """rack_layout_creating_tubes.rb""" .
+  :step :stepAction """StepPlanner::RackLayoutCreatingTubes""" .
 }.
 
 {
@@ -48,5 +48,3 @@
   :step :stepAction """update_sequencescape.rb""" .
   :step :addFacts { ?p :pushTo :Sequencescape . } .
 }.
-
-

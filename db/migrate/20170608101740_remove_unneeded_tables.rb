@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-class RemoveUnneededTables < ActiveRecord::Migration
+
+class RemoveUnneededTables < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     drop_table :asset_groups_steps
     drop_table :asset_relations

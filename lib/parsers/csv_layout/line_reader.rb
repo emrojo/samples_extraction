@@ -1,9 +1,8 @@
 require 'csv'
 module Parsers
   module CsvLayout
-    class LineReader
-
-      BOM_HEADER="\xEF\xBB\xBF"
+    class LineReader # rubocop:todo Style/Documentation
+      BOM_HEADER = "\xEF\xBB\xBF"
 
       def initialize(input)
         @input = input
@@ -26,7 +25,6 @@ module Parsers
       def csv_convert(str)
         CSV.new(str).to_a
       end
-
     end
   end
 end

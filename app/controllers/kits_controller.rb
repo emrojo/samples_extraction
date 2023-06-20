@@ -1,6 +1,6 @@
-class KitsController < ApplicationController
-  before_action :set_kit, only: [:show, :edit, :update, :destroy]
-  before_action :set_kit_types, only: [:new, :show, :edit, :update]
+class KitsController < ApplicationController # rubocop:todo Style/Documentation
+  before_action :set_kit, only: %i[show edit update destroy]
+  before_action :set_kit_types, only: %i[new show edit update]
 
   # GET /kits
   # GET /kits.json
@@ -10,8 +10,7 @@ class KitsController < ApplicationController
 
   # GET /kits/1
   # GET /kits/1.json
-  def show
-  end
+  def show; end
 
   # GET /kits/new
   def new
@@ -19,8 +18,7 @@ class KitsController < ApplicationController
   end
 
   # GET /kits/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /kits
   # POST /kits.json
@@ -28,7 +26,7 @@ class KitsController < ApplicationController
     @kit = Kit.new(kit_params)
     respond_to do |format|
       if @kit.save
-        format.html { redirect_to @kit, notice: 'Kit was successfully created.' }
+        format.html { redirect_to @kit, notice: 'Kit was successfully created.' } # rubocop:todo Rails/I18nLocaleTexts
         format.json { render :show, status: :created, location: @kit }
       else
         format.html { render :new }
@@ -42,7 +40,7 @@ class KitsController < ApplicationController
   def update
     respond_to do |format|
       if @kit.update(kit_params)
-        format.html { redirect_to @kit, notice: 'Kit was successfully updated.' }
+        format.html { redirect_to @kit, notice: 'Kit was successfully updated.' } # rubocop:todo Rails/I18nLocaleTexts
         format.json { render :show, status: :ok, location: @kit }
       else
         format.html { render :edit }
@@ -56,23 +54,24 @@ class KitsController < ApplicationController
   def destroy
     @kit.destroy
     respond_to do |format|
-      format.html { redirect_to kits_url, notice: 'Kit was successfully destroyed.' }
+      format.html { redirect_to kits_url, notice: 'Kit was successfully destroyed.' } # rubocop:todo Rails/I18nLocaleTexts
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_kit
-      @kit = Kit.find(params[:id])
-    end
 
-    def set_kit_types
-      @kit_types = KitType.all
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_kit
+    @kit = Kit.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def kit_params
-      params.require(:kit).permit(:barcode, :max_num_reactions, :num_reactions_performed, :kit_type_id)
-    end
+  def set_kit_types
+    @kit_types = KitType.all
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def kit_params
+    params.require(:kit).permit(:barcode, :max_num_reactions, :num_reactions_performed, :kit_type_id)
+  end
 end

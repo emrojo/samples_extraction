@@ -1,6 +1,3 @@
-
-
-
 <%= bootstrap_form_for(step_type, :html => { :"data-psd-component-class" => "ConditionGroups", :"data-psd-component-parameters" => condition_groups_init_for_step_type(@step_type)}) do |f| %>
   <% if step_type.errors.any? %>
     <div id="error_explanation">
@@ -13,6 +10,7 @@
       </ul>
     </div>
   <% end %>
+
   <% readonly = params[:action] == 'show' %>
   <div class="field step_type_name">
     <%= f.text_field :name, :readonly => readonly %>
@@ -52,7 +50,6 @@
         >New Asset</a>
       </div>
     </div>
-
   </div>
 
 

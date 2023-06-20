@@ -1,4 +1,4 @@
-class CreateActivityTypesInstruments < ActiveRecord::Migration
+class CreateActivityTypesInstruments < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :activity_types_instruments do |t|
       t.references :instrument, index: true, foreign_key: true

@@ -1,5 +1,4 @@
-module Steps::Job
-
+module Steps::Job # rubocop:todo Style/Documentation
   def create_job
     save_job(delay(queue: 'steps').perform_job)
   end
@@ -12,7 +11,7 @@ module Steps::Job
 
   def clear_job
     self.job_id = nil
-    @error=nil
+    @error = nil
     save!
   end
 
@@ -24,10 +23,9 @@ module Steps::Job
 
   def output_error(exception)
     return output unless exception
-    [
-      output, exception && exception.message,
-      Rails.backtrace_cleaner.clean(exception && exception.backtrace)
-    ].flatten.join("\n")
+
+    [output, exception && exception.message, Rails.backtrace_cleaner.clean(exception && exception.backtrace)].flatten
+      .join("\n")
   end
 
   def job
@@ -46,9 +44,6 @@ module Steps::Job
       complete! if running?
     end
   ensure
-    unless (stopped? || ignored? || completed?)
-      fail!
-    end
+    fail! unless stopped? || ignored? || completed?
   end
-
 end

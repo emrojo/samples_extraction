@@ -2,11 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-
-#conditionGroups a[data-psd-condition-group-action-types]{
+#conditionGroups a[data-psd-condition-group-action-types] {
   margin-bottom: 1em;
 }
-#conditionGroups div.alert { padding: 0px; }
+#conditionGroups div.alert {
+  padding: 0px;
+}
 
 .main-view #conditionGroups .panel-body {
   padding-bottom: 15px;
@@ -38,8 +39,15 @@ span.editable-text {
   .not-for-reasoning { display: none;}
 }*/
 
-.readonly .btn-group { display: none; }
-.readonly .input-group { display: none; }
-.readonly span[data-psd-delete-icon] { display: none; }
-.readonly button { display: none; }
-
+.readonly .btn-group {
+  display: none;
+}
+.readonly .input-group {
+  display: none;
+}
+.readonly span[data-psd-delete-icon] {
+  display: none;
+}
+.readonly button {
+  display: none;
+}

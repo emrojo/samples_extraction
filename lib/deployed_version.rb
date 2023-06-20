@@ -2,8 +2,8 @@
 
 require 'open3'
 
-module Deployed
-  class RepoData
+module Deployed # rubocop:todo Style/Documentation
+  class RepoData # rubocop:todo Style/Documentation
     def tag
       @tag ||= git_tag || read_file('TAG').strip.presence
     end
@@ -45,15 +45,11 @@ module Deployed
     end
 
     def version_hash
-      @version_hash ||= /\Arelease-(?<major>\d+)\.(?<minor>\d+)\.?(?<extra>\S*)\z/.match(label)
+      @version_hash ||= /\A(?:release-|v){0,1}(?<major>\d+)\.(?<minor>\d+)\.?(?<extra>\S*)\z/.match(label)
     end
 
     def version_label
-      if major == 0 && minor == 0 && extra == 0
-        'WIP'
-      else
-        "#{major}.#{minor}.#{extra}"
-      end
+      major == 0 && minor == 0 && extra == 0 ? 'WIP' : "#{major}.#{minor}.#{extra}"
     end
 
     private
@@ -84,7 +80,7 @@ module Deployed
     end
 
     def read_file(filename)
-      File.open(Rails.root.join(filename), 'r', &:readline)
+      Rails.root.join(filename).open('r', &:readline)
     rescue Errno::ENOENT, EOFError
       ''
     end
@@ -108,13 +104,15 @@ module Deployed
 
   VERSION_STRING = "#{APP_NAME} #{VERSION_ID} [#{ENVIRONMENT}]"
   VERSION_COMMIT = "#{BRANCH}@#{ABBREV_COMMIT}"
-  REPO_URL       = REPO_DATA.release_url.presence || '#'
-  HOSTNAME       = Socket.gethostname
+  REPO_URL = REPO_DATA.release_url.presence || '#'
+  HOSTNAME = Socket.gethostname
 
   require 'ostruct'
-  DETAILS = OpenStruct.new(
-    name: nil,
-    version: VERSION_ID,
-    environment: ENVIRONMENT
-  )
+  DETAILS =
+    OpenStruct.new(
+      # rubocop:todo Style/OpenStructUse
+      name: nil,
+      version: VERSION_ID,
+      environment: ENVIRONMENT
+    )
 end

@@ -1,4 +1,4 @@
-class CreateActivityTypeStepTypes < ActiveRecord::Migration
+class CreateActivityTypeStepTypes < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :activity_type_step_types do |t|
       t.references :activity_type, index: true, foreign_key: true

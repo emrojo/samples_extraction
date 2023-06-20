@@ -1,7 +1,6 @@
 import React from 'react'
 
 class Fact extends React.Component {
-
   constructor(props) {
     super(props)
     this.valueForPredicate = this.valueForPredicate.bind(this)
@@ -13,9 +12,11 @@ class Fact extends React.Component {
   }
 
   valueForPredicate(asset, predicate) {
-    let val = (asset.facts && asset.facts.filter((a) => {
-      return (a.predicate == predicate)
-    })[0])
+    let val =
+      asset.facts &&
+      asset.facts.filter((a) => {
+        return a.predicate == predicate
+      })[0]
     if (val) {
       return val.object
     } else {
@@ -28,11 +29,11 @@ class Fact extends React.Component {
   }
 
   renderShortDescription(asset) {
-    let label = (asset && asset.barcode) ? asset.barcode : '#'+asset.id
+    let label = asset && asset.barcode ? asset.barcode : '#' + asset.id
     if (asset && asset.info_line) {
-      return (`${asset.info_line} ${this.classType(asset)} ${label}`)
+      return `${asset.info_line} ${this.classType(asset)} ${label}`
     }
-    return(`${this.valueForPredicate(asset, 'aliquotType')} ${this.classType(asset)} ${label}`)
+    return `${this.valueForPredicate(asset, 'aliquotType')} ${this.classType(asset)} ${label}`
   }
 
   renderObject(fact) {
@@ -41,23 +42,31 @@ class Fact extends React.Component {
 
       return (
         <a className="object-reference" href={url}>
-          { fact.object_asset ? this.renderShortDescription(fact.object_asset) : '#'+fact.object_asset_id }
+          {fact.object_asset ? this.renderShortDescription(fact.object_asset) : '#' + fact.object_asset_id}
         </a>
       )
     } else {
-      return ( <span data-tip={this.tipForPredicate(fact.object)}>{ fact.object }</span> )
+      return <span data-tip={this.tipForPredicate(fact.object)}>{fact.object}</span>
     }
   }
 
   tipForPredicate(predicate) {
     if (window.ONTOLOGY && window.ONTOLOGY[predicate]) {
-      return (window.ONTOLOGY[predicate].description || null)
+      return window.ONTOLOGY[predicate].description || null
     }
   }
 
   renderRemoveButton(fact) {
     if (this.props.onRemoveFact) {
-      return(<span onClick={() => { this.props.onRemoveFact(fact) }}>×</span>)
+      return (
+        <span
+          onClick={() => {
+            this.props.onRemoveFact(fact)
+          }}
+        >
+          ×
+        </span>
+      )
     }
     return null
   }
@@ -65,20 +74,17 @@ class Fact extends React.Component {
   render() {
     const fact = this.props.fact
 
-    return(
+    return (
       <div className="fact administrator-allowed">
-        <span className={"label "+ (fact["is_remote?"] ? 'label-info' : 'label-default')}>
-        <span data-tip={this.tipForPredicate(fact.predicate)} className="predicate">
-          { fact.predicate }
-        </span>
-        :
-        <span className="object">
-        </span>
+        <span className={'label ' + (fact['is_remote?'] ? 'label-info' : 'label-default')}>
+          <span data-tip={this.tipForPredicate(fact.predicate)} className="predicate">
+            {fact.predicate}
+          </span>
+          :<span className="object"></span>
           {this.renderObject(fact)}
           &nbsp;
           {this.renderRemoveButton(fact)}
         </span>
-
       </div>
     )
   }

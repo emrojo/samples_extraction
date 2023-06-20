@@ -1,5 +1,1 @@
-FactoryBot.define do
-  factory :activity_type_step_type do
-    
-  end
-end
+FactoryBot.define { factory :activity_type_step_type }

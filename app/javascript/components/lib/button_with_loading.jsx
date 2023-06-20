@@ -8,7 +8,7 @@ class ButtonWithLoading extends React.Component {
     this.propsForButton = this.propsForButton.bind(this)
     this.state = {
       disabledButton: false,
-      lastText: null
+      lastText: null,
     }
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -17,7 +17,7 @@ class ButtonWithLoading extends React.Component {
     }
   }
   toggleDisableButton(flag) {
-    this.setState({disabledButton: flag, lastText: this.props.text})
+    this.setState({ disabledButton: flag, lastText: this.props.text })
   }
   onClick(e) {
     this.toggleDisableButton(true)
@@ -29,18 +29,27 @@ class ButtonWithLoading extends React.Component {
     return Object.assign({}, this.props, {
       onClick: this.onClick,
       disabled: this.state.disabledButton,
-      text: null
+      text: null,
     })
   }
   render() {
     const text = this.props.text
-    const loadingIcon = (<span className="glyphicon glyphicon-refresh fast-right-spinner" aria-hidden="true"> </span>)
-    const hiddenLoadingIcon = (<span className="glyphicon glyphicon-refresh invisible" aria-hidden="true"> </span>)
+    const loadingIcon = (
+      <span className="glyphicon glyphicon-refresh fast-right-spinner" aria-hidden="true">
+        {' '}
+      </span>
+    )
+    const hiddenLoadingIcon = (
+      <span className="glyphicon glyphicon-refresh invisible" aria-hidden="true">
+        {' '}
+      </span>
+    )
     const propsToUse = this.propsForButton()
 
-    return(
-      <button {...propsToUse}>{text}
-        {propsToUse.disabled ? loadingIcon : hiddenLoadingIcon }
+    return (
+      <button {...propsToUse}>
+        {text}
+        {propsToUse.disabled ? loadingIcon : hiddenLoadingIcon}
       </button>
     )
   }

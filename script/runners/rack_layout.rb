@@ -1,6 +1,8 @@
+# @todo Migrate to StepPlanner https://github.com/sanger/samples_extraction/issues/193
+
 require 'actions/racking'
 
-class RackLayout
+class RackLayout # rubocop:todo Style/Documentation
   attr_reader :asset_group
 
   include Actions::Racking
@@ -13,17 +15,12 @@ class RackLayout
     asset_group.uploaded_files
   end
 
-
   def process
-    FactChanges.new.tap do |updates|
-      if assets_compatible_with_step_type.count > 0
-        updates.merge(rack_layout(@asset_group))
-      end
-    end
+    FactChanges.new.tap { |updates| updates.merge(rack_layout) if assets_compatible_with_step_type.count > 0 }
   end
 end
 
-return unless ARGV.any?{|s| s.match(".json")}
+return unless ARGV.any? { |s| s.match('.json') }
 
 args = ARGV[0]
 asset_group_id = args.match(/(\d*)\.json/)[1]
@@ -35,7 +32,7 @@ begin
   JSON.parse(json)
   puts json
 rescue InvalidDataParams => e
-  puts ({ set_errors: e.errors }.to_json)
+  puts({ set_errors: e.errors }.to_json)
 rescue StandardError => e
-  puts ({ set_errors: ['Unknown error while parsing file'+e]}.to_json)
+  puts({ set_errors: ['Unknown error while parsing file' + e] }.to_json)
 end

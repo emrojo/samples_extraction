@@ -1,4 +1,4 @@
-class CreateLabelTemplates < ActiveRecord::Migration
+class CreateLabelTemplates < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :label_templates do |t|
       t.string :name, null: false, unique: true

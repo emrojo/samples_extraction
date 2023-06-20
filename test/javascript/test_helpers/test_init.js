@@ -1,16 +1,16 @@
-import React, {Fragment} from 'react';
-import ReactDOM from 'react-dom';
-import $ from 'jquery';
-import Adapter from 'enzyme-adapter-react-16';
-import { configure } from 'enzyme';
+import React, { Fragment } from 'react'
+import ReactDOM from 'react-dom'
+import $ from 'jquery'
+import Adapter from 'enzyme-adapter-react-16'
+import { configure } from 'enzyme'
 
-const CSRF_TOKEN = "1234"
+const CSRF_TOKEN = '1234'
 
 const testInit = () => {
-  global.$ = global.jQuery = $;
-  global.React = React;
+  global.$ = global.jQuery = $
+  global.React = React
 
-  configure({ adapter: new Adapter() });
+  configure({ adapter: new Adapter() })
   mockWebSockets()
   mockCsrfToken(CSRF_TOKEN)
 }
@@ -29,9 +29,9 @@ const mockWebSockets = () => {
   global.App = {
     cable: {
       subscriptions: {
-        create: jest.fn()
-      }
-    }
+        create: jest.fn(),
+      },
+    },
   }
 }
 

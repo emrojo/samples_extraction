@@ -1,15 +1,13 @@
-require 'parsers/csv_layout/validators/any_barcode_validator'
-require 'parsers/csv_layout/validators/fluidx_barcode_validator'
+# frozen_string_literal: true
 
 module Parsers
   module CsvLayout
-    class BarcodeParser
-
+    class BarcodeParser # rubocop:todo Style/Documentation
       NO_READ_BARCODE = 'no read'
 
       include ActiveModel::Validations
 
-      validates :asset, presence: { message: "Cannot find the barcode" }
+      validates :asset, presence: { message: 'Cannot find the barcode' }, if: :barcode? # rubocop:todo Rails/I18nLocaleTexts
       validate :validations
 
       def validations
@@ -20,26 +18,25 @@ module Parsers
 
       def initialize(line, parser)
         @parser = parser
-        _parse(line)
-
-        valid?
+        parse(line)
       end
 
       def no_read_barcode?
-        !barcode.nil? && barcode.downcase.start_with?(NO_READ_BARCODE)
+        !!barcode&.downcase&.start_with?(NO_READ_BARCODE)
       end
 
       def asset
-        Asset.find_or_import_asset_with_barcode(barcode)
+        @parser.find_or_import_asset_with_barcode(barcode)
       end
 
-      protected
-      def _parse(line)
-        begin
-          @barcode = line[1].strip
-        rescue StandardError => e
-          errors.add(:barcode, 'There was an error while parsing the barcode')
-        end
+      def barcode?
+        barcode.present? && !no_read_barcode?
+      end
+
+      private
+
+      def parse(line)
+        @barcode = line[1]&.strip
       end
     end
   end

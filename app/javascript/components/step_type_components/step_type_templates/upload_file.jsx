@@ -9,11 +9,9 @@ import 'react-fine-uploader/gallery/gallery.css'
 import { uploaderOptions } from '../../lib/uploader_utils'
 
 class UploadFile extends Component {
-    render() {
-        return (
-            <Gallery uploader={ new FineUploaderTraditional(uploaderOptions(this.props)) } />
-        )
-    }
+  render() {
+    return <Gallery uploader={new FineUploaderTraditional(uploaderOptions(this.props))} />
+  }
 }
 
 export default UploadFile

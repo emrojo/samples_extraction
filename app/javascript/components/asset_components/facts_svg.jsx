@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import ReactDOM from 'react-dom'
 import SVG from 'react-inlinesvg'
 import classNames from 'classnames'
@@ -16,15 +16,17 @@ class FactsSvg extends React.Component {
     this.classesConfig = this.classesConfig.bind(this)
     this.state = {
       enlarge: false,
-      previousValue: {}
+      previousValue: {},
     }
   }
   numWells(facts) {
-    return facts.filter((v) => { return v.predicate=='contains'}).length
+    return facts.filter((v) => {
+      return v.predicate == 'contains'
+    }).length
   }
   filename(facts) {
     const name = this.nameForFacts(facts)
-    if (name == 'plate'){
+    if (name == 'plate') {
       if (this.numWells(facts) > 96) {
         return '384_plate'
       } else {
@@ -62,7 +64,9 @@ class FactsSvg extends React.Component {
     if (facts.length == 0) {
       return null
     }
-    let typeFact = facts.find((v) => { return v.predicate=="a" })
+    let typeFact = facts.find((v) => {
+      return v.predicate == 'a'
+    })
     if (!typeFact) {
       return null
     }
@@ -75,7 +79,6 @@ class FactsSvg extends React.Component {
     } else {
       return null
     }
-
   }
   componentDidUpdate(prevProps) {
     this.onLoadSvg(prevProps)
@@ -85,46 +88,52 @@ class FactsSvg extends React.Component {
     this.setState({ enlarge: !this.state.enlarge })
   }
   onLoadSvg(prevProps) {
-    var data = this.props.dataAssetDisplay[this.props.asset.uuid];
-    var ignoreKeys=[];
+    var data = this.props.dataAssetDisplay[this.props.asset.uuid]
+    var ignoreKeys = []
     for (var key in data) {
-      if (prevProps && prevProps.dataAssetDisplay &&
+      if (
+        prevProps &&
+        prevProps.dataAssetDisplay &&
         prevProps.dataAssetDisplay[this.props.asset.uuid] &&
-        prevProps.dataAssetDisplay[this.props.asset.uuid][key]) {
+        prevProps.dataAssetDisplay[this.props.asset.uuid][key]
+      ) {
         ignoreKeys.push(key)
       }
-      var node = $('.svg-'+this.props.asset.uuid+' .'+key);
+      var node = $('.svg-' + this.props.asset.uuid + ' .' + key)
       // We want to reset all previous css but we also want to
       // to keep the location, that is represented as a css class (key)
-      node.attr('class', key+' '+data[key].cssClass);
+      node.attr('class', key + ' ' + data[key].cssClass)
       if (node[0]) {
-        node[0].setAttribute('data-tip', data[key].title);
+        node[0].setAttribute('data-tip', data[key].title)
       }
     }
     if (prevProps && prevProps.dataAssetDisplay) {
-      var oldData = prevProps.dataAssetDisplay[this.props.asset.uuid];
+      var oldData = prevProps.dataAssetDisplay[this.props.asset.uuid]
       for (var key in oldData) {
-        if (!(ignoreKeys.find((e)=> {return e==key}))) {
-          var node = $('.svg-'+this.props.asset.uuid+' .'+key);
+        if (
+          !ignoreKeys.find((e) => {
+            return e == key
+          })
+        ) {
+          var node = $('.svg-' + this.props.asset.uuid + ' .' + key)
           // We want to reset all previous css but we also want to
           // to keep the location, that is represented as a css class (key)
-          node.attr('class', key);
+          node.attr('class', key)
           if (node[0]) {
-            node[0].setAttribute('data-tip', null);
+            node[0].setAttribute('data-tip', null)
           }
         }
       }
-
     }
     ReactTooltip.rebuild()
   }
 
   classesConfig() {
     let classesConfig = {
-      'svg': true,
-      'enlarge': this.state.enlarge
+      svg: true,
+      enlarge: this.state.enlarge,
     }
-    classesConfig["svg-"+this.props.asset.uuid]=true
+    classesConfig['svg-' + this.props.asset.uuid] = true
     return classNames(classesConfig)
   }
 
@@ -133,21 +142,21 @@ class FactsSvg extends React.Component {
 
     if (path) {
       return (
-        <div className={this.classesConfig()} onClick={this.toggleEnlarge} >
+        <div className={this.classesConfig()} onClick={this.toggleEnlarge}>
           <SVG
             src={this.pathImage(this.props.facts)}
-            ref={el => this.el = el}
+            ref={(el) => (this.el = el)}
             cacheGetRequests={true}
-            onLoad={this.onLoadSvg}>
-          </SVG>
+            onLoad={this.onLoadSvg}
+          ></SVG>
         </div>
       )
     } else {
-      return(
-        <div className='svg' style={{fontSize: 'xx-large', float: 'left', marginRight: '0.6em'}}>
+      return (
+        <div className="svg" style={{ fontSize: 'xx-large', float: 'left', marginRight: '0.6em' }}>
           <span className="glyphicon glyphicon-file" />
         </div>
-        )
+      )
     }
   }
 }

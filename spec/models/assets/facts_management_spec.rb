@@ -1,6 +1,5 @@
 require 'rails_helper'
 RSpec.describe Assets::FactsManagement do
-
   context '#first_value_for' do
     it 'returns the first object value for an asset predicate' do
       asset = create :asset
@@ -31,6 +30,5 @@ RSpec.describe Assets::FactsManagement do
 
       expect(asset.first_value_for('contains')).to eq(nil)
     end
-
   end
 end
