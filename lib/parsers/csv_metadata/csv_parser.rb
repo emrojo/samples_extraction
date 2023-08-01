@@ -6,14 +6,13 @@ require 'parsers/csv_metadata/validators/headers_validator'
 
 module Parsers
   module CsvMetadata
-    class CsvParser
+    class CsvParser # rubocop:todo Style/Documentation
       include ActiveModel::Validations
 
       validate :validate_parsed_data
 
       attr_accessor :headers_parser
       attr_reader :data, :parsed, :parsed_changes, :components, :line_parser
-
 
       DEFAULT_COMPONENTS = {
         headers_parser: Parsers::CsvMetadata::HeadersParser,
@@ -23,7 +22,7 @@ module Parsers
         headers_validator: Parsers::CsvMetadata::Validators::HeadersValidator
       }
 
-      def initialize(str, component_defs={})
+      def initialize(str, component_defs = {})
         @parsed = false
         @input = str
         @components = self.class::DEFAULT_COMPONENTS.merge(component_defs)
@@ -63,11 +62,8 @@ module Parsers
 
       def validate_parsed_data
         parse unless @parsed
-        unless @line_parser.valid?
-          errors.add(:base, "The csv contains some errors")
-        end
+        errors.add(:base, 'The csv contains some errors') unless @line_parser.valid?
       end
-
     end
   end
 end

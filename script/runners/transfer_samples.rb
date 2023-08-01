@@ -1,9 +1,12 @@
+# @todo Migrate to StepPlanner https://github.com/sanger/samples_extraction/issues/193
+
 require 'actions/tube_transfer'
 
-class TransferSamples
+class TransferSamples # rubocop:todo Style/Documentation
   include Actions::TubeTransfer
 
   attr_reader :asset_group
+
   def initialize(params)
     @asset_group = params[:asset_group]
   end
@@ -17,19 +20,31 @@ class TransferSamples
     asset_group
   end
 
-  def each_asset_and_modified_asset(&block)
-    asset_group.assets.with_predicate('transfer').each do |asset|
-      asset.facts.with_predicate('transfer').each do |fact|
-        modified_asset = fact.object_asset
-        yield(asset, modified_asset) if asset && modified_asset
+  def each_asset_and_modified_asset
+    asset_group
+      .assets
+      .with_predicate('transfer')
+      .each do |asset|
+        asset
+          .facts
+          .with_predicate('transfer')
+          .each do |fact|
+            modified_asset = fact.object_asset
+            yield(asset, modified_asset) if asset && modified_asset
+          end
       end
-    end
-    asset_group.assets.with_predicate('transferredFrom').each do |modified_asset|
-      modified_asset.facts.with_predicate('transferredFrom').each do |fact|
-        asset = fact.object_asset
-        yield(asset, modified_asset) if asset && modified_asset
+    asset_group
+      .assets
+      .with_predicate('transferredFrom')
+      .each do |modified_asset|
+        modified_asset
+          .facts
+          .with_predicate('transferredFrom')
+          .each do |fact|
+            asset = fact.object_asset
+            yield(asset, modified_asset) if asset && modified_asset
+          end
       end
-    end
   end
 
   def process
@@ -44,9 +59,8 @@ class TransferSamples
       end
     end
   end
-
 end
-return unless ARGV.any?{|s| s.match(".json")}
+return unless ARGV.any? { |s| s.match('.json') }
 
 args = ARGV[0]
 asset_group_id = args.match(/(\d*)\.json/)[1]

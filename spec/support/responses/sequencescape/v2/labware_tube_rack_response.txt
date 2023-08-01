@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+X-Content-Type-Options: nosniff
+X-Download-Options: noopen
+X-Permitted-Cross-Domain-Policies: none
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Type: application/vnd.api+json
+Cache-Control: no-store, must-revalidate, private, max-age=0
+X-Request-Id: 4c11e98f-e564-4214-8658-fe963747b5a0
+X-Runtime: 0.034263
+Vary: Origin
+X-MiniProfiler-Original-Cache-Control: max-age=0, private, must-revalidate
+X-MiniProfiler-Ids: dbebqz2k1y074mg30fb6,dw048ingt3p8h0e2t2ci,91wr17h4h7nwlyq3bopp,p2lk18v81us8d2lqo8od,yk3ewri34ey1gwth6llw,srx9veqj73onmo4b90oq,67pmtv59y0qgswh86phf,tei9eifhqr5ai5wsr37h,u51wi3xrsy4nno21z5y1,k7zjigrzrl5xqtzptj79,v3g61r5x6i8vcoiz41n2,hixdm5dp9js34vvd5n1j,h5nry8521lil2x65eyi7,do19v972tj6g4j0fb0ab,tgbpp7q89bzob2eol0b9,wiq23okz07dl48t7xj3d,hhjcy0xhsxo88qstns8w,en9xjfcoe8m7c4spdmta,khokuqgbpk813qg0cm39,xt1w47sa31bq51t6w0zv
+Set-Cookie: __profilin=p%3Dt; path=/; HttpOnly; SameSite=Lax
+Transfer-Encoding: chunked
+
+{"data":[{"id":"4","type":"tube_racks","links":{"self":"http://localhost:3000/api/v2/tube_racks/4"},"attributes":{"uuid":"f3834d5e-9fb3-11ec-a4f7-acde48001122","labware_barcode":{"ean13_barcode":null,"machine_barcode":"AB42785517","human_barcode":"AB42785517"}},"relationships":{"purpose":{"links":{"self":"http://localhost:3000/api/v2/tube_racks/4/relationships/purpose","related":"http://localhost:3000/api/v2/tube_racks/4/purpose"},"data":{"type":"purposes","id":"74"}}}}],"included":[{"id":"74","type":"purposes","links":{"self":"http://localhost:3000/api/v2/purposes/74"},"attributes":{"uuid":"6eda06d4-9a21-11ec-9a02-acde48001122","name":"TR Stock 96","size":96}}],"links":{"first":"http://localhost:3000/api/v2/labware?fields%5Bplates%5D=uuid%2Clabware_barcode%2Creceptacles%2Cpurpose&fields%5Bpurpose%5D=name&fields%5Bsample_metadata%5D=supplier_name%2Csample_common_name&fields%5Bsamples%5D=sanger_sample_id%2Cuuid%2Cname&fields%5Bstudy%5D=name%2Cuuid&fields%5Btube_racks%5D=uuid%2Clabware_barcode%2Cpurpose&fields%5Btubes%5D=uuid%2Clabware_barcode%2Creceptacles%2Cpurpose&filter%5Bbarcode%5D=AB42785517%2CNOT_FOUND&include=receptacles.aliquots.sample.sample_metadata%2Creceptacles.aliquots.study%2Cpurpose&page%5Bnumber%5D=1&page%5Bsize%5D=100","last":"http://localhost:3000/api/v2/labware?fields%5Bplates%5D=uuid%2Clabware_barcode%2Creceptacles%2Cpurpose&fields%5Bpurpose%5D=name&fields%5Bsample_metadata%5D=supplier_name%2Csample_common_name&fields%5Bsamples%5D=sanger_sample_id%2Cuuid%2Cname&fields%5Bstudy%5D=name%2Cuuid&fields%5Btube_racks%5D=uuid%2Clabware_barcode%2Cpurpose&fields%5Btubes%5D=uuid%2Clabware_barcode%2Creceptacles%2Cpurpose&filter%5Bbarcode%5D=AB42785517%2CNOT_FOUND&include=receptacles.aliquots.sample.sample_metadata%2Creceptacles.aliquots.study%2Cpurpose&page%5Bnumber%5D=1&page%5Bsize%5D=100"}}

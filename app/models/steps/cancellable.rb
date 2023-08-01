@@ -1,8 +1,8 @@
-module Steps::Cancellable
+module Steps::Cancellable # rubocop:todo Style/Documentation
   def self.included(klass)
     klass.instance_eval do
-      scope :newer_than, ->(step) { where("id > #{step.id}").includes(:operations, :step_type)}
-      scope :older_than, ->(step) { where("id < #{step.id}").includes(:operations, :step_type)}
+      scope :newer_than, ->(step) { where("id > #{step.id}").includes(:operations, :step_type) }
+      scope :older_than, ->(step) { where("id < #{step.id}").includes(:operations, :step_type) }
     end
   end
 
@@ -28,11 +28,13 @@ module Steps::Cancellable
 
   def steps_newer_than_me
     return Step.none unless activity
+
     activity.steps.newer_than(self)
   end
 
   def steps_older_than_me
     return Step.none unless activity
+
     activity.steps.older_than(self)
   end
 
@@ -50,14 +52,14 @@ module Steps::Cancellable
     end
   end
 
-
-  def _cancel_me_and_any_newer_completed_steps(change_state=true)
-    changes = [
-      fact_changes_for_option(:cancel),
-      steps_newer_than_me.completed.map{|s| s.fact_changes_for_option(:cancel)}
-    ].flatten.compact.reduce(FactChanges.new) do |memo, updates|
-      memo.merge(updates)
-    end
+  def _cancel_me_and_any_newer_completed_steps(change_state = true)
+    changes =
+      [
+          fact_changes_for_option(:cancel),
+          steps_newer_than_me.completed.map { |s| s.fact_changes_for_option(:cancel) }
+        ].flatten
+        .compact
+        .reduce(FactChanges.new) { |memo, updates| memo.merge(updates) }
 
     ActiveRecord::Base.transaction do
       changes.apply(self, false)
@@ -68,12 +70,13 @@ module Steps::Cancellable
   end
 
   def _remake_me_and_any_older_cancelled_steps
-    changes = [
-      steps_older_than_me.cancelled.map{|s| s.fact_changes_for_option(:remake)},
-      fact_changes_for_option(:remake)
-    ].flatten.compact.reduce(FactChanges.new) do |memo, updates|
-      memo.merge(updates)
-    end
+    changes =
+      [
+          steps_older_than_me.cancelled.map { |s| s.fact_changes_for_option(:remake) },
+          fact_changes_for_option(:remake)
+        ].flatten
+        .compact
+        .reduce(FactChanges.new) { |memo, updates| memo.merge(updates) }
 
     ActiveRecord::Base.transaction do
       changes.apply(self, false)
@@ -89,5 +92,4 @@ module Steps::Cancellable
       updates
     end
   end
-
 end

@@ -1,20 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 import ReactTooltip from 'react-tooltip'
 
 import ActivityControl from './activity_components/activity_control'
 import AlertDisplay from './activity_components/alert_display'
-import ActivityDescription from "./activity_components/activity_description"
-import PrintersSelection from "./activity_components/printers_selection"
-import AssetGroupsEditor from "./asset_group_components/asset_groups_editor"
-import Steps from "./step_components/steps"
-import StepsRunning from "./step_components/steps_running"
-import StepsFailed from "./step_components/steps_failed"
-import StepTypesControl from "./step_type_components/step_types_control"
-import C from "./step_components/step_states"
+import ActivityDescription from './activity_components/activity_description'
+import PrintersSelection from './activity_components/printers_selection'
+import AssetGroupsEditor from './asset_group_components/asset_groups_editor'
+import Steps from './step_components/steps'
+import StepsRunning from './step_components/steps_running'
+import StepsFailed from './step_components/steps_failed'
+import StepTypesControl from './step_type_components/step_types_control'
+import C from './step_components/step_states'
 
-import {FormFor, HashFields} from "react-rails-form-helpers"
+import { FormFor, HashFields } from 'react-rails-form-helpers'
 
 const MAX_BARCODE_SIZE = 255
 
@@ -35,7 +35,7 @@ class Activity extends React.Component {
       stepsFailed: props.stepsFailed,
       activityRunning: props.activityRunning,
       dataAssetDisplay: props.dataAssetDisplay,
-      collapsedFacts: {}
+      collapsedFacts: {},
     }
     this.onSelectAssetGroup = this.onSelectAssetGroup.bind(this)
     this.onChangeAssetGroup = this.onChangeAssetGroup.bind(this)
@@ -62,26 +62,29 @@ class Activity extends React.Component {
     this.listenWebSockets()
   }
   onCollapseFacts(collapsedFacts, uuid, predicate) {
-    return(()=>{
+    return () => {
       let obj = Object.create({}, collapsedFacts)
       if (!obj[uuid]) {
-        obj[uuid]={}
+        obj[uuid] = {}
       }
       if (obj[uuid][predicate] === true) {
-        obj[uuid][predicate]=false
+        obj[uuid][predicate] = false
       } else {
-        obj[uuid][predicate]=true
+        obj[uuid][predicate] = true
       }
       return obj
-    })
+    }
   }
   listenWebSockets() {
-    this.activityChannel = App.cable.subscriptions.create({
-      channel: 'ActivityChannel',
-      activity_id: this.props.activity.id
-    }, {
-      received: $.proxy(this.onWebSocketsMessage, this)
-    })
+    this.activityChannel = App.cable.subscriptions.create(
+      {
+        channel: 'ActivityChannel',
+        activity_id: this.props.activity.id,
+      },
+      {
+        received: $.proxy(this.onWebSocketsMessage, this),
+      }
+    )
   }
   getAllAssets() {
     return Object.values(this.state.assetGroups).flat()
@@ -90,7 +93,7 @@ class Activity extends React.Component {
     let newState
 
     if (msg.error) {
-      newState = {messages: [msg.error]}
+      newState = { messages: [msg.error] }
     } else {
       var selectedGroup = this.state.selectedAssetGroup
       if (!(msg.assetGroups && msg.assetGroups[selectedGroup])) {
@@ -111,23 +114,22 @@ class Activity extends React.Component {
         stepsRunning: msg.stepsRunning || [],
         stepsFailed: msg.stepsFailed,
         stepsPending: msg.stepsPending || [],
-        stepsFinished: msg.stepsFinished
+        stepsFinished: msg.stepsFinished,
       }
     }
 
     this.setState(newState)
-
   }
   onRemoveErrorMessage(msg, pos) {
-    this.state.messages.splice(pos,1)
-    this.setState({messages: this.state.messages})
+    this.state.messages.splice(pos, 1)
+    this.setState({ messages: this.state.messages })
   }
   onErrorMessage(msg) {
     this.state.messages.push(msg)
-    this.setState({messages: this.state.messages})
+    this.setState({ messages: this.state.messages })
   }
   onSelectAssetGroup(assetGroup) {
-    this.setState({selectedAssetGroup: assetGroup.id})
+    this.setState({ selectedAssetGroup: assetGroup.id })
   }
   onChangeAssetGroup(msg) {
     return msg
@@ -142,42 +144,40 @@ class Activity extends React.Component {
 
   barcodesFromInput(barcodes) {
     return barcodes.split(' ').filter((b) => {
-      return ((b.length > 0) && (b.length < MAX_BARCODE_SIZE) && (b.match(/\w+/)))
+      return b.length > 0 && b.length < MAX_BARCODE_SIZE && b.match(/\w+/)
     })
   }
   onAddBarcodesToAssetGroup(assetGroup, userInput) {
-    return this.changeAssetGroup(assetGroup,
-                                 {asset_group: {
-                                   id: assetGroup.id,
-                                   assets: this.getAssetUuidsForAssetGroup(assetGroup).concat(this.barcodesFromInput(userInput))
-                                 }
-                                 }
-                                )
+    return this.changeAssetGroup(assetGroup, {
+      asset_group: {
+        id: assetGroup.id,
+        assets: this.getAssetUuidsForAssetGroup(assetGroup).concat(this.barcodesFromInput(userInput)),
+      },
+    })
   }
-  onRemoveAssetFromAssetGroup(assetGroup, asset, pos){
-
+  onRemoveAssetFromAssetGroup(assetGroup, asset, pos) {
     let uuids = this.getAssetUuidsForAssetGroup(assetGroup)
 
     let removedUuid = asset.uuid
-    let newUuids = uuids.filter((uuid) => (uuid != removedUuid))
+    let newUuids = uuids.filter((uuid) => uuid != removedUuid)
 
     this.state.uuidsPendingRemoval.push(removedUuid)
     let uuidsPendingRemoval = this.state.uuidsPendingRemoval
-    this.setState({uuidsPendingRemoval})
+    this.setState({ uuidsPendingRemoval })
 
     return this.changeAssetGroup(assetGroup, {
       asset_group: {
         id: assetGroup.id,
-	      assets: newUuids
-      }
+        assets: newUuids,
+      },
     })
   }
-  onRemoveAllAssetsFromAssetGroup(assetGroup){
+  onRemoveAllAssetsFromAssetGroup(assetGroup) {
     return this.changeAssetGroup(assetGroup, {
       asset_group: {
         id: assetGroup.id,
-	assets: []
-      }
+        assets: [],
+      },
     })
   }
 
@@ -188,8 +188,12 @@ class Activity extends React.Component {
         return;
       }*/
       const event_name = stateEventName || (e.target.checked ? C.STEP_EVENT_REMAKE : C.STEP_EVENT_CANCEL)
-      this.setState({activityRunning: true})
-      this.changeStateStep(step, event_name).then($.proxy(() => { this.setState({activityRunning: false}) }, this))
+      this.setState({ activityRunning: true })
+      this.changeStateStep(step, event_name).then(
+        $.proxy(() => {
+          this.setState({ activityRunning: false })
+        }, this)
+      )
     }
   }
 
@@ -199,31 +203,31 @@ class Activity extends React.Component {
       dataType: 'json',
       contentType: 'application/json; charset=utf-8',
       url: step.stepUpdateUrl,
-      data: JSON.stringify({step: {event_name}})
+      data: JSON.stringify({ step: { event_name } }),
     })
   }
 
   onChangeTubePrinter(e) {
-    this.setState({selectedTubePrinter: e.target.value})
+    this.setState({ selectedTubePrinter: e.target.value })
   }
   onChangePlatePrinter(e) {
-    this.setState({selectedPlatePrinter: e.target.value})
+    this.setState({ selectedPlatePrinter: e.target.value })
   }
   onExecuteStep(msg) {
-    this.setState({activityRunning: true})
+    this.setState({ activityRunning: true })
   }
   changeShownComponents() {
     this.activityChannel.send({
       activity: {
         id: this.props.activity.id,
-        stepsFinished: !this.state.stepsFinished
-      }
+        stepsFinished: !this.state.stepsFinished,
+      },
     })
   }
   onToggleComponentBuilder(componentName) {
     return () => {
       let msg = { activity: {} }
-      msg.activity[componentName] = (typeof this.state[componentName] === 'undefined')
+      msg.activity[componentName] = typeof this.state[componentName] === 'undefined'
       console.log(this.state)
       this.activityChannel.send(msg)
     }
@@ -233,86 +237,92 @@ class Activity extends React.Component {
   }
   renderStepTypesControl(instanceId) {
     const steps = [].concat(this.state.stepsRunning).concat(this.state.stepsPending)
-    if ((this.state.stepsFailed) && (this.state.stepsFailed.length > 0)) {
-      return(<StepsFailed
-                      onChangeStateStep={this.onChangeStateStep}
-                      steps={this.state.stepsFailed} />)
+    if (this.state.stepsFailed && this.state.stepsFailed.length > 0) {
+      return <StepsFailed onChangeStateStep={this.onChangeStateStep} steps={this.state.stepsFailed} />
     } else {
-      if ((this.state.stepsRunning) && (this.state.stepsRunning.length > 0)) {
-        return(<StepsRunning steps={this.state.stepsRunning} onChangeStateStep={this.onChangeStateStep} />)
+      if (this.state.stepsRunning && this.state.stepsRunning.length > 0) {
+        return <StepsRunning steps={this.state.stepsRunning} onChangeStateStep={this.onChangeStateStep} />
       } else {
-  	return(
-  	  <StepTypesControl
+        return (
+          <StepTypesControl
             onToggle={this.onToggleComponentBuilder('stepTypes')}
             stepTypes={this.state.stepTypes}
-  	    instanceId={instanceId}
-  	    onExecuteStep={this.onExecuteStep}
-  	    activityRunning={this.state.activityRunning}
-  	    selectedAssetGroup={this.state.selectedAssetGroup}
-  	    selectedTubePrinter={this.state.selectedTubePrinter}
-  	    selectedPlatePrinter={this.state.selectedPlatePrinter}
-  	  />
-  	)
+            instanceId={instanceId}
+            onExecuteStep={this.onExecuteStep}
+            activityRunning={this.state.activityRunning}
+            selectedAssetGroup={this.state.selectedAssetGroup}
+            selectedTubePrinter={this.state.selectedTubePrinter}
+            selectedPlatePrinter={this.state.selectedPlatePrinter}
+          />
+        )
       }
     }
   }
 
   renderAssetGroupsEditorAndStepTypes() {
-    if (this.props.activityState=='finish') {
+    if (this.props.activityState == 'finish') {
       return null
     } else {
-      return(
+      return (
         <React.Fragment>
-        {this.renderStepTypesControl("1")}
-        <AssetGroupsEditor
-          uuidsPendingRemoval={this.state.uuidsPendingRemoval}
-                dataAssetDisplay={this.state.dataAssetDisplay}
-          activityRunning={this.state.activityRunning}
-                onCollapseFacts={this.onCollapseFacts}
-                collapsedFacts={null} // {this.state.collapsedFacts}
-
-          onExecuteStep={this.onExecuteStep}
-                onAddBarcodesToAssetGroup={this.onAddBarcodesToAssetGroup}
-          onRemoveAssetFromAssetGroup={this.onRemoveAssetFromAssetGroup}
-          onRemoveAllAssetsFromAssetGroup={this.onRemoveAllAssetsFromAssetGroup}
-          onErrorMessage={this.onErrorMessage}
-          onChangeAssetGroup={this.onChangeAssetGroup}
-          selectedAssetGroup={this.state.selectedAssetGroup}
-          onSelectAssetGroup={this.onSelectAssetGroup}
-          assetGroups={this.state.assetGroups} />
-        {this.renderStepTypesControl("2")}
+          {this.renderStepTypesControl('1')}
+          <AssetGroupsEditor
+            uuidsPendingRemoval={this.state.uuidsPendingRemoval}
+            dataAssetDisplay={this.state.dataAssetDisplay}
+            activityRunning={this.state.activityRunning}
+            onCollapseFacts={this.onCollapseFacts}
+            collapsedFacts={null} // {this.state.collapsedFacts}
+            onExecuteStep={this.onExecuteStep}
+            onAddBarcodesToAssetGroup={this.onAddBarcodesToAssetGroup}
+            onRemoveAssetFromAssetGroup={this.onRemoveAssetFromAssetGroup}
+            onRemoveAllAssetsFromAssetGroup={this.onRemoveAllAssetsFromAssetGroup}
+            onErrorMessage={this.onErrorMessage}
+            onChangeAssetGroup={this.onChangeAssetGroup}
+            selectedAssetGroup={this.state.selectedAssetGroup}
+            onSelectAssetGroup={this.onSelectAssetGroup}
+            allowPrinting={
+              this.props.featureFlags?.dpl348_decouple_automatic_printing_from_steps ||
+              this.props.featureFlags?.dpl348_allow_printing_from_activities_pages
+            }
+            assetGroups={this.state.assetGroups}
+            tubePrinter={this.props.tubePrinter}
+            platePrinter={this.props.platePrinter}
+          />
+          {this.renderStepTypesControl('2')}
         </React.Fragment>
       )
     }
   }
 
-  render () {
+  render() {
     return (
       <div>
-      <h1>Activity {this.props.activity.id }&nbsp;
-      <ActivityControl activityRunning={this.state.activityRunning} />
-      </h1>
+        <h1>
+          Activity {this.props.activity.id}&nbsp;
+          <ActivityControl activityRunning={this.state.activityRunning} />
+        </h1>
 
-  <ReactTooltip multiline={true} effect="solid" />
-	<AlertDisplay
-	  onRemoveErrorMessage={this.onRemoveErrorMessage}
-	  messages={this.state.messages} />
-  <ActivityDescription activity={this.props.activity} />
+        <ReactTooltip multiline={true} effect="solid" />
+        <AlertDisplay onRemoveErrorMessage={this.onRemoveErrorMessage} messages={this.state.messages} />
+        <ActivityDescription activity={this.props.activity} />
 
-	<PrintersSelection
-	  selectedTubePrinter={this.state.selectedTubePrinter}
-	  selectedPlatePrinter={this.state.selectedPlatePrinter}
-	  tubePrinter={this.props.tubePrinter}
-	  platePrinter={this.props.platePrinter}
-	  onChangeTubePrinter={this.onChangeTubePrinter}
-	  onChangePlatePrinter={this.onChangePlatePrinter}
-	/>
-  {this.renderAssetGroupsEditorAndStepTypes()}
-	<Steps
-      onToggle={this.onToggleComponentBuilder('stepsFinished')}
-      steps={this.state.stepsFinished}
-	    activityRunning={this.state.activityRunning}
-	   onChangeStateStep={this.onChangeStateStep}/>
+        {!this.props.featureFlags?.dpl348_decouple_automatic_printing_from_steps && (
+          <PrintersSelection
+            selectedTubePrinter={this.state.selectedTubePrinter}
+            selectedPlatePrinter={this.state.selectedPlatePrinter}
+            tubePrinter={this.props.tubePrinter}
+            platePrinter={this.props.platePrinter}
+            onChangeTubePrinter={this.onChangeTubePrinter}
+            onChangePlatePrinter={this.onChangePlatePrinter}
+          />
+        )}
+        {this.renderAssetGroupsEditorAndStepTypes()}
+        <Steps
+          onToggle={this.onToggleComponentBuilder('stepsFinished')}
+          steps={this.state.stepsFinished}
+          activityRunning={this.state.activityRunning}
+          onChangeStateStep={this.onChangeStateStep}
+        />
       </div>
     )
   }

@@ -1,2 +1,60 @@
-require: rubocop-performance
-require: rubocop-rails
+inherit_from:
+  - .rubocop_todo.yml
+  - node_modules/@prettier/plugin-ruby/rubocop.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - 'db/views_schema.rb'
+
+# Blocks are used to structure tests and are part of the rspec dsl.
+# The standard BlockLength limits are too stringent for this purpose.
+# Block DSL is also used in routes
+# We should be careful keeping rake tasks here, as large tasks are still an issue.
+# Not sure if we need to split namespaces across several files though.
+Metrics/BlockLength:
+  Exclude:
+    - Gemfile
+  IgnoredMethods:
+    - describe
+    - context
+    - background
+    - scenario
+    - namespace
+    - task
+    - included
+    - shared_context
+    - shared_examples
+    - shared_examples_for
+    - state_machine
+    - configure
+    - draw
+    - feature
+    - subject
+    - let
+    - let!
+    - factory
+    - define
+    - guard
+    - transient
+    - with_nested_has_many_association
+    - with_association
+    - it
+    - class_eval
+    - has_metadata
+    - resources
+
+# Rubocop is choking on this file, so we're excluding it for now.
+Rails/NegateInclude:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - 'lib/changes_support/disjoint_list.rb'

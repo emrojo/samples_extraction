@@ -13,4 +13,14 @@ RSpec.describe Activity, type: :model do
       expect(Activity.for_user(user)).to eq([act1])
     end
   end
+
+  describe '#after_finish', warren: true do
+    let(:activity) { create :activity }
+
+    before { activity.after_finish }
+
+    it 'broadcasts the activity message' do
+      expect(Warren.handler.messages_matching("activity.finished.#{activity.id}")).to eq(1)
+    end
+  end
 end

@@ -4,11 +4,7 @@ RSpec.describe UserSessionsController, type: :controller do
   context '#create' do
     let!(:user) { create(:user, barcode: '1234') }
     it 'creates a session' do
-      post :create, params: {
-        user_session: {
-          barcode: "1234"
-        }
-      }, as: :json
+      post :create, params: { user_session: { barcode: '1234' } }, as: :json
       expect(session[:token]).not_to eq(nil)
     end
   end
@@ -26,9 +22,7 @@ RSpec.describe UserSessionsController, type: :controller do
       end
     end
     context 'when you are not logged in' do
-      before do
-        @user = create :user, token: 'mytoken'
-      end
+      before { @user = create :user, token: 'mytoken' }
       it 'does not remove the token' do
         post :destroy
         expect(session[:token]).to eq(nil)

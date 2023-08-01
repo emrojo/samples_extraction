@@ -1,4 +1,4 @@
-class CreateActivityTypeCompatibilities < ActiveRecord::Migration
+class CreateActivityTypeCompatibilities < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :activity_type_compatibilities do |t|
       t.references :asset, index: true, foreign_key: true

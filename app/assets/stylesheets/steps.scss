@@ -1,4 +1,7 @@
 // Place all the styles related to the steps controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-tr.cancelled .fact span { color:silver; text-decoration: line-through;};
+tr.cancelled .fact span {
+  color: silver;
+  text-decoration: line-through;
+}

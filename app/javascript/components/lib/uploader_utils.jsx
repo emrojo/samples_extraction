@@ -7,36 +7,32 @@ const getCsrfToken = () => {
 }
 
 const uploaderOptions = (props) => {
-  return(
-    {
-      options: {
-        validation: {
-          sizeLimit: 12000000,
+  return {
+    options: {
+      validation: {
+        sizeLimit: 12000000,
+      },
+      chunking: {
+        enabled: false,
+      },
+      deleteFile: {
+        enabled: true,
+        endpoint: '/asset_groups/' + props.assetGroup.id + '/upload',
+      },
+      request: {
+        endpoint: '/asset_groups/' + props.assetGroup.id + '/upload',
+        customHeaders: { 'X-CSRF-Token': getCsrfToken() },
+      },
+      retry: {
+        enableAuto: true,
+      },
+      callbacks: {
+        onError: function (id, name, errorReason, xhrOrXdr) {
+          props.onErrorMessage({ type: 'danger', msg: errorReason })
         },
-        chunking: {
-            enabled: false
-        },
-        deleteFile: {
-            enabled: true,
-            endpoint: '/asset_groups/'+props.assetGroup.id+'/upload'
-        },
-        request: {
-            endpoint: '/asset_groups/'+props.assetGroup.id+'/upload',
-            customHeaders: { 'X-CSRF-Token': getCsrfToken() }
-        },
-        retry: {
-            enableAuto: true
-        },
-        callbacks: {
-          onError: function(id, name, errorReason, xhrOrXdr) {
-            props.onErrorMessage({type: 'danger', msg: errorReason})
-          }
-        }
-      }
-    }
-  )
+      },
+    },
+  }
 }
 
-export {
-  getCsrfToken, uploaderOptions
-}
+export { getCsrfToken, uploaderOptions }

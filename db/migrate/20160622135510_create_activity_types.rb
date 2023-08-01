@@ -1,4 +1,4 @@
-class CreateActivityTypes < ActiveRecord::Migration
+class CreateActivityTypes < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :activity_types do |t|
       t.string :name

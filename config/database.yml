@@ -13,12 +13,14 @@ default: &default
   adapter: mysql2
   encoding: utf8
   pool: 5
+  host: <%= ENV.fetch('DBHOST','127.0.0.1') %>
+  port: <%= ENV.fetch('DBPORT','3306') %>
   username: root
-  password: 
+  password:
 
 development:
   <<: *default
-  database: samples_extraction_development
+  database: <%= ENV.fetch('DBNAME','samples_extraction_development') %>
 
 debug:
   <<: *default
@@ -27,7 +29,6 @@ debug:
 selenium: &test
   <<: *default
   database: samples_extraction_selenium
-
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".

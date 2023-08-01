@@ -36,7 +36,11 @@
   <%= yield %>
 
       <div class="well">
-        <%= bootstrap_link_to "Feedback", "mailto:#{Rails.configuration.admin_email}" %> · <%= Deployed::VERSION_STRING %> · A tool from <%= bootstrap_link_to Rails.configuration.team_name, Rails.configuration.team_url %>
+        <%= link_to "Feedback", "mailto:#{Rails.configuration.admin_email}" %> ·
+        <%= Deployed::VERSION_STRING %> ·
+        <%= link_to Deployed::VERSION_COMMIT, Deployed::REPO_URL%> ·
+        <%= Deployed::RELEASE_NAME %> ·
+        A tool from <%= link_to Rails.configuration.team_name, Rails.configuration.team_url %>
       </div>
 
 <input type="hidden" id="refresh" value="no">

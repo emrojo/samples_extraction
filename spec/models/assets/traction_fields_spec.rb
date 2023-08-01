@@ -33,5 +33,4 @@ RSpec.describe 'TractionFields' do
     let(:method) { :study_uuid }
     it_behaves_like 'a method that converts from quoted to unquoted uuid'
   end
-
 end

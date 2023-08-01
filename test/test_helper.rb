@@ -5,7 +5,7 @@ require 'factory_bot'
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-  #fixtures :all
+  # fixtures :all
   include FactoryBot::Syntax::Methods
 
   # Add more helper methods to be used by all tests here...

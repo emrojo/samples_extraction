@@ -1,4 +1,4 @@
-class CreateKits < ActiveRecord::Migration
+class CreateKits < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :kits do |t|
       t.string :barcode, null: false

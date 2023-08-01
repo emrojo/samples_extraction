@@ -1,8 +1,6 @@
-module Activities::WebsocketEvents
+module Activities::WebsocketEvents # rubocop:todo Style/Documentation
   def self.included(klass)
-    klass.instance_eval do
-      after_commit :wss_event
-    end
+    klass.instance_eval { after_commit :wss_event }
   end
 
   def running_inside_transaction?
@@ -17,35 +15,31 @@ module Activities::WebsocketEvents
     ActionCable.server.broadcast(stream_id, data)
   end
 
+  def report_error(message)
+    send_wss_event({ error: { type: 'danger', msg: message } })
+  end
+
   def stream_id
     "activity_#{id}"
   end
 
-  def websockets_attributes(attrs)
-    attrs.keys.reduce({shownComponents: {}}) do |memo, key|
-      memo[key] = attrs[key].call unless (ActivityChannel.activity_attributes(id)[key.to_s] == false)
-      memo
+  def websockets_attributes
+    # Extract all activity attributes where the value is `false`
+    rejected_keys = ActivityChannel.activity_attributes(id).filter_map { |k, v| k unless v }
+
+    json_attributes.each_with_object({ shownComponents: {} }) do |(attribute, method), memo|
+      next if rejected_keys.include?(attribute.to_s)
+
+      memo[attribute] = method.call
     end
   end
 
-  def initial_websockets_attributes(attrs)
-    attrs.keys.reduce({}) do |memo, key|
-      memo[key] = attrs[key].call
-      memo
-    end
-  end
-
-  def wss_event(opts={})
-    _wss_event(opts)
-    #delay(queue: 'websockets')._wss_event(opts)
-  end
-
-  def _wss_event(opts={})
+  def wss_event(opts = {})
     if Rails.configuration.redis_enabled && is_being_listened?
-      data = websockets_attributes(json_attributes).merge(opts)
-      #debugger if data[:stepsFinished][0]['state']=='error'
+      data = websockets_attributes.merge(opts)
+
+      # debugger if data[:stepsFinished][0]['state']=='error'
       send_wss_event(data)
     end
   end
-
 end

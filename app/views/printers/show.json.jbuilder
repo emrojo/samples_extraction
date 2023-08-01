@@ -1,1 +1,1 @@
-json.partial! "printers/printer", printer: @printer
+json.partial! 'printers/printer', printer: @printer

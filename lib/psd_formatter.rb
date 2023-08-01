@@ -3,11 +3,11 @@
 require 'syslog/logger'
 require 'ostruct'
 
-class PsdFormatter < Syslog::Logger::Formatter
+class PsdFormatter < Syslog::Logger::Formatter # rubocop:todo Style/Documentation
   LINE_FORMAT = "(thread-%s) [%s] %5s -- : %s\n".freeze
 
   def initialize(deployment_info)
-    info = OpenStruct.new(deployment_info)
+    info = OpenStruct.new(deployment_info) # rubocop:todo Style/OpenStructUse
     @app_tag = [info.name, info.version, info.environment].compact.join(':').freeze
     super()
   end
@@ -23,10 +23,6 @@ class PsdFormatter < Syslog::Logger::Formatter
   SEV_LABEL = %w[DEBUG INFO WARN ERROR FATAL ANY].each(&:freeze).freeze
 
   def format_severity(severity)
-    if severity.is_a?(Integer)
-      SEV_LABEL[severity] || 'ANY'
-    else
-      severity
-    end
+    severity.is_a?(Integer) ? SEV_LABEL[severity] || 'ANY' : severity
   end
 end

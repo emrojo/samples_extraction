@@ -15,6 +15,4 @@
 #   inflect.acronym 'RESTful'
 # end
 
-ActiveSupport::Inflector.inflections do |inflect|
-  inflect.irregular 'activity', 'activities'
-end
+ActiveSupport::Inflector.inflections { |inflect| inflect.irregular 'activity', 'activities' }

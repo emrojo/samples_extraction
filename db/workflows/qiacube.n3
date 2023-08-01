@@ -401,7 +401,7 @@
   ?file :maxCardinality """1""".
 } => {
   :step :stepTypeName """Apply layout of fluidx tubes in Empty TubeRack""" .
-  :step :stepAction """rack_layout_creating_tubes.rb""" .
+  :step :stepAction """StepPlanner::RackLayoutCreatingTubes""" .
   :step :addFacts { ?tube_rack :layout :Complete . } .
 } .
 
@@ -425,5 +425,3 @@
   :step :addFacts { ?tube_rack :pushTo :Sequencescape. }.
   :step :stepAction """update_sequencescape.rb""" .
 } .
-
-

@@ -7,7 +7,7 @@ require 'parsers/csv_layout/validators/location_validator'
 
 module Parsers
   module CsvLayout
-    class CsvParser
+    class CsvParser # rubocop:todo Style/Documentation
       include ActiveModel::Validations
 
       validate :validate_parsed_data
@@ -17,19 +17,18 @@ module Parsers
       attr_reader :data, :parsed, :parsed_changes, :components, :line_parser
 
       DEFAULT_COMPONENTS = {
-          barcode_parser: Parsers::CsvLayout::BarcodeParser,
-          location_parser: Parsers::CsvLayout::LocationParser,
-          location_validator: Parsers::CsvLayout::Validators::LocationValidator,
-          barcode_validator: Parsers::CsvLayout::Validators::FluidxBarcodeValidator,
-          line_parser: Parsers::CsvLayout::LineParser,
-          line_reader: Parsers::CsvLayout::LineReader
+        barcode_parser: Parsers::CsvLayout::BarcodeParser,
+        location_parser: Parsers::CsvLayout::LocationParser,
+        location_validator: Parsers::CsvLayout::Validators::LocationValidator,
+        barcode_validator: Parsers::CsvLayout::Validators::FluidxBarcodeValidator,
+        line_parser: Parsers::CsvLayout::LineParser,
+        line_reader: Parsers::CsvLayout::LineReader
       }
 
-      def initialize(str, component_defs={})
+      def initialize(str, component_defs = {})
         @parsed = false
         @input = str
         @components = self.class::DEFAULT_COMPONENTS.merge(component_defs)
-        valid?
       end
 
       def parsed?
@@ -58,22 +57,41 @@ module Parsers
         self_error_list.concat(line_parser.error_list)
       end
 
+      def find_or_import_asset_with_barcode(barcode)
+        asset_cache.fetch(barcode, nil)
+      end
+
       protected
+
+      def asset_cache
+        @asset_cache ||=
+          Asset
+            .find_or_import_assets_with_barcodes(
+              @line_parser.barcodes,
+              # Include the facts, any associated objects (such as tube racks)
+              # and their associated facts
+              # It may make sense to tidy these up with explicit associations
+              includes: {
+                facts: {
+                  object_asset: {
+                    facts: :object_asset
+                  }
+                }
+              }
+            )
+            .index_by(&:barcode)
+      end
 
       def validate_parsed_data
         parse unless @parsed
-        unless @line_parser.valid?
-          errors.add(:base, "The csv contains some errors")
-        end
+        errors.add(:base, 'The csv contains some errors') unless @line_parser.valid?
       end
 
       def validate_tube_duplication
         parse unless @parsed
         if @line_parser.valid?
-          unless duplicated(:asset).empty?
-            duplicated(:asset).each do |asset|
-              errors.add(:base, "The tube with barcode #{asset.barcode} is duplicated in the file")
-            end
+          duplicated(:asset).each do |asset|
+            errors.add(:base, "The tube with barcode #{asset.barcode} is duplicated in the file")
           end
         end
       end
@@ -81,21 +99,15 @@ module Parsers
       def validate_location_duplication
         parse unless @parsed
         if @line_parser.valid?
-          unless duplicated(:location).empty?
-            duplicated(:location).each do |location|
-              errors.add(:base, "The location #{location} is duplicated in the file")
-            end
+          duplicated(:location).each do |location|
+            errors.add(:base, "The location #{location} is duplicated in the file")
           end
         end
       end
 
       def duplicated(sym)
-        all_elems = layout.map{|obj| obj[sym]}
-        all_elems.select do |element|
-          (!element.nil?) && (all_elems.count(element) > 1)
-        end.uniq.compact
+        layout.pluck(sym).compact.uniq! || []
       end
-
     end
   end
 end

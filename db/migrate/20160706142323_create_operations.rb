@@ -1,4 +1,4 @@
-class CreateOperations < ActiveRecord::Migration
+class CreateOperations < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :operations do |t|
       t.references :action, index: true, foreign_key: true

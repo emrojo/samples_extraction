@@ -13,6 +13,17 @@ import ReactTooltip from 'react-tooltip'
 import ButtonWithLoading from 'components/lib/button_with_loading'
 import SearchControl from 'components/lib/search_control'
 
-window.React = React;
+window.React = React
 
-WebpackerReact.setup({React,Activity,SearchControl, ButtonWithLoading,Steps,StepsFinished,FactsSvg,Facts,FactsEditor,ReactTooltip})
+WebpackerReact.setup({
+  React,
+  Activity,
+  SearchControl,
+  ButtonWithLoading,
+  Steps,
+  StepsFinished,
+  FactsSvg,
+  Facts,
+  FactsEditor,
+  ReactTooltip,
+})

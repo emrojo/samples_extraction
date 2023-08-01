@@ -1,0 +1,5 @@
+# dpl348 flags are closely related. In practice we should only need to enable dpl348_decouple_automatic_printing_from_steps
+# The other flags may be useful if we want partial rollout
+dpl348_steps_only_warn_on_print_failure: When enabled, printing failures during step execution will warn, but allow the step to pass
+dpl348_decouple_automatic_printing_from_steps: When enabled, steps will not automatically print barcodes for associated assets. Will automatically enable the print interface on the activities page.
+dpl348_allow_printing_from_activities_pages: When enabled will allow printing from the activities page regardless of decoupling.

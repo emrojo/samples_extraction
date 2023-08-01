@@ -1,5 +1,8 @@
-class PrintBarcodes
+# Migrate to StepPlanner https://github.com/sanger/samples_extraction/issues/193
+
+class PrintBarcodes # rubocop:todo Style/Documentation
   attr_reader :asset_group, :step
+
   def initialize(params)
     @asset_group = params[:asset_group]
     @step = params[:step]
@@ -26,17 +29,17 @@ class PrintBarcodes
     FactChanges.new.tap do |updates|
       if assets_compatible_with_step_type
         asset_group.assets.each do |asset|
-          asset.print(printer_config, user.username)
+          asset.print(printer_config)
+
           # Do not print again unless the step fails
           updates.remove(Fact.where(asset: asset, predicate: 'is', object: 'readyForPrint'))
         end
       end
     end
   end
-
 end
 
-return unless ARGV.any?{|s| s.match(".json")}
+return unless ARGV.any? { |s| s.match('.json') }
 
 args = ARGV[0]
 asset_group_id = args.match(/(\d*)\.json/)[1]

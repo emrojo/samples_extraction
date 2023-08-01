@@ -1,8 +1,7 @@
 require 'rails_helper'
 require 'spec_helper'
 shared_examples_for 'background task' do
-
-  it_behaves_like "queueable job"
+  it_behaves_like 'queueable job'
 
   context '#Background task' do
     let(:step) { build_instance }
@@ -41,16 +40,14 @@ shared_examples_for 'background task' do
       context 'when the process of the background task fails' do
         it 'sets the state to error' do
           allow(step).to receive(:process).and_raise(StandardError, 'boom!')
-          expect{ step.execute_actions }.not_to raise_error
+          expect { step.execute_actions }.not_to raise_error
           expect(step.state).to eq('error')
           expect(step.output).to include('boom!')
         end
       end
 
       context 'when re-running a background task previously failed' do
-        before do
-          step.update_attributes(state: 'error', output: 'previous failure!!')
-        end
+        before { step.update(state: 'error', output: 'previous failure!!') }
         context 'when the step is completed correctly' do
           before do
             allow(step).to receive(:process)
@@ -67,7 +64,7 @@ shared_examples_for 'background task' do
         context 'when the step fails again' do
           before do
             allow(step).to receive(:process).and_raise(StandardError, 'boom!')
-            expect{ step.execute_actions }.not_to raise_error
+            expect { step.execute_actions }.not_to raise_error
             step.reload
           end
           it 'sets the right state to the step' do
@@ -77,7 +74,6 @@ shared_examples_for 'background task' do
             expect(step.output).to include('boom!')
           end
         end
-
       end
     end
   end

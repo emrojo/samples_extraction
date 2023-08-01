@@ -1,4 +1,4 @@
-class CreateAssetGroupsSteps < ActiveRecord::Migration
+class CreateAssetGroupsSteps < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :asset_groups_steps do |t|
       t.references :asset_group, index: true, foreign_key: true

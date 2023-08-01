@@ -1,5 +1,1 @@
-FactoryBot.define do
-  factory :kit_type do
-    
-  end
-end
+FactoryBot.define { factory :kit_type }

@@ -2,7 +2,6 @@
 
 A workflow processor and management tool supported in metadata annotations that allows a user to specifiy the decisions to make during the process of a group of labware. Actions can be specified as metadata changes definition or as external scripts, allowing it to interact with external persistance applications.
 
-
 ## Main Features:
 
 - UI for workflows creation and process
@@ -12,7 +11,6 @@ A workflow processor and management tool supported in metadata annotations that 
 - Searching facilities for labware based on metadata
 - Kits, kit types, users, printers
 
-
 ## Requirements
 
 - Sequencescape
@@ -20,7 +18,110 @@ A workflow processor and management tool supported in metadata annotations that 
 - Redis
 - Mysql
 
-## To start:
+## Installation
+
+## Setup a development environment in local
+
+This installation procedure is prepared for a MacOS environment:
+
+### Redis
+
+1. Install redis as we will need it (for example, using Homebrew):
+
+```
+    # brew install redis
+```
+
+2. Start redis
+
+```
+    # redis-server
+```
+
+### Print_my_barcode config
+
+1. Add the barcode printers that you would like to use in the server. In a MacOS environment open Settings/Printers & Scanners and add the barcode printers making sure they are defined with protocol LPD.
+
+2. In the rails console, run the following command to add the printer we require into the database:
+
+```
+  > Printer.create(name: PRINTER_NAME)
+```
+
+3. In print_my_barcode folder, start the server
+
+```
+  # rails s -p10000
+```
+
+4. In Samples Extraction project folder, run the following command to create the required label templates into print_my_barcode:
+
+```bash
+  # rake label_templates:setup
+```
+
+### mysql
+
+1. Start the server
+
+```
+  # mysql.server start
+```
+
+### Sequencescape
+
+1. Start the delayed jobs:
+
+```
+  # rake jobs:work
+```
+
+2. Start the Sequencescape server:
+
+```
+  # rails s
+```
+
+### Samples extraction config
+
+1. Install all the dependencies for the project
+
+```
+  # gem install bundler
+
+  # bundle install
+
+  # bundle exec rake db:setup
+
+  # yarn
+```
+
+2. From the project folder, run the command
+
+```
+  # rake secret
+```
+
+3. Copy the resulting string and create a config/secrets.yml file and paste the string as value from secret_key_base attribute:
+
+```
+development:
+  secret_key_base: <RANDOM_STRING_OBTAINED>
+```
+
+4. Run the delayed job for Samples extraction
+
+```
+  # rake jobs:work
+```
+
+5. Run the server in a different port than the other services
+
+```
+  # rails s -p9000
+```
+
+## Starting procedure:
 
 First, start all the required service applications and configure their endpoints by defining
 the following environment variables:
@@ -30,7 +131,7 @@ the following environment variables:
 - SE_PMB_URI: PrintMyBarcode URI (Defaults: http://localhost:10000/v1)
 - SE_REDIS_URI: Redis DB (Defaults: redis://127.0.0.1:6379)
 
-Additionally you may require to configure the database connection  and credentials for mysql from database.yml.
+Additionally you may require to configure the database connection and credentials for mysql from database.yml.
 
 Second, start the background jobs processor:
 
@@ -45,9 +146,11 @@ bundle exec puma
 ```
 
 ## Running Javascript tests
+
 ```
   yarn test
 ```
+
 ## Running tests in watch mode
 
 ```
@@ -73,7 +176,6 @@ bundle exec puma
 ### Selection of workflows
 
 Workflows are selected by using one of the instruments from the instruments view at /instruments and scanning for them a kit barcode. The kit barcode is linked with one of the available workflows so it will create a new Activity to start processing labware with that workflow.
-
 
 ### Brief description of the workflow process
 
@@ -104,8 +206,7 @@ selected group.
 The actions of the rule to ran are queued in a table in the database. A background processor
 (delayed_jobs) will load this changes to apply and run the associated action for the rule.
 Actions can be a combination of external scripts and metadata changes definitions. All metadata
- changes are gathered to be applied in a single commit in the database.
-
+changes are gathered to be applied in a single commit in the database.
 
 ### User interface sections
 
@@ -128,15 +229,15 @@ needed. Stopping the job will revert all metadata changes.
 All applied changes from past rules are stored in the Operations table and displayed in this
 view.
 A set of controls is provided so the user can perform the following actions:
-  - Cancel applied rules by reverting all metadata changes, which it would allow to revert history
-  - Re-apply cancelled rules
-  - Continue with already stopped jobs (this is really a re-run, as the changes
+
+- Cancel applied rules by reverting all metadata changes, which it would allow to revert history
+- Re-apply cancelled rules
+- Continue with already stopped jobs (this is really a re-run, as the changes
   from a stopped job are always reverted)
 
 #### User feedback
 
 Changes are broadcasted to the user interface by websockets with the support of a Redis database. The interface is updated with the changes in the database. All changes in available groups, assets, metadata and rules to apply are updated in the user interface automatically.
-
 
 #### Data model:
 
@@ -153,3 +254,19 @@ ConditionGroups <--/   AssetGroups        Operations
 Conditions             Assets --> Facts
 ```
 
+## Linting and formatting
+
+Linting and formatting are provided by rubocop, prettier and Eslint. I strongly
+recommend checking out editor integrations. Also, using lefthook will help
+ensure that only valid files are committed.
+
+```shell
+# Run rubocop
+bundle exec rubocop
+# Run rubocop with safe autofixes
+bundle exec rubocop -a
+# Check prettier formatting
+yarn prettier --check .
+# Fix prettier formatting
+yarn prettier --write .
+```

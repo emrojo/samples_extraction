@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import React from 'react'
 import C from '../step_components/step_states'
-import ButtonWithLoading from "../lib/button_with_loading"
+import ButtonWithLoading from '../lib/button_with_loading'
 
 class StepControl extends React.Component {
   constructor(props) {
@@ -19,20 +19,33 @@ class StepControl extends React.Component {
   }
 
   renderStepRunningControl() {
-    return(
-      <ButtonWithLoading onClick={this.buildChangeStateHandler(C.STEP_EVENT_STOP)} className="btn btn-danger" text="Stop?" />
+    return (
+      <ButtonWithLoading
+        onClick={this.buildChangeStateHandler(C.STEP_EVENT_STOP)}
+        className="btn btn-danger"
+        text="Stop?"
+      />
     )
   }
   renderStepErrorControl() {
-    return(
+    return (
       <React.Fragment>
-        <ButtonWithLoading onClick={this.buildChangeStateHandler(C.STEP_EVENT_RUN)} className="btn btn-success" text="Retry?" />&nbsp;
-        <ButtonWithLoading onClick={this.buildChangeStateHandler(C.STEP_EVENT_STOP)} className="btn btn-danger" text="Stop?" />
+        <ButtonWithLoading
+          onClick={this.buildChangeStateHandler(C.STEP_EVENT_RUN)}
+          className="btn btn-success"
+          text="Retry?"
+        />
+        &nbsp;
+        <ButtonWithLoading
+          onClick={this.buildChangeStateHandler(C.STEP_EVENT_STOP)}
+          className="btn btn-danger"
+          text="Stop?"
+        />
       </React.Fragment>
     )
   }
   eventNameForState(state) {
-    switch(state) {
+    switch (state) {
       case C.STEP_STATE_STOPPED:
       case C.STEP_STATE_PENDING:
       case C.STEP_STATE_FAILED:
@@ -51,22 +64,26 @@ class StepControl extends React.Component {
   renderStepFinishedControl() {
     const state = this.props.step.state
 
-    return(
+    return (
       <ButtonWithLoading
         disabled={this.props.isDisabled}
         onClick={this.buildChangeStateHandler(this.eventNameForState(state))}
         className={classNames({
-          "pull-right btn": true,
-          "btn-danger": (state===C.STEP_STATE_COMPLETED) || (state === C.STEP_STATE_PENDING) ||
-            (state === C.STEP_STATE_FAILED) || (state === C.STEP_STATE_RUNNING),
-          "btn-primary": (state!=C.STEP_STATE_COMPLETED)
-          })}
+          'pull-right btn': true,
+          'btn-danger':
+            state === C.STEP_STATE_COMPLETED ||
+            state === C.STEP_STATE_PENDING ||
+            state === C.STEP_STATE_FAILED ||
+            state === C.STEP_STATE_RUNNING,
+          'btn-primary': state != C.STEP_STATE_COMPLETED,
+        })}
         text={classNames({
-          'Stop?': (state === null) || (state === C.STEP_STATE_FAILED) || (state === C.STEP_STATE_RUNNING),
-          'Redo?': (state === C.STEP_STATE_CANCELLED),
-          'Continue?': ((state === C.STEP_STATE_PENDING) || (state == C.STEP_STATE_STOPPED) || (state == C.STEP_STATE_FAILED)),
-          'Revert?': (state === C.STEP_STATE_COMPLETED)
-        })} />
+          'Stop?': state === null || state === C.STEP_STATE_FAILED || state === C.STEP_STATE_RUNNING,
+          'Redo?': state === C.STEP_STATE_CANCELLED,
+          'Continue?': state === C.STEP_STATE_PENDING || state == C.STEP_STATE_STOPPED || state == C.STEP_STATE_FAILED,
+          'Revert?': state === C.STEP_STATE_COMPLETED,
+        })}
+      />
     )
   }
   render() {
@@ -75,7 +92,7 @@ class StepControl extends React.Component {
       return null
     }
 
-    switch(state){
+    switch (state) {
       case C.STEP_STATE_COMPLETED:
       case C.STEP_STATE_PENDING:
       case C.STEP_STATE_CANCELLED:

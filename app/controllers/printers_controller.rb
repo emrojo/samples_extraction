@@ -1,5 +1,5 @@
-class PrintersController < ApplicationController
-  before_action :set_printer, only: [:show, :edit, :update, :destroy]
+class PrintersController < ApplicationController # rubocop:todo Style/Documentation
+  before_action :set_printer, only: %i[show edit update destroy]
 
   # GET /printers
   # GET /printers.json
@@ -9,8 +9,7 @@ class PrintersController < ApplicationController
 
   # GET /printers/1
   # GET /printers/1.json
-  def show
-  end
+  def show; end
 
   # GET /printers/new
   def new
@@ -18,8 +17,7 @@ class PrintersController < ApplicationController
   end
 
   # GET /printers/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /printers
   # POST /printers.json
@@ -28,7 +26,7 @@ class PrintersController < ApplicationController
 
     respond_to do |format|
       if @printer.save
-        format.html { redirect_to @printer, notice: 'Printer was successfully created.' }
+        format.html { redirect_to @printer, notice: 'Printer was successfully created.' } # rubocop:todo Rails/I18nLocaleTexts
         format.json { render :show, status: :created, location: @printer }
       else
         format.html { render :new }
@@ -42,7 +40,7 @@ class PrintersController < ApplicationController
   def update
     respond_to do |format|
       if @printer.update(printer_params)
-        format.html { redirect_to @printer, notice: 'Printer was successfully updated.' }
+        format.html { redirect_to @printer, notice: 'Printer was successfully updated.' } # rubocop:todo Rails/I18nLocaleTexts
         format.json { render :show, status: :ok, location: @printer }
       else
         format.html { render :edit }
@@ -56,19 +54,20 @@ class PrintersController < ApplicationController
   def destroy
     @printer.destroy
     respond_to do |format|
-      format.html { redirect_to printers_url, notice: 'Printer was successfully destroyed.' }
+      format.html { redirect_to printers_url, notice: 'Printer was successfully destroyed.' } # rubocop:todo Rails/I18nLocaleTexts
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_printer
-      @printer = Printer.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def printer_params
-      params.require(:printer).permit(:name, :printer_type, :default_printer)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_printer
+    @printer = Printer.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def printer_params
+    params.require(:printer).permit(:name, :printer_type, :default_printer)
+  end
 end

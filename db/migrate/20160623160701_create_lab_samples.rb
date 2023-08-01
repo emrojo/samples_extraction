@@ -1,4 +1,4 @@
-class CreateLabSamples < ActiveRecord::Migration
+class CreateLabSamples < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :lab_samples do |t|
       t.string :type

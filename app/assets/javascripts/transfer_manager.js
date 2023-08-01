@@ -1,15 +1,12 @@
-(function($, undefined) {
+;(function ($, undefined) {
   function TransferManager(node, params) {
-    this.node = node;
-    this.params = params;
+    this.node = node
+    this.params = params
 
-    this.attachHandlers();
-  };
+    this.attachHandlers()
+  }
 
-  var proto = TransferManager.prototype;
+  var proto = TransferManager.prototype
 
-  proto.attachHandlers = function() {
-
-  };
-
-}(jQuery));
+  proto.attachHandlers = function () {}
+})(jQuery)

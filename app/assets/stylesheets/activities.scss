@@ -7,7 +7,7 @@
 tr.output {
   background-color: lightgray;
   span {
-    font-family: "Courier New", Courier, monospace;
+    font-family: 'Courier New', Courier, monospace;
   }
   a:hover {
     background-color: lightgray;
@@ -19,22 +19,26 @@ tr.output {
   padding-left: 1em;
 }
 
-form.edit_asset_group .panel-header {
+form.edit_asset_group .panel-header,
+.print-asset-group-header {
   padding: 10px 15px;
   background-color: #f5f5f5;
-  /*border-top: 1px solid #ddd;*/
   border-bottom: 1px solid #ddd;
 }
 
+.main-view form.edit_asset_group,
+.main-view form.print_asset_group {
+  padding-bottom: 0;
+}
+
 body.logged-off ul.step-selection input {
-  pointer-events:none;
+  pointer-events: none;
   opacity: 0.65;
 }
 
 .with-bottom-margin {
   margin-bottom: 1em;
 }
-
 
 .condition-group-label {
   @extend .alert-success;
@@ -51,29 +55,41 @@ body.logged-off ul.step-selection input {
   overflow: hidden;
 }
 
-.condition-group-label .type-name {padding-left: 2em;}
+.condition-group-label .type-name {
+  padding-left: 2em;
+}
 
 /* .condition-group-label:hover {*/
 .condition-group-label {
   height: auto;
-  z-index:10;
+  z-index: 10;
   /*position:absolute;*/
-  cursor:context-menu;
+  cursor: context-menu;
 }
 
-
-.condition-group-label .row { margin-left: 0px; }
+.condition-group-label .row {
+  margin-left: 0px;
+}
 .condition-group-container {
   padding-left: 1em !important;
   padding-top: 1em !important;
   /* padding-right: 1em; */
 }
 
-.not-matched .condition-group-label { @extend .alert-danger; }
-.not-matched .condition-group-label.matched-group { @extend .alert-warning; }
-.not-matched .condition-group-label.matched-group.empty-group { @extend .alert-info; }
+.not-matched .condition-group-label {
+  @extend .alert-danger;
+}
+.not-matched .condition-group-label.matched-group {
+  @extend .alert-warning;
+}
+.not-matched .condition-group-label.matched-group.empty-group {
+  @extend .alert-info;
+}
 
-.not-matched .nav.nav-pills {margin-bottom: 0.5em; margin-left: 0.5em;}
+.not-matched .nav.nav-pills {
+  margin-bottom: 0.5em;
+  margin-left: 0.5em;
+}
 
 .condition-group {
   border-style: dashed;
@@ -91,17 +107,17 @@ body.logged-off ul.step-selection input {
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display:         flex;
+  display: flex;
 }
 
-
-.asset-groups .tab-pane.active form .panel {
+.asset-groups .tab-pane.active .panel {
   border-top-width: 0px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
-
 }
-.asset-groups .nav li.active a {background-color: #f5f5f5 !important;}
+.asset-groups .nav li.active a {
+  background-color: #f5f5f5 !important;
+}
 
 table.steps-table tr.operations div.react-toggle {
   border-style: none;
@@ -134,7 +150,7 @@ table.steps-table tr.operations div.react-toggle-track-check {
   -ms-user-select: none;
   user-select: none;
 
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -161,7 +177,7 @@ table.steps-table tr.operations div.react-toggle-track-check {
   height: 24px;
   padding: 0;
   border-radius: 30px;
-  background-color: #4D4D4D;
+  background-color: #4d4d4d;
   -webkit-transition: all 0.2s ease;
   -moz-transition: all 0.2s ease;
   transition: all 0.2s ease;
@@ -172,11 +188,11 @@ table.steps-table tr.operations div.react-toggle-track-check {
 }
 
 .react-toggle--checked .react-toggle-track {
-  background-color: #19AB27;
+  background-color: #19ab27;
 }
 
 .react-toggle--checked:hover:not(.react-toggle--disabled) .react-toggle-track {
-  background-color: #128D15;
+  background-color: #128d15;
 }
 
 .react-toggle-track-check {
@@ -229,9 +245,9 @@ table.steps-table tr.operations div.react-toggle-track-check {
   left: 1px;
   width: 22px;
   height: 22px;
-  border: 1px solid #4D4D4D;
+  border: 1px solid #4d4d4d;
   border-radius: 50%;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -244,17 +260,17 @@ table.steps-table tr.operations div.react-toggle-track-check {
 
 .react-toggle--checked .react-toggle-thumb {
   left: 27px;
-  border-color: #19AB27;
+  border-color: #19ab27;
 }
 
 .react-toggle--focus .react-toggle-thumb {
-  -webkit-box-shadow: 0px 0px 3px 2px #0099E0;
-  -moz-box-shadow: 0px 0px 3px 2px #0099E0;
-  box-shadow: 0px 0px 2px 3px #0099E0;
+  -webkit-box-shadow: 0px 0px 3px 2px #0099e0;
+  -moz-box-shadow: 0px 0px 3px 2px #0099e0;
+  box-shadow: 0px 0px 2px 3px #0099e0;
 }
 
 .react-toggle:active:not(.react-toggle--disabled) .react-toggle-thumb {
-  -webkit-box-shadow: 0px 0px 5px 5px #0099E0;
-  -moz-box-shadow: 0px 0px 5px 5px #0099E0;
-  box-shadow: 0px 0px 5px 5px #0099E0;
+  -webkit-box-shadow: 0px 0px 5px 5px #0099e0;
+  -moz-box-shadow: 0px 0px 5px 5px #0099e0;
+  box-shadow: 0px 0px 5px 5px #0099e0;
 }

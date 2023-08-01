@@ -1,4 +1,4 @@
-class CreateStepTypes < ActiveRecord::Migration
+class CreateStepTypes < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :step_types do |t|
       t.string :name

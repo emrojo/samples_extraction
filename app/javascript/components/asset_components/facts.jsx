@@ -8,11 +8,11 @@ class Facts extends React.Component {
     this.state = { collapsed: {} }
   }
   collapsedPredicate(facts) {
-    return facts[0].predicate;
+    return facts[0].predicate
   }
   onClickCollapse(predicate) {
     this.state.collapsed[predicate] = !this.isCollapsed(predicate)
-    this.setState({collapsed: this.state.collapsed})
+    this.setState({ collapsed: this.state.collapsed })
   }
   isCollapsed(predicate) {
     if (typeof this.state.collapsed[predicate] === 'undefined') {
@@ -23,37 +23,38 @@ class Facts extends React.Component {
   }
   renderCollapsedControl(classifiedFacts, posPredicate) {
     let predicate = this.collapsedPredicate(classifiedFacts)
-    return(
+    return (
       <div
         key={posPredicate}
-        onClick={() => { this.onClickCollapse(predicate) }}
-        className="fact administrator-allowed">
-          <span className={"label label-warning"}>
-          <span className={"glyphicon " + (this.isCollapsed(predicate) ? 'glyphicon-plus' : 'glyphicon-minus')}></span>&nbsp;
-          <span className="predicate">
-            { this.collapsedPredicate(classifiedFacts) }
-          </span>
-          :
-          <span className="object">
-          </span>
-            <span>
-              ({classifiedFacts.length})
-            </span>
-          </span>
+        onClick={() => {
+          this.onClickCollapse(predicate)
+        }}
+        className="fact administrator-allowed"
+      >
+        <span className={'label label-warning'}>
+          <span className={'glyphicon ' + (this.isCollapsed(predicate) ? 'glyphicon-plus' : 'glyphicon-minus')}></span>
+          &nbsp;
+          <span className="predicate">{this.collapsedPredicate(classifiedFacts)}</span>:<span className="object"></span>
+          <span>({classifiedFacts.length})</span>
+        </span>
       </div>
     )
   }
 
   renderCollapsedList(classifiedFacts, posPredicate) {
     if (classifiedFacts.length == 1) {
-      return this.renderFact(classifiedFacts[0], posPredicate+"-1")
+      return this.renderFact(classifiedFacts[0], posPredicate + '-1')
     } else {
       let render = [this.renderCollapsedControl(classifiedFacts, posPredicate)]
       let predicate = this.collapsedPredicate(classifiedFacts)
       if (!this.isCollapsed(predicate)) {
-        render = render.concat(classifiedFacts.map((fact, pos) => { return this.renderFact(fact, posPredicate+"-"+pos)}))
+        render = render.concat(
+          classifiedFacts.map((fact, pos) => {
+            return this.renderFact(fact, posPredicate + '-' + pos)
+          })
+        )
       }
-      return(render)
+      return render
     }
   }
   renderCollapsedFacts(facts) {
@@ -62,7 +63,7 @@ class Facts extends React.Component {
     let posPredicate = 0
     for (var predicate in factsByPredicate) {
       rendered.push(this.renderCollapsedList(factsByPredicate[predicate], posPredicate))
-      posPredicate+=1
+      posPredicate += 1
     }
     return rendered
   }
@@ -74,25 +75,22 @@ class Facts extends React.Component {
       } else {
         memo[fact.predicate].push(fact)
       }
-      return memo;
+      return memo
     }, {})
   }
 
   renderFact(fact, index) {
-    return(<Fact fact={fact} key={index} onRemoveFact={this.props.onRemoveFact} />)
+    return <Fact fact={fact} key={index} onRemoveFact={this.props.onRemoveFact} />
   }
   render() {
-    if ((!this.props.facts) || (this.props.facts.length == 0)) {
+    if (!this.props.facts || this.props.facts.length == 0) {
       return null
     }
-    return(
+    return (
       <span className="facts-list ">
         <span>
-          <FactsSvg asset={this.props.asset}  facts={this.props.facts}
-            dataAssetDisplay={this.props.dataAssetDisplay}  />
-          <div className="col-xs-10">
-            {this.renderCollapsedFacts(this.props.facts)}
-          </div>
+          <FactsSvg asset={this.props.asset} facts={this.props.facts} dataAssetDisplay={this.props.dataAssetDisplay} />
+          <div className="col-xs-10">{this.renderCollapsedFacts(this.props.facts)}</div>
         </span>
       </span>
     )

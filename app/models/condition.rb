@@ -1,20 +1,20 @@
-class Condition < ActiveRecord::Base
+class Condition < ApplicationRecord # rubocop:todo Style/Documentation
   belongs_to :condition_group
-  has_many :activity_types, :through => :condition_group
-  belongs_to :object_condition_group, :class_name => 'ConditionGroup'
+  has_many :activity_types, through: :condition_group
+  belongs_to :object_condition_group, class_name: 'ConditionGroup'
 
-  def check_wildcard_condition(asset, wildcard_values={})
+  def check_wildcard_condition(asset, wildcard_values = {})
     cg = object_condition_group
 
     # If the condition group is a wildcard, we'll cache all the possible
     # values and check compatibility with other definitions of the same
     # wildcard.
     if asset.facts.kind_of? Array
-      facts = asset.facts.select{|f| f.predicate == predicate}
+      facts = asset.facts.select { |f| f.predicate == predicate }
     else
       facts = asset.facts.with_predicate(predicate)
     end
-    return false if facts.count==0
+    return false if facts.count == 0
 
     return false unless facts.first.respond_to?(:object_value)
 
@@ -34,8 +34,8 @@ class Condition < ActiveRecord::Base
     end
   end
 
-  def check_related_condition_group(cg, fact, related_assets = [], checked_condition_groups=[], wildcard_values={})
-    related_asset = Asset.find(fact.object_asset_id)
+  def check_related_condition_group(cg, fact, related_assets = [], checked_condition_groups = [], wildcard_values = {})
+    related_asset = fact.object_asset
 
     # This condition does not support evaluating relations like:
     # ?a :t ?b . ?b :t ?c . ?c :t ?a .
@@ -43,12 +43,14 @@ class Condition < ActiveRecord::Base
     # we would need to pass as an argument the list of condition_groups valid up to
     # this point, in which the only thing we need to validate is the object in the relations.
     # For the moment these types of relations will remain unsupported
-    if checked_condition_groups.include?(cg)
-      compatible = (fact.predicate == predicate)
-    else
-      checked_condition_groups << cg
-      compatible = ((fact.predicate == predicate) && cg.compatible_with?(related_asset, related_assets, checked_condition_groups, wildcard_values))
-    end
+    compatible =
+      if checked_condition_groups.include?(cg)
+        fact.predicate == predicate
+      else
+        checked_condition_groups << cg
+        (fact.predicate == predicate) &&
+          cg.compatible_with?(related_asset, related_assets, checked_condition_groups, wildcard_values)
+      end
     related_assets.push(related_asset) if compatible
     compatible
   end
@@ -58,37 +60,34 @@ class Condition < ActiveRecord::Base
   end
 
   def runtime_compatible_with?(asset, related_asset)
-    if (predicate == 'equalTo')
-      return asset == related_asset
-    end
-    if (predicate == 'notEqualTo')
-      return asset != related_asset
-    end
-    if (predicate == 'hasNotPredicate')
-      return asset.facts.with_predicate(object).count == 0
-    end
-    if (predicate == 'sum')
-      return asset.facts.with_predicate(object).count == 0
-    end    
+    return asset == related_asset if predicate == 'equalTo'
+    return asset != related_asset if predicate == 'notEqualTo'
+    return asset.facts.with_predicate(object).count == 0 if predicate == 'hasNotPredicate'
+    return asset.facts.with_predicate(object).count == 0 if predicate == 'sum'
   end
 
   def is_runtime_evaluable_condition?
     (predicate == 'equalTo') || (predicate == 'notEqualTo') || (predicate == 'hasNotPredicate') || (predicate == 'sum')
   end
 
-  def compatible_with?(asset, related_assets = [], checked_condition_groups=[], wildcard_values = {})
+  def compatible_with?(asset, related_assets = [], checked_condition_groups = [], wildcard_values = {})
     return true if is_runtime_evaluable_condition?
     return false if asset.nil?
     return check_wildcard_condition(asset, wildcard_values) if is_wildcard_condition?
+
     asset.facts.any? do |fact|
       # Either objects are equal, or both of them are relations to something. We
       # do not check the relations values, because we consider them as wildcards
-      if (object_condition_group_id.nil? || (fact.respond_to?(:object_asset_id) && fact.object_asset_id.nil?))
+      if object_condition_group_id.nil? || (fact.respond_to?(:object_asset_id) && fact.object_asset_id.nil?)
         ((fact.predicate == predicate) && (fact.object == object))
       else
-        cg = ConditionGroup.find(object_condition_group_id)
-        check_related_condition_group(cg, fact, related_assets,
-  	  checked_condition_groups, wildcard_values)
+        check_related_condition_group(
+          object_condition_group,
+          fact,
+          related_assets,
+          checked_condition_groups,
+          wildcard_values
+        )
       end
     end
   end

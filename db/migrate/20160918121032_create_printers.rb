@@ -1,4 +1,4 @@
-class CreatePrinters < ActiveRecord::Migration
+class CreatePrinters < ActiveRecord::Migration # rubocop:todo Style/Documentation
   def change
     create_table :printers do |t|
       t.string :name, null: false, unique: true

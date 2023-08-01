@@ -1,4 +1,4 @@
-class AddMessagesTable < ActiveRecord::Migration[5.1]
+class AddMessagesTable < ActiveRecord::Migration[5.1] # rubocop:todo Style/Documentation
   def change
     create_table :step_messages do |t|
       t.integer :step_id, null: false

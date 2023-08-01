@@ -1,14 +1,9 @@
-module Steps::Retryable
-
+module Steps::Retryable # rubocop:todo Style/Documentation
   def on_retrying
-    if ((state == 'retrying') && (state_was == 'error'))
-      delay(queue: 'steps').on_retry
-    end
+    delay(queue: 'steps').on_retry if (state == 'retrying') && (state_was == 'error')
   end
 
   def on_retry
-    ActiveRecord::Base.transaction do
-      job.update_attributes(run_at: job.created_at)
-    end
+    ActiveRecord::Base.transaction { job.update(run_at: job.created_at) }
   end
 end

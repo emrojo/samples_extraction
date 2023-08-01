@@ -1,0 +1,19 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file
+# Avoids copying these files into our docker-container
+
+# Node modules can break docker-builds on the local machine if it gets
+# coppied to the container. (You'll see yarn integrity errors)
+node_modules
+# .bundle contains bundler configuration which is specific to our local system
+.bundle
+
+# These folders store transisent informatation and aren't relevant between
+# systems. They are in our .gitignore, so we also add them here to keep
+# local builds consistent.
+log
+tmp
+
+# We're building our container for production, so lets exclude the test and
+# spec folders. This will keep our container size a little smaller
+test
+spec

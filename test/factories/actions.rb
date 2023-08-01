@@ -1,5 +1,1 @@
-FactoryBot.define do
-  factory :action do
-    
-  end
-end
+FactoryBot.define { factory :action }

@@ -5,16 +5,15 @@ class SamplesStatusController < ApplicationController
   before_action :set_activity_types, only: [:index]
   before_action :set_assets_for_activity_types, only: [:index]
 
-  def index
-  end
+  def index; end
 
   private
 
   def pagination_params_for_activity_type(activity_type)
-    if samples_started_params[:activity_type_id].to_i==activity_type.id
-      {:page => samples_started_params[:page], :per_page => 5}
+    if samples_started_params[:activity_type_id].to_i == activity_type.id
+      { page: samples_started_params[:page], per_page: 5 }
     else
-      {:page => 1, :per_page => 5}
+      { page: 1, per_page: 5 }
     end
   end
 
@@ -27,16 +26,13 @@ class SamplesStatusController < ApplicationController
   end
 
   def set_activity_types
-    @activity_types = ActivityType.all.visible.sort{|a,b| a.name <=> b.name}.uniq
+    @activity_types = ActivityType.visible.alphabetical
   end
 
   def set_assets_for_activity_types
-    @assets_for_activity_types = @activity_types.map do |activity_type|
-      {
-        :activity_type => activity_type,
-        :assets => get_assets_for_activity_type(activity_type)
-      }
-    end
+    @assets_for_activity_types =
+      @activity_types.map do |activity_type|
+        { activity_type: activity_type, assets: get_assets_for_activity_type(activity_type) }
+      end
   end
-
 end
